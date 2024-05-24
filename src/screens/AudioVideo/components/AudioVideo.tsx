@@ -8,6 +8,8 @@ import { Context as PreachersContext } from "../../../contexts/PreachersContext"
 import { Context as AuthContext } from "../../../contexts/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
+import IconContainer from "../../../commonComponents/IconContainer";
+import IconLink from "../../../commonComponents/IconLink";
 
 interface AudioVideoProps {
     meeting: IMeeting,
@@ -63,37 +65,29 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                     description="Mikrofon 2"
                     value={audioVideo.microphone2Operator.name}
                 />}
-                {((state.preacher && state.preacher.roles?.includes('can_edit_audio_video')) || authContext.state.whoIsLoggedIn === "admin") && <View style={styles.linkContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Audio Edit", { meeting, audioVideo })}>
-                        <Text style={styles.link}>
-                            <MaterialCommunityIcons name="pencil" size={18} />
-                            <Text> </Text>
-                            <Text>Edytuj dane</Text>
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate("Audio Delete Confirm", { meeting, audioVideo })}>
-                        <Text style={styles.link}>
-                            <MaterialCommunityIcons name="trash-can" size={18} />
-                            <Text> </Text>
-                            <Text>Usuń dane</Text>
-                        </Text>
-                    </TouchableOpacity>
-                </View>}
+                {((state.preacher && state.preacher.roles?.includes('can_edit_audio_video')) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
+                    <IconLink 
+                        onPress={() => navigation.navigate("Audio Edit", { meeting, audioVideo })}
+                        iconName="pencil"
+                        description="Edytuj dane"
+                    />
+                    <IconLink 
+                        onPress={() => navigation.navigate("Audio Delete Confirm", { meeting, audioVideo })}
+                        iconName="trash-can"
+                        description="Usuń dane"
+                    />
+                </IconContainer>}
                 
             </View> : <>
                 <NotFound title="Nie dodano rekordów audio-video dla tego zebrania" />
-                {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && <View style={styles.linkContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Audio New", { meeting })}>
-                        <Text style={styles.link}>
-                            <MaterialCommunityIcons name="plus" size={18} />
-                            <Text> </Text>
-                            <Text>Dodaj dane</Text>
-                        </Text>
-                    </TouchableOpacity>
-                
-                </View>}
-                
-
+                {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && (
+                    <IconLink 
+                        onPress={() => navigation.navigate("Audio New", { meeting })}
+                        iconName="plus"
+                        description="Dodaj dane"
+                    />
+                )}
+        
             </>}
             
         </ListItem.Accordion>
@@ -103,29 +97,10 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
 }
 
 const styles = StyleSheet.create({
-
     date: {
         fontFamily: "MontserratRegular",
         fontSize: 20,
     },
-    text: {
-        fontFamily: "InterRegular",
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    textBold: {
-        fontFamily: "InterSemiBold",
-    },
-    linkContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10
-    },
-    link: {
-        fontSize: 17,
-        color: '#1f8aad',
-        paddingVertical: 10
-    }
 })
 
 export default AudioVideo;

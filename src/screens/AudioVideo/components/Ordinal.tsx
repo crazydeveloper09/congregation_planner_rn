@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { IMeeting, IOrdinal } from "../../../contexts/interfaces";
 import { ListItem } from "react-native-elements";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NotFound from "../../../commonComponents/NotFound";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
