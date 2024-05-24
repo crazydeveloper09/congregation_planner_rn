@@ -32,7 +32,8 @@
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR"
       ],
-      "package": "com.crazydev09.congregation_planner"
+      "package": "com.crazydev09.congregation_planner",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
