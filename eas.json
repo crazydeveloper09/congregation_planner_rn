@@ -1,0 +1,33 @@
+{
+    "build": {
+      "development": {
+        "distribution": "internal",
+        "channel": "main",
+        "env": {
+          "ENVIRONMENT": "production",
+          "NODE_ENV": "development",
+          "BABEL_ENV": "release",
+          "APP_VARIANT": "release"
+        },
+        "node": "16.15.1",
+        "ios": {
+          "resourceClass": "m-medium"
+        }
+      },
+      "preview": {
+        "ios": {
+          "simulator": true
+        },
+        "android": {
+          "buildType": "apk"
+        },
+        "channel": "preview"
+      },
+      "production": {
+        "channel": "main"
+      }
+    },
+    "submit": {
+      "production": {}
+    }
+  }
