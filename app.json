@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Congregation Planner",
+    "slug": "congregation_planner",
+    "version": "1.0.0",
+    "orientation": "automatic",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/mysplash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1F8AAD"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza"
+        }
+      ]
+    ]
+  }
+}
