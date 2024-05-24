@@ -71,13 +71,13 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
 
   useEffect(() => {
     currentFilter === "Wszystkie"
-      ? loadCartDayInfo(route.params?.date || startDate)
+      ? loadCartDayInfo(startDate)
       : loadPreacherHours();
     preachersContext.loadAllPreachers();
 
     const unsubscribe = navigation.addListener("focus", () => {
       currentFilter === "Wszystkie"
-        ? loadCartDayInfo(route.params?.date || startDate)
+        ? loadCartDayInfo(startDate)
         : loadPreacherHours();
     });
 

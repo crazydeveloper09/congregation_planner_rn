@@ -61,7 +61,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
             
                 
             { state.ministryMeetings?.length === 0 ? <NotFound title="Niestety nie znaleziono zbiórek" /> : <FlatList
-                keyExtractor={(ministryMeeting) => ministryMeeting.date} 
+                keyExtractor={(ministryMeeting) => ministryMeeting._id} 
                 data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
                 renderItem={({ item }) => <MinistryMeeting meeting={item} navigate={navigation.navigate} />}
                 contentContainerStyle={styles.container}

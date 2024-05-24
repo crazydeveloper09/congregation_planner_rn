@@ -80,6 +80,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
             <NotFound title="Niestety nie znaleziono zebrań" />
           ) : (
             <FlatList
+                keyExtractor={(meeting) => meeting._id}
                 data={groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
                   (meeting) => meeting.month === currentMonth
                 )}
@@ -92,12 +93,14 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
       </View> : <View style={styles.container}>
         <Text style={styles.meeting}>Prowadzący lub modlitwa</Text>
         {state.meetings?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+          keyExtractor={(meeting) => meeting._id}
             data={state.meetings}
             renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
             scrollEnabled={false}
           />}
           <Text style={styles.meeting}>Zadania lub lektorowanie</Text>
             {state.assignments?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+              keyExtractor={(assignment) => assignment._id}
               data={state.assignments}
               renderItem={({ item }) => <PreacherAssignment type={item.type} assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}

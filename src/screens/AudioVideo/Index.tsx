@@ -62,6 +62,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
 
         {currentFilter === "Wszystkie" ? <View style={styles.container}>
           {state?.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze żadnych zebrań" /> : <FlatList
+            keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}
             renderItem={({ item }) => type === "Audio-video" ? <AudioVideo meeting={item} audioVideo={item.audioVideo} /> : <Ordinal meeting={item} ordinal={item.ordinal} />}
             scrollEnabled={false}
@@ -69,12 +70,14 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
         </View>: <View style={styles.container}>
           <Text style={styles.meeting}>Audio-video</Text>
           {audioVideoContext.state.audioVideos?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+              keyExtractor={(audioVideo) => audioVideo._id}
               data={audioVideoContext.state.audioVideos}
               renderItem={({ item }) => <AudioVideoAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
           <Text style={styles.meeting}>Porządkowy</Text>
           {audioVideoContext.state.ordinals?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+            keyExtractor={(ordinal) => ordinal._id}
               data={audioVideoContext.state.ordinals}
               renderItem={({ item }) => <OrdinalAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}

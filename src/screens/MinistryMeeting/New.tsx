@@ -60,13 +60,8 @@ const MinistryMeetingNewScreen: React.FC = () => {
             <DateTimePicker date={date} onConfirm={(date) => {
                 setDate(date)
                 setDateOpen(false)
-            }} onCancel={() => setDateOpen(false)} isVisible={dateOpen} />
-            <Text style={styles.labelStyle}>Czas</Text>
-            <TouchableOpacity onPress={() => setTimeOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    {time.getHours().toLocaleString('pl-Pl')}:{time.getMinutes()} 
-                </Text>
-            </TouchableOpacity>
+            }} onCancel={() => setDateOpen(false)} isVisible={dateOpen} mode="datetime" />
+   
             <DateTimePicker mode="time" date={time} onConfirm={(date) => {
                 setTime(date)
                 setTimeOpen(false)

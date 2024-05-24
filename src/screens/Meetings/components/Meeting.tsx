@@ -97,12 +97,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             <View>
                 {meeting.cleaningGroup && <IconDescriptionValue 
                     iconName="broom"
-                    value={meeting.cleaningGroup.name}
+                    value={meeting.cleaningGroup?.name}
                 />}
                 <IconDescriptionValue 
                     iconName="music"
                     description="Pieśń"
-                    value={meeting?.beginSong.toString()}
+                    value={meeting?.beginSong?.toString()}
                 />
                 <IconDescriptionValue 
                     iconName="account-tie"
@@ -124,6 +124,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 )}
                 
                 <FlatList 
+                    keyExtractor={(assignmentType) => assignmentType}
                     data={Object.keys(assignmentsGroup)}
                     renderItem={({ item }) => <MeetingAssignment type={item} assignments={assignmentsGroup} midSong={meeting?.midSong} meeting={meeting} />}
                     contentContainerStyle={{borderBottomWidth: 1, borderBottomColor: 'black' }}
@@ -132,7 +133,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 <IconDescriptionValue 
                     iconName="music"
                     description="Pieśń końcowa"
-                    value={meeting?.endSong.toString()}
+                    value={meeting?.endSong?.toString()}
                 />
                 <IconDescriptionValue 
                     iconName="hands-pray"

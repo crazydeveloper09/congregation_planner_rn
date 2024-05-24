@@ -91,6 +91,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         <Text>{type}</Text>
       </Text>
       <FlatList
+        keyExtractor={(assignment) => assignment._id}
         data={assignments[type]}
         renderItem={(assignment) => (
           <>
