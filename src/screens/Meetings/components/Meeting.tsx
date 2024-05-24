@@ -95,9 +95,9 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             underlayColor={'rgba(0, 0, 0, 0.0)'}
         >
             <View>
-                {meeting.cleaningGroup && <IconDescriptionValue 
+                {meeting?.cleaningGroup && <IconDescriptionValue 
                     iconName="broom"
-                    value={meeting.cleaningGroup?.name}
+                    value={meeting?.cleaningGroup?.name}
                 />}
                 <IconDescriptionValue 
                     iconName="music"
@@ -138,7 +138,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 <IconDescriptionValue 
                     iconName="hands-pray"
                     description="Modlitwa końcowa"
-                    value={meeting?.endPrayer?.name || meeting.otherEndPrayer}
+                    value={meeting?.endPrayer?.name || meeting?.otherEndPrayer}
                 />
                 
                 {((state.preacher && state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>

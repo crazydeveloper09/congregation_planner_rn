@@ -81,7 +81,7 @@ const Ordinal: React.FC<OrdinalProps> = ({ ordinal, meeting }) => {
                 <NotFound title="Nie dano rekordów o porządkowych dla tego zebrania" />
                 {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && (
                     <IconLink 
-                        onPress={() => navigation.navigate("Ordinal New", { ordinal })}
+                        onPress={() => navigation.navigate("Ordinal New", { meeting })}
                         iconName="plus"
                         description="Dodaj dane"
                     />
