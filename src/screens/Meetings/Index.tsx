@@ -71,7 +71,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
       </>}
       
 
-      {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings" || "can_have_assignment" || "can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
+      {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_have_assignment") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
       { currentFilter === "Wszystkie" ? <View style={styles.container}>
         {state.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze zebrań" /> : <>
         {groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
@@ -93,14 +93,14 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
       </View> : <View style={styles.container}>
         <Text style={styles.meeting}>Prowadzący lub modlitwa</Text>
         {state.meetings?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
-          keyExtractor={(meeting) => meeting._id}
+            keyExtractor={(meeting) => meeting?._id}
             data={state.meetings}
             renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
             scrollEnabled={false}
           />}
           <Text style={styles.meeting}>Zadania lub lektorowanie</Text>
             {state.assignments?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
-              keyExtractor={(assignment) => assignment._id}
+              keyExtractor={(assignment) => assignment?._id}
               data={state.assignments}
               renderItem={({ item }) => <PreacherAssignment type={item.type} assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}

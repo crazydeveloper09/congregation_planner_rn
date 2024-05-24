@@ -28,7 +28,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
     if(state.preacher && filter === "Moje przydziały") {
         return (
           <>
-            {state.preacher._id === meeting.lead._id && (
+            {state.preacher?._id === meeting.lead?._id && (
                 <View>
                     <Text style={styles.title}>
                         {new Date(meeting?.date).toLocaleDateString("pl-PL")} -
@@ -43,7 +43,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 </View>
               
             )}
-            {state.preacher._id === meeting.beginPrayer._id && (
+            {state.preacher?._id === meeting.beginPrayer?._id && (
                 <View>
                     <Text style={styles.title}>
                         {new Date(meeting?.date).toLocaleDateString("pl-PL")} -
@@ -57,7 +57,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                     />
                 </View>
             )}
-            {state.preacher._id === meeting.endPrayer._id && (
+            {state.preacher?._id === meeting.endPrayer?._id && (
                 <View>
                     <Text style={styles.title}>
                         {new Date(meeting?.date).toLocaleDateString("pl-PL")} -

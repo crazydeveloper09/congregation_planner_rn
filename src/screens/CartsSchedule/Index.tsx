@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import { NavigationProp } from "@react-navigation/native";
@@ -51,6 +52,15 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   const preachersContext = useContext(PreachersContext);
   const authContext = useContext(AuthContext);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+
   const onDateChange = (date: Date) => {
     setSelectedStartDate(date);
   };
@@ -82,7 +92,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     });
 
     return unsubscribe;
-  }, [selectedStartDate, route.params?.date, currentFilter]);
+  }, [selectedStartDate, route.params?.date, currentFilter, refreshing]);
 
   if (state.isLoading || preachersContext.state.isLoading) {
     return <Loading />;
@@ -139,7 +149,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   }
 
   return (
-    <ScrollView onScroll={getScrollPosition} scrollEventThrottle={16} stickyHeaderIndices={[0]} ref={scrollViewRef}>
+    <ScrollView onScroll={getScrollPosition} scrollEventThrottle={8} stickyHeaderIndices={[0]} ref={scrollViewRef} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === "Wszystkie" && isScrolledDate && <View style={{ paddingHorizontal: 15, paddingVertical: 7, backgroundColor: '#1f8aad' }}>
             <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
             <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>
@@ -178,6 +188,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
                       hour={item}
                       preachers={preachersContext.state.allPreachers!}
                       day={startDate}
+                      refresh={onRefresh}
                     />
                   )}
                   contentContainerStyle={{ marginBottom: 50 }}

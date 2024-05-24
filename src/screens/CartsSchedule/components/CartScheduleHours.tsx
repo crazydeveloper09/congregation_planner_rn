@@ -14,9 +14,10 @@ interface CartsScheduleHoursProps {
   hour: ICartHour;
   preachers: IPreacher[];
   day: string;
+  refresh: Function;
 }
 
-const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers, day }) => {
+const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers, day, refresh }) => {
   const [preacher1Value, setPreacher1Value] = useState("");
   const [preacher1Open, setPreacher1Open] = useState(false);
   const [preacher1Items, setPreacher1Items] = useState([
@@ -127,6 +128,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
               onPress={() => {
                 assignPreachersToHours(hour?._id, preacher1Value, preacher2Value, otherPreacher1, otherPreacher2, day)
                 setEditMode(false)
+                refresh()
               }}
             />
       </> : <>

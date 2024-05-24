@@ -86,6 +86,14 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
   }
   return (
     <View style={styles.container}>
+      {(type === "Studium Strażnicy") && (
+        <IconDescriptionValue 
+          iconName="music"
+          description="Pieśń"
+          value={midSong.toString()}
+        />
+    
+      )}
       <Text style={[{ backgroundColor: fontColor }, styles.title]}>
         {icon}
         <Text>{type}</Text>
@@ -130,7 +138,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         scrollEnabled={false}
       />
       
-      {(type === "Studium Strażnicy" || type === "Ulepszajmy swoją służbę") && (
+      {(type === "Ulepszajmy swoją służbę") && (
         <IconDescriptionValue 
           iconName="music"
           description="Pieśń"
