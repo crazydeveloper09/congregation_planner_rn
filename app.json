@@ -4,7 +4,7 @@
     "slug": "congregation_planner",
     "version": "1.0.4",
     "orientation": "default",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/mysplash.png",
@@ -25,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#1F8AAD"
       },
       "permissions": [
