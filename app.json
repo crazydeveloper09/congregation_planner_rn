@@ -3,6 +3,7 @@
     "name": "Congregation Planner",
     "slug": "congregation_planner",
     "version": "1.0.4",
+    "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
