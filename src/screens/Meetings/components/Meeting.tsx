@@ -34,7 +34,14 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.lead?._id && (
                 <View>
                     <Text style={styles.title}>
-                        {new Date(meeting?.date).toLocaleDateString("pl-PL")} -
+                        {new Date(meeting?.date).toLocaleString('pl-PL', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                hour: '2-digit', 
+                                minute: '2-digit',
+                                hour12: true // użycie formatu 12-godzinnego z AM/PM
+                            })} -
                         Prowadzący
                     </Text>
                     <IconLink 
