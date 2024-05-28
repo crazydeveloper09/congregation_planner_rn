@@ -39,7 +39,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                                 day: '2-digit', 
                                 hour: '2-digit', 
                                 minute: '2-digit',
-                                hour12: true // użycie formatu 12-godzinnego z AM/PM
+                                hour12: false // użycie formatu 12-godzinnego z AM/PM
                             })}
                         </ListItem.Title>
                     </ListItem.Content>

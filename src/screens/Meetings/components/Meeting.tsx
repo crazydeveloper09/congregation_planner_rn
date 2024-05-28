@@ -34,13 +34,13 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.lead?._id && (
                 <View>
                     <Text style={styles.title}>
-                        {new Date(meeting?.date).toLocaleString('pl-PL', { 
-                                year: 'numeric', 
-                                month: '2-digit', 
-                                day: '2-digit', 
-                                hour: '2-digit', 
+                        {new Date(meeting?.date).toLocaleString('pl-PL', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
                                 minute: '2-digit',
-                                hour12: true // użycie formatu 12-godzinnego z AM/PM
+                                hour12: false
                             })} -
                         Prowadzący
                     </Text>
@@ -56,7 +56,14 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.beginPrayer?._id && (
                 <View>
                     <Text style={styles.title}>
-                        {new Date(meeting?.date).toLocaleDateString("pl-PL")} -
+                        {new Date(meeting?.date).toLocaleString('pl-PL', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                            })} -
                         Modlitwa początkowa
                     </Text>
                     <IconLink 
@@ -70,10 +77,17 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.endPrayer?._id && (
                 <View>
                     <Text style={styles.title}>
-                        {new Date(meeting?.date).toLocaleDateString("pl-PL")} -
+                        {new Date(meeting?.date).toLocaleString('pl-PL', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                            })} -
                         Modlitwa końcowa
                     </Text>
-                    <IconLink 
+                    <IconLink
                         onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), `Modlitwa końcowa`, 'Sala Królestwa')}
                         iconName="calendar-month-outline"
                         description="Dodaj do kalendarza"
@@ -94,7 +108,14 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleString('pl-PL', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    })}</ListItem.Title>
                 </ListItem.Content>
                 </>
             }
