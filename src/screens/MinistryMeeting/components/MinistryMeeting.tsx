@@ -33,7 +33,14 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                     
                     <ListItem.Content>
                         <ListItem.Title style={styles.date}>
-                            {new Date(meeting.date).toLocaleString('pl-Pl')}
+                            {new Date(meeting.date).toLocaleString('pl-PL', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                hour: '2-digit', 
+                                minute: '2-digit',
+                                hour12: false // użycie formatu 12-godzinnego z AM/PM
+                            })}
                         </ListItem.Title>
                     </ListItem.Content>
                     </>
