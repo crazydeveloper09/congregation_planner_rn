@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { ListItem } from "react-native-elements";
+import { ListItem } from "@rneui/themed";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { groupBy } from "../../../helpers/arrays";
 import MeetingAssignment from "./MeetingAssignment";
@@ -12,6 +12,9 @@ import { addMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
+import NotFound from "../../../commonComponents/NotFound";
+import { Avatar } from "@rneui/base";
+import Accordion from "../../../commonComponents/Accordion";
 
 interface MeetingProps {
     meeting: IMeeting,
@@ -74,8 +77,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
           </>
         );
     }
-    return (
-        <View>
+    return (<View>
             <ListItem.Accordion
             containerStyle={{
                 backgroundColor: 'rgba(0, 0, 0, 0.0)',
@@ -83,78 +85,78 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             }}
             content={
                 <>
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.date}>{new Date(meeting?.date).toLocaleString('pl-PL')}</ListItem.Title>
-                    </ListItem.Content>
+                
+                <ListItem.Content>
+                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                </ListItem.Content>
                 </>
             }
             isExpanded={expanded}
             onPress={() => {
                 setExpanded(!expanded);
             }}
-            underlayColor={'rgba(0, 0, 0, 0.0)'}
         >
-            <View>
+            
                 {meeting?.cleaningGroup && <IconDescriptionValue 
-                    iconName="broom"
-                    value={meeting?.cleaningGroup?.name}
-                />}
-                <IconDescriptionValue 
-                    iconName="music"
-                    description="Pieśń"
-                    value={meeting?.beginSong?.toString()}
-                />
-                <IconDescriptionValue 
-                    iconName="account-tie"
-                    description="Prowadzący"
-                    value={meeting?.lead?.name}
-                />
-                <IconDescriptionValue 
-                    iconName="hands-pray"
-                    description="Modlitwa"
-                    value={meeting?.beginPrayer?.name}
-                />
-                
-                {((state.preacher && state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin") && (
-                    <IconLink 
-                        onPress={() => navigation.navigate("Meetings Assignment New", { meeting })}
-                        iconName="plus"
-                        description="Dodaj zadanie"
-                    />
-                )}
-                
-                <FlatList 
-                    keyExtractor={(assignmentType) => assignmentType}
-                    data={Object.keys(assignmentsGroup)}
-                    renderItem={({ item }) => <MeetingAssignment type={item} assignments={assignmentsGroup} midSong={meeting?.midSong} meeting={meeting} />}
-                    contentContainerStyle={{borderBottomWidth: 1, borderBottomColor: 'black' }}
-                    scrollEnabled={false}
-                />
-                <IconDescriptionValue 
-                    iconName="music"
-                    description="Pieśń końcowa"
-                    value={meeting?.endSong?.toString()}
-                />
-                <IconDescriptionValue 
-                    iconName="hands-pray"
-                    description="Modlitwa końcowa"
-                    value={meeting?.endPrayer?.name || meeting?.otherEndPrayer}
-                />
-                
-                {((state.preacher && state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
-                    <IconLink 
-                        onPress={() => navigation.navigate("Meetings Edit", { meeting })}
-                        iconName="pencil"
-                        description="Edytuj zebranie"
-                    />
-                    <IconLink 
-                        onPress={() => navigation.navigate("Meetings Delete Confirm", { meeting })}
-                        iconName="trash-can"
-                        description="Usuń zebranie"
-                    />
-                </IconContainer>}
-                
-            </View>
+                            iconName="broom"
+                            value={meeting?.cleaningGroup?.name}
+                        />}
+                        <IconDescriptionValue 
+                            iconName="music"
+                            description="Pieśń"
+                            value={meeting?.beginSong?.toString()}
+                        />
+                        <IconDescriptionValue 
+                            iconName="account-tie"
+                            description="Prowadzący"
+                            value={meeting?.lead?.name}
+                        />
+                        <IconDescriptionValue 
+                            iconName="hands-pray"
+                            description="Modlitwa"
+                            value={meeting?.beginPrayer?.name}
+                        />
+                        
+                        {((state.preacher && state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin") && (
+                            <IconLink 
+                                onPress={() => navigation.navigate("Meetings Assignment New", { meeting })}
+                                iconName="plus"
+                                description="Dodaj zadanie"
+                            />
+                        )}
+                        
+                        <FlatList 
+                            keyExtractor={(assignmentType) => assignmentType}
+                            data={Object.keys(assignmentsGroup)}
+                            renderItem={({ item }) => <MeetingAssignment type={item} assignments={assignmentsGroup} midSong={meeting?.midSong} meeting={meeting} />}
+                            contentContainerStyle={{borderBottomWidth: 1, borderBottomColor: 'black' }}
+                            scrollEnabled={false}
+                        />
+                        <IconDescriptionValue 
+                            iconName="music"
+                            description="Pieśń końcowa"
+                            value={meeting?.endSong?.toString()}
+                        />
+                        <IconDescriptionValue 
+                            iconName="hands-pray"
+                            description="Modlitwa końcowa"
+                            value={meeting?.endPrayer?.name || meeting?.otherEndPrayer}
+                        />
+                        
+                        {((state.preacher && state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
+                            <IconLink 
+                                onPress={() => navigation.navigate("Meetings Edit", { meeting })}
+                                iconName="pencil"
+                                description="Edytuj zebranie"
+                            />
+                            <IconLink 
+                                onPress={() => navigation.navigate("Meetings Delete Confirm", { meeting })}
+                                iconName="trash-can"
+                                description="Usuń zebranie"
+                            />
+                        </IconContainer>}
+              
+            
         </ListItem.Accordion>
         </View>
        
@@ -174,11 +176,12 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: "InterRegular",
         fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'justify'
+        textAlign: 'justify',
     },
     textBold: {
         fontFamily: "InterSemiBold",
+        fontSize: 16,
+        textAlign: 'justify',
     },
     linkContainer: {
         flexDirection: 'row',

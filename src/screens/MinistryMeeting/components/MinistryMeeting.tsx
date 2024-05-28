@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { MinistryMeeting as IMinistryMeeting } from "../data.mock";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
-import { ListItem } from "react-native-elements";
+import { ListItem } from "@rneui/themed";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
@@ -23,66 +23,64 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
     const authContext = useContext(AuthContext)
     return (
         <View>
-             <ListItem.Accordion
-            containerStyle={{
-                backgroundColor: 'rgba(0, 0, 0, 0.0)',
-                paddingHorizontal: 0
-            }}
-            content={
-                <>
-                
-                <ListItem.Content>
-                    <ListItem.Title style={styles.date}>
-                        {new Date(meeting.date).toLocaleString('pl-Pl')}
-                    </ListItem.Title>
-                </ListItem.Content>
-                </>
-            }
-            isExpanded={expanded}
-            onPress={() => {
-                setExpanded(!expanded);
-            }}
-            underlayColor={'rgba(0, 0, 0, 0.0)'}
+            <ListItem.Accordion
+                containerStyle={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                    paddingHorizontal: 0
+                }}
+                content={
+                    <>
+                    
+                    <ListItem.Content>
+                        <ListItem.Title style={styles.date}>
+                            {new Date(meeting.date).toLocaleString('pl-Pl')}
+                        </ListItem.Title>
+                    </ListItem.Content>
+                    </>
+                }
+                isExpanded={expanded}
+                onPress={() => {
+                    setExpanded(!expanded);
+                }}
         >
-            <View>
-                <IconDescriptionValue 
-                    iconName={meeting.place === "Zoom" ? "video-box" : "home"}
-                    description="Miejsce"
-                    value={meeting.place}
-                />
-                <IconDescriptionValue 
-                    iconName="account-tie"
-                    description="Prowadzący"
-                    value={meeting.lead.name}
-                />
+           
+                    <IconDescriptionValue 
+                        iconName={meeting.place === "Zoom" ? "video-box" : "home"}
+                        description="Miejsce"
+                        value={meeting.place}
+                    />
+                    <IconDescriptionValue 
+                        iconName="account-tie"
+                        description="Prowadzący"
+                        value={meeting.lead.name}
+                    />
 
-                {meeting.topic && <IconDescriptionValue 
-                    iconName="table-of-contents"
-                    description="Temat"
-                    value={meeting.topic}
-                />}
-                {((state.preacher && state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
-                    <IconLink 
-                        onPress={() => navigate("Ministry Meeting Edit", { meeting })}
-                        iconName="pencil"
-                        description="Edytuj zbiórkę"
-                    />
-                    <IconLink 
-                        onPress={() => navigate("Ministry Meeting Delete Confirm", { meeting })}
-                        iconName="trash-can"
-                        description="Usuń zbiórkę"
-                    />
-                </IconContainer>}
-                {state.preacher && state.preacher?._id === meeting.lead._id && (
-                    <IconLink 
-                        onPress={() => addMinistryMeetingAssignmentToCalendar(meeting.date, meeting.place, meeting.topic!)}
-                        iconName="calendar-month-outline"
-                        description="Dodaj do kalendarza"
-                        isCentered={true}
-                    />
-                )}
-                
-            </View>
+                    {meeting.topic && <IconDescriptionValue 
+                        iconName="table-of-contents"
+                        description="Temat"
+                        value={meeting.topic}
+                    />}
+                    {((state.preacher && state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
+                        <IconLink 
+                            onPress={() => navigate("Ministry Meeting Edit", { meeting })}
+                            iconName="pencil"
+                            description="Edytuj zbiórkę"
+                        />
+                        <IconLink 
+                            onPress={() => navigate("Ministry Meeting Delete Confirm", { meeting })}
+                            iconName="trash-can"
+                            description="Usuń zbiórkę"
+                        />
+                    </IconContainer>}
+                    {state.preacher && state.preacher?._id === meeting.lead._id && (
+                        <IconLink 
+                            onPress={() => addMinistryMeetingAssignmentToCalendar(meeting.date, meeting.place, meeting.topic!)}
+                            iconName="calendar-month-outline"
+                            description="Dodaj do kalendarza"
+                            isCentered={true}
+                        />
+                    )}
+           
         </ListItem.Accordion>
         </View>
        

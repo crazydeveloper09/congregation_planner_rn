@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsSemiBold",
     color: "white",
     gap: 6,
+    width: '100%'
   },
   assignmentTitle: {
     paddingVertical: 10,

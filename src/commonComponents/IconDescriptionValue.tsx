@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Platform } from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
 
 interface IconDescriptionValueProps {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textBold: {
-    fontFamily: "InterSemiBold",
+    fontFamily: "PoppinsSemiBold",
   },
 });
 
