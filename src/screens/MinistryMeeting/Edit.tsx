@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
-import { Input } from "react-native-elements";
+import { Input } from "@rneui/base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../commonComponents/Button";
 import Loading from "../../commonComponents/Loading";
@@ -29,6 +29,12 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [time, setTime] = useState<Date>(new Date())
     const [timeOpen, setTimeOpen] = useState<boolean>(false);
     const [place, setPlace] = useState<string>('')
+    const [defaultPlaceValue, setDefaultPlaceValue] = useState<string>('')
+    const [defaultPlaceOpen, setDefaultPlaceOpen] = useState<boolean>(false);
+    const [defaultPlaceItems, setDefaultPlaceItems] = useState([
+        { label: 'Sala Królestwa', value: 'Sala Królestwa' },
+        { label: 'Zoom', value: 'Zoom' },
+    ]);
     const [leadValue, setLeadValue] = useState("");
     const [leadOpen, setLeadOpen] = useState(false);
     const [leadItems, setLeadItems] = useState([]);
@@ -59,6 +65,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
         setDate(new Date(route.params.meeting.date))
         setTime(new Date(route.params.meeting.date))
         setPlace(route.params.meeting.place)
+        setDefaultPlaceValue(route.params.meeting?.defaultPlace || '')
         if(route.params.meeting.topic) {
             setTopic(route.params.meeting.topic)
             setIsTopic(true)
@@ -83,14 +90,26 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 setTime(date)
                 setTimeOpen(false)
             }} onCancel={() => setTimeOpen(false)} isVisible={timeOpen} />
-            <Input 
+            <Text style={styles.labelStyle}>Domyślne miejsce</Text>
+                <DropDownPicker 
+                    value={defaultPlaceValue}
+                    setValue={setDefaultPlaceValue}
+                    open={defaultPlaceOpen}
+                    setOpen={setDefaultPlaceOpen}
+                    items={defaultPlaceItems}
+                    listMode="MODAL"
+                    modalTitle="Domyślne miejsce"
+                    placeholder="Wybierz domyślne miejsce zbiórki"
+                />
+            {defaultPlaceValue === '' && <Input 
                 value={place}
                 onChangeText={setPlace}
                 label={<Text style={styles.labelStyle}>Miejsce</Text>}
                 inputContainerStyle={styles.inputContainer}
                 containerStyle={styles.containerInput}
                 placeholder="Wpisz miejsce zbiórki"
-            />
+            />}
+    
             <Text style={styles.labelStyle}>Prowadzący</Text>
             <DropDownPicker 
                 value={leadValue}

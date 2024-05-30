@@ -16,6 +16,8 @@ import HeaderRight from "../../commonComponents/HeaderRight";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PreacherAssignment from "./components/PreacherAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
+import IconLink from "../../commonComponents/IconLink";
+import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -79,7 +81,8 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
           ).length === 0 ? (
             <NotFound title="Niestety nie znaleziono zebrań" />
           ) : (
-            <FlatList
+            <>
+              <FlatList
                 keyExtractor={(meeting) => meeting._id}
                 data={groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
                   (meeting) => meeting.month === currentMonth
@@ -87,7 +90,12 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
                 renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
                 scrollEnabled={false}
               />
-          
+              { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
+                iconName="download"
+                value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+              />}
+              
+            </>
           )}
         </>}
       </View> : <View style={styles.container}>

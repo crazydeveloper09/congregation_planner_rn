@@ -50,7 +50,7 @@ const meetingReducer = (
     case "turn_off_loading":
       return { ...state, isLoading: false, errMessage: "" };
     case "add_error":
-      return { ...state, errMessage: action.payload };
+      return { ...state, isLoading: false, errMessage: action.payload };
     default:
       return state;
   }
@@ -224,7 +224,8 @@ const addAssignment = (dispatch: Function) => {
     type: string,
     participant: string,
     reader: string,
-    otherParticipant: string
+    otherParticipant: string,
+    defaultTopic: string,
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
@@ -232,7 +233,7 @@ const addAssignment = (dispatch: Function) => {
       const congregationID = await AsyncStorage.getItem("congregationID");
       const response = await territories.post(
         `/meetings/${meetingID}/assignments?congregationID=${congregationID}`,
-        { topic, type, participant, reader, otherParticipant },
+        { topic, type, participant, reader, otherParticipant, defaultTopic },
         {
           headers: {
             Authorization: `bearer ${token}`,
@@ -242,7 +243,7 @@ const addAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie dodano zadanie na zebraniu: ${topic}`,
+        message: `Poprawnie dodano zadanie na zebraniu: ${topic || defaultTopic}`,
         type: "success",
       });
     } catch (err) {

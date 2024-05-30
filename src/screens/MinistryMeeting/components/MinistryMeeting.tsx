@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { MinistryMeeting as IMinistryMeeting } from "../data.mock";
+import { IMinistryMeeting } from "../../../contexts/interfaces";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
 import { ListItem } from "@rneui/themed";
@@ -52,9 +52,9 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
         >
            
                     <IconDescriptionValue 
-                        iconName={meeting.place === "Zoom" ? "video-box" : "home"}
+                        iconName={meeting.defaultPlace === "Zoom" ? "video-box" : "home"}
                         description="Miejsce"
-                        value={meeting.place}
+                        value={meeting.place || meeting.defaultPlace}
                     />
                     <IconDescriptionValue 
                         iconName="account-tie"
