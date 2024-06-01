@@ -142,7 +142,7 @@ const deleteMinistryMeeting = (dispatch: Function) => {
                 }
             });
             dispatch({ type: 'turn_off_loading' })
-            navigate('MinistryMeetings')
+            navigate('Ministry Meeting Index')
             showMessage({
                 message: `Poprawnie usunięto grupę służby`,
                 type: 'success',

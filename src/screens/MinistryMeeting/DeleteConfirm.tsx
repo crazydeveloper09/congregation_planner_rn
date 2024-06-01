@@ -4,27 +4,27 @@ import { View, Text, StyleSheet } from "react-native";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
 import MinistryMeeting from "./components/MinistryMeeting";
 import ButtonC from "../../commonComponents/Button";
+import { IMinistryMeeting } from "../../contexts/interfaces";
 
 interface MinistryMeetingDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
     route: {
         params: {
-            id: string;                 
+            meeting: IMinistryMeeting                
         }
     }
 }
 
 const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const {state, deleteMinistryMeeting} = useContext(MinistryMeetingContext);
-    
-    const meeting = state.ministryMeetings?.find((meeting) => meeting._id === route.params.id)
+
     return (
         <View style={styles.container}>
-            <MinistryMeeting meeting={meeting!} navigate={navigation.navigate} />
-            <Text style={styles.text}>Czy na pewno chcesz usunąć tą zbiórkę?</Text>
+            <MinistryMeeting meeting={route.params.meeting!} navigate={navigation.navigate} />
+            <Text style={styles.text}>Czy na pewno chcesz usunąć tą zbiórkę (rozwiń po więcej informacji)?</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteMinistryMeeting(route.params.id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title="Tak" onPress={() => deleteMinistryMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
                 <ButtonC title="Nie" onPress={() => navigation.navigate('Ministry Meeting Index')} />
