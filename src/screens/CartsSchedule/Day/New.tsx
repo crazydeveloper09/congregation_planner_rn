@@ -2,18 +2,30 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
-import { Input } from "react-native-elements";
+import { Input } from "@rneui/base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 
-const CartDayNewScreen: React.FC = () => {
+interface CartDayNewScreenProps {
+    route: {
+        params: {
+            date: Date
+        }
+    }
+}
+
+const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     const [date, setDate] = useState<Date>(new Date())
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const [place, setPlace] = useState<string>('')
     const [startHour, setStartHour] = useState<string>('');
     const [finalHour, setFinalHour] = useState<string>('')
     const { state, addCartDay } = useContext(CartsScheduleContext)
+
+    useEffect(() => {
+        setDate(new Date(route.params.date))
+    }, [])
 
     return (
         <View style={styles.container}>

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
