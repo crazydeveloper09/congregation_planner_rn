@@ -79,12 +79,12 @@ const loadMinistryMeetingsOfPreacher = (dispatch: Function) => {
 }
 
 const addMinistryMeeting = (dispatch: Function) => {
-    return async (place: string, lead: string, date: Date, hour: string, topic?: string) => {
+    return async (place: string, lead: string, date: Date, hour: string, defaultPlace: string, topic?: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
             const congregationID = await AsyncStorage.getItem("congregationID");
-            const response = await territories.post(`/ministryMeetings?congregationID=${congregationID}`, {place, lead, date, hour, topic}, {
+            const response = await territories.post(`/ministryMeetings?congregationID=${congregationID}`, {place, lead, date, hour, topic, defaultPlace}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }
@@ -105,12 +105,12 @@ const addMinistryMeeting = (dispatch: Function) => {
 }
 
 const editMinistryMeeting = (dispatch: Function) => {
-    return async (ministryMeetingID: string, place: string, lead: string, date: Date, hour: string, topic?: string) => {
+    return async (ministryMeetingID: string, place: string, lead: string, date: Date, hour: string, defaultPlace: string, topic?: string,) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
             const congregationID = await AsyncStorage.getItem("congregationID");
-            const response = await territories.put(`/ministryMeetings/${ministryMeetingID}?congregationID=${congregationID}`, {ministryMeeting: {place, lead, date, hour, topic}}, {
+            const response = await territories.put(`/ministryMeetings/${ministryMeetingID}?congregationID=${congregationID}`, {ministryMeeting: {place, lead, date, hour, topic, defaultPlace}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }
@@ -142,7 +142,7 @@ const deleteMinistryMeeting = (dispatch: Function) => {
                 }
             });
             dispatch({ type: 'turn_off_loading' })
-            navigate('MinistryMeetings')
+            navigate('Ministry Meeting Index')
             showMessage({
                 message: `Poprawnie usunięto grupę służby`,
                 type: 'success',

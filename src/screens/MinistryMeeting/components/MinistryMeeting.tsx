@@ -1,12 +1,9 @@
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { MinistryMeeting as IMinistryMeeting } from "../data.mock";
+import { IMinistryMeeting } from "../../../contexts/interfaces";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
 import { ListItem } from "@rneui/themed";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
-import { NavigationProp } from "@react-navigation/native";
 import { addMinistryMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
@@ -52,20 +49,20 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
         >
            
                     <IconDescriptionValue 
-                        iconName={meeting.place === "Zoom" ? "video-box" : "home"}
+                        iconName={meeting?.defaultPlace === "Zoom" ? "video-box" : "home"}
                         description="Miejsce"
-                        value={meeting.place}
+                        value={meeting?.place || meeting?.defaultPlace}
                     />
                     <IconDescriptionValue 
                         iconName="account-tie"
                         description="Prowadzący"
-                        value={meeting.lead.name}
+                        value={meeting?.lead?.name}
                     />
 
-                    {meeting.topic && <IconDescriptionValue 
+                    {meeting?.topic && <IconDescriptionValue 
                         iconName="table-of-contents"
                         description="Temat"
-                        value={meeting.topic}
+                        value={meeting?.topic}
                     />}
                     {((state.preacher && state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 
@@ -79,9 +76,9 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                             description="Usuń zbiórkę"
                         />
                     </IconContainer>}
-                    {state.preacher && state.preacher?._id === meeting.lead._id && (
+                    {state.preacher && state.preacher?._id === meeting?.lead?._id && (
                         <IconLink 
-                            onPress={() => addMinistryMeetingAssignmentToCalendar(meeting.date, meeting.place, meeting.topic!)}
+                            onPress={() => addMinistryMeetingAssignmentToCalendar(meeting?.date, meeting?.place, meeting?.topic!)}
                             iconName="calendar-month-outline"
                             description="Dodaj do kalendarza"
                             isCentered={true}

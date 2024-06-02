@@ -15,6 +15,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderRight from "../../commonComponents/HeaderRight";
 import TopMenu from "../../commonComponents/TopMenu";
+import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
@@ -59,15 +60,21 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
                 {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_minimeetings")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
             </> }
             
-                
-            { state.ministryMeetings?.length === 0 ? <NotFound title="Niestety nie znaleziono zbiórek" /> : <FlatList
-                keyExtractor={(ministryMeeting) => ministryMeeting._id} 
-                data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
-                renderItem={({ item }) => <MinistryMeeting meeting={item} navigate={navigation.navigate} />}
-                contentContainerStyle={styles.container}
-                scrollEnabled={false}
-                
-            />}
+            <View style={styles.container}>
+                { state.ministryMeetings?.length === 0 ? <NotFound title="Niestety nie znaleziono zbiórek" /> : <FlatList
+                    keyExtractor={(ministryMeeting) => ministryMeeting._id} 
+                    data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
+                    renderItem={({ item }) => <MinistryMeeting meeting={item} navigate={navigation.navigate} />}
+                    scrollEnabled={false}
+                    
+                />}
+
+                { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
+                    iconName="download"
+                    value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+                />}
+            </View>
+            
             
         </ScrollView>
     )

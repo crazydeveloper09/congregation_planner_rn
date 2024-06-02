@@ -73,6 +73,7 @@ export interface IMinistryMeeting {
     place: string;
     date: Date;
     hour: string;
+    defaultPlace: string;
     month: string;
     topic?: string;
     lead: IPreacher;
@@ -85,6 +86,7 @@ export interface IMeetingAssignment {
     participant: IPreacher,
     reader?: IPreacher,
     type: string,
+    defaultTopic?: string,
     otherParticipant: string,
     meeting: IMeeting
 }

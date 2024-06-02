@@ -108,11 +108,12 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     navigation.setOptions({
       headerRight: () => (
         <HeaderRight>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Carts Day New")}
+          {!state.cartDay && <TouchableOpacity
+            onPress={() => navigation.navigate("Carts Day New", {date: selectedStartDate})}
           >
             <MaterialCommunityIcons name="plus" size={30} color={"white"} />
-          </TouchableOpacity>
+          </TouchableOpacity>}
+          
           {state.cartDay && (
             <>
               <TouchableOpacity
@@ -150,9 +151,9 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
 
   return (
     <ScrollView onScroll={getScrollPosition} scrollEventThrottle={8} stickyHeaderIndices={[0]} ref={scrollViewRef} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === "Wszystkie" && isScrolledDate && <View style={{ paddingHorizontal: 15, paddingVertical: 7, backgroundColor: '#1f8aad' }}>
+      {currentFilter === "Wszystkie" && <View style={{ paddingHorizontal: 15, paddingVertical: 7, backgroundColor: '#1f8aad' }}>
             <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
-            <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>
+            {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
         </View>}
       {authContext.state.whoIsLoggedIn !== "admin" && (
        <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />
@@ -172,8 +173,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               onDateChange={onDateChange}
             />
             <View style={styles.resultContainer}>
-              <Text style={styles.chosenDate}>{startDate}</Text>
-              <Text style={styles.place}>{state.cartDay?.place}</Text>
+          
               {Boolean(state.cartDay) ? (
                 ""
               ) : (

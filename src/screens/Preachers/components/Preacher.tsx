@@ -23,7 +23,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
         try {
           const result = await Share.share({
             message:
-                `Witaj ${preacher.name}, \n Twój specjalny link do Congregation Planner: ${preacher.link} (link tylko do skopiowania, nie klikaj go!). Skopiuj go, wejdź do aplikacji, kliknij "Logowanie głosiciela" i wklej go. Vouilla. Możesz teraz przeglądać różne plany w Twoim zborze. Link do instrukcji uruchamiania: https://docs.google.com/document/d/1mhc8c38rUHpXxug-amBXT_W3AUuVsBpMEkat-BR3dVI/edit?usp=sharing`,
+                `Witaj ${preacher.name},\n Twój specjalny link do Congregation Planner: ${preacher.link} (link tylko do skopiowania, nie klikaj go!). \n\n Jak uruchomić aplikację? \n\n 1. \n • IOS - wejdź do instrukcji uruchamiania: https://docs.google.com/document/d/1mhc8c38rUHpXxug-amBXT_W3AUuVsBpMEkat-BR3dVI/edit?usp=sharing i postępuj zgodnie z podanymi tam wskazówkami. \n\n • Android: W odpowiedzi na tą wiadomość wyślij mi swojego maila. Po jakimś czasie dostaniesz linka do Sklepu Play. Zainstaluj ją na swoim urządzeniu. \n\n 2. Wejdź do aplikacji. \n\n 3. Kliknij "Logowanie głosiciela" i wklej specjalny link. \n\n Vouilla. Możesz teraz przeglądać różne plany w Twoim zborze.`,
             });
           if (result.action === Share.sharedAction) {
             if (result.activityType) {

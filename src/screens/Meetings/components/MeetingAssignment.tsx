@@ -104,7 +104,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         renderItem={(assignment) => (
           <>
             <Text style={[{ color: fontColor }, styles.assignmentTitle]}>
-              {assignment.item.topic}
+              {assignment.item.topic || assignment.item.defaultTopic}
             </Text>
             <IconDescriptionValue 
                     iconName="account"

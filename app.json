@@ -2,7 +2,7 @@
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "1.0.4",
+    "version": "1.0.8",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -34,7 +34,7 @@
         "android.permission.WRITE_CALENDAR"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 5
+      "versionCode": 6
     },
     "web": {
       "favicon": "./assets/favicon.png"

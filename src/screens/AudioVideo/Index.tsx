@@ -16,6 +16,7 @@ import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import AudioVideoAssignment from "./components/AudioVideoAssignment";
 import OrdinalAssignment from "./components/OrdinalAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
+import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -61,12 +62,18 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
       {authContext.state.whoIsLoggedIn !== "admin" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
 
         {currentFilter === "Wszystkie" ? <View style={styles.container}>
-          {state?.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze żadnych zebrań" /> : <FlatList
+          {state?.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze żadnych zebrań" /> : <>
+          <FlatList
             keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}
             renderItem={({ item }) => type === "Audio-video" ? <AudioVideo meeting={item} audioVideo={item.audioVideo} /> : <Ordinal meeting={item} ordinal={item.ordinal} />}
             scrollEnabled={false}
-          />}
+          />
+          { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
+                iconName="download"
+                value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+              />}
+          </>}
         </View>: <View style={styles.container}>
           <Text style={styles.meeting}>Audio-video</Text>
           {audioVideoContext.state.audioVideos?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
@@ -82,6 +89,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
               renderItem={({ item }) => <OrdinalAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
+               
         </View>}
         
      

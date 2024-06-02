@@ -34,6 +34,20 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
         {label: 'Ulepszajmy swoją służbę', value: 'Ulepszajmy swoją służbę'},
         {label: 'Chrześcijański tryb życia', value: 'Chrześcijański tryb życia'},
     ]);
+    const [defaultTopicValue, setDefaultTopicValue] = useState<string>('')
+    const [defaultTopicOpen, setDefaultTopicOpen] = useState<boolean>(false);
+    const [defaultTopicItems, setDefaultTopicItems] = useState([
+        { label: 'Wyszukujemy duchowe skarby', value: 'Wyszukujemy duchowe skarby' },
+        { label: 'Czytanie Biblii', value: 'Czytanie Biblii' },
+        { label: 'Rozpoczynanie rozmowy', value: 'Rozpoczynanie rozmowy' },
+        { label: 'Podtrzymywanie zainteresowania', value: 'Podtrzymywanie zainteresowania' },
+        { label: 'Pozyskiwanie uczniów', value: 'Pozyskiwanie uczniów' },
+        { label: 'Wyjaśnianie swoich wierzeń', value: 'Wyjaśnianie swoich wierzeń' },
+        { label: 'Przemówienie', value: 'Przemówienie' },
+        { label: 'Potrzeby zboru', value: 'Potrzeby zboru' },
+        { label: 'Osiągnięcia organizacji', value: 'Osiągnięcia organizacji' },
+        { label: 'Zborowe studium Biblii', value: 'Zborowe studium Biblii' },
+    ]);
     const [isReader, setIsReader] = useState(false)
     const [readerValue, setReaderValue] = useState<string>('')
     const [readerOpen, setReaderOpen] = useState<boolean>(false);
@@ -65,6 +79,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
         loadPreachers()
         setParticipantValue(route.params.assignment.participant?._id)
         setTypeValue(route.params.assignment.type)
+        setDefaultTopicValue(route.params.assignment?.defaultTopic || '')
         setTopic(route.params.assignment.topic)
         if(route.params.assignment.reader){
             setIsReader(true);
@@ -80,15 +95,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
         <ScrollView style={styles.container}>
             <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
             <Meeting meeting={route.params.meeting} filter="Wszystkie" />
-            <Input 
-                    value={topic}
-                    onChangeText={setTopic}
-                    label={<Text style={styles.labelStyle}>Temat</Text>}
-                    inputContainerStyle={styles.inputContainer}
-                    containerStyle={styles.containerInput}
-                    placeholder="Wpisz temat"
-                />
-                <Text style={styles.labelStyle}>Typ</Text>
+            <Text style={styles.labelStyle}>Typ</Text>
             <DropDownPicker 
                 value={typeValue}
                 setValue={setTypeValue}
@@ -99,6 +106,30 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 modalTitle="Typ zadania"
                 placeholder="Wybierz typ zadania"
             />
+
+            {route.params.meeting.type === "Zebranie w tygodniu" && <>
+                <Text style={styles.labelStyle}>Domyślny temat</Text>
+                <DropDownPicker 
+                    value={defaultTopicValue}
+                    setValue={setDefaultTopicValue}
+                    open={defaultTopicOpen}
+                    setOpen={setDefaultTopicOpen}
+                    items={defaultTopicItems}
+                    listMode="MODAL"
+                    modalTitle="Domyślny temat"
+                    placeholder="Wybierz domyślny temat zadania"
+                />
+            </>}
+
+                {defaultTopicValue === '' && <Input 
+                    value={topic}
+                    onChangeText={setTopic}
+                    label={<Text style={styles.labelStyle}>Temat</Text>}
+                    inputContainerStyle={styles.inputContainer}
+                    containerStyle={styles.containerInput}
+                    placeholder="Wpisz temat"
+                />}
+               
 
                 <Text style={styles.labelStyle}>Uczestnik</Text>
             <DropDownPicker 
@@ -163,7 +194,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             <ButtonC 
                 title="Edytuj zadanie"
                 isLoading={state.isLoading}
-                onPress={() => editAssignment(route.params.meeting?._id, route.params.assignment?._id, topic, typeValue, participantValue, readerValue, otherParticipant)}
+                onPress={() => editAssignment(route.params.meeting?._id, route.params.assignment?._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue)}
             />
         </ScrollView>
     )

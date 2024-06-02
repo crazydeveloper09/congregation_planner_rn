@@ -102,7 +102,7 @@ const logInPreacher = (dispatch: Function) => {
         await AsyncStorage.setItem('whoIsLoggedIn', 'preacher')
         await AsyncStorage.setItem('preacherID', JSON.stringify(response.data.preacher._id))
         await AsyncStorage.setItem('congregationID', JSON.stringify(response.data.preacher.congregation))
-        dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'preacher' } })
+        dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'preacher', preacherID: response.data.preacher._id  } })
         mainNavNavigate('Meetings')
       }
     } catch (err) {
