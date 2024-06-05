@@ -9,6 +9,7 @@ import { Context as AuthContext } from "../../../contexts/AuthContext";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
+import { chooseFontColorAndIcon } from "../Assignments/helpers/types";
 
 interface MeetingAssignmentProps {
   type: string;
@@ -25,65 +26,11 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
   midSong,
   meeting,
 }) => {
-  let fontColor: string;
-  let icon: ReactElement;
+  const { icon, fontColor } = chooseFontColorAndIcon(type);
   const navigation = useNavigation();
   const {state} = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
-  switch (type) {
-    case "Studium Strażnicy": {
-      fontColor = "#588D3F";
-      icon = (
-        <MaterialCommunityIcons
-          name="book-open-blank-variant"
-          size={21}
-          color={"white"}
-        />
-      );
-      break;
-    }
-    case "Wykład biblijny": {
-      fontColor = "#292929";
-      icon = (
-        <MaterialCommunityIcons
-          name="book-education"
-          size={21}
-          color={"white"}
-        />
-      );
-      break;
-    }
-    case "Skarby ze Słowa Bożego": {
-      fontColor = "#2A6B77";
-      icon = (
-        <MaterialCommunityIcons
-          name="diamond-stone"
-          size={21}
-          color={"white"}
-        />
-      );
-      break;
-    }
-    case "Ulepszajmy swoją służbę": {
-      fontColor = "#9B6D17";
-      icon = (
-        <MaterialCommunityIcons
-          name="briefcase-upload"
-          size={21}
-          color={"white"}
-        />
-      );
-      break;
-    }
-    case "Chrześcijański tryb życia": {
-      fontColor = "#942926";
-      icon = <MaterialCommunityIcons name="sheep" size={21} color={"white"} />;
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+
   return (
     <View style={styles.container}>
       {(type === "Studium Strażnicy") && (

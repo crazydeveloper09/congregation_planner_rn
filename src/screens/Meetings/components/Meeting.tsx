@@ -132,7 +132,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         <IconDescriptionValue 
                             iconName="music"
                             description="Pieśń"
-                            value={meeting?.beginSong?.toString()}
+                            value={meeting.beginSong !== 0 ? meeting?.beginSong?.toString(): ""}
                         />
                         <IconDescriptionValue 
                             iconName="account-tie"
@@ -163,7 +163,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         <IconDescriptionValue 
                             iconName="music"
                             description="Pieśń końcowa"
-                            value={meeting?.endSong?.toString()}
+                            value={meeting.endSong !== 0 ? meeting?.endSong?.toString(): ""}
                         />
                         <IconDescriptionValue 
                             iconName="hands-pray"

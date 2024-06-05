@@ -90,15 +90,15 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     useEffect(() => {
         loadPreachers()
         loadMinistryGroups()
-        setDate(new Date(route.params.meeting.date))
-        setBeginPrayerValue(route.params.meeting.beginPrayer._id)
+        setDate(new Date(route.params.meeting?.date))
+        setBeginPrayerValue(route.params.meeting.beginPrayer?._id || '')
         setTypeValue(route.params.meeting.type)
-        setBeginSong(route.params.meeting.beginSong.toString())
-        setMidSong(route.params.meeting.midSong.toString())
-        setEndSong(route.params.meeting.endSong.toString())
-        setLeadValue(route.params.meeting.lead._id)
-        setEndPrayerValue(route.params.meeting.endPrayer._id)
-        setCleaningGroupValue(route.params.meeting.cleaningGroup?._id)
+        setBeginSong(route.params.meeting.beginSong?.toString() || '')
+        setMidSong(route.params.meeting.midSong?.toString() || '')
+        setEndSong(route.params.meeting.endSong?.toString() || '')
+        setLeadValue(route.params.meeting.lead?._id || '')
+        setEndPrayerValue(route.params.meeting.endPrayer?._id || '')
+        setCleaningGroupValue(route.params.meeting.cleaningGroup?._id || '')
         if(route.params.meeting.otherEndPrayer){
             setIsOtherEndPrayer(true);
             setOtherEndPrayer(route.params.meeting.otherEndPrayer)

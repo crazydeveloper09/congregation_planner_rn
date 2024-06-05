@@ -5,6 +5,8 @@ import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetin
 import MinistryMeeting from "./components/MinistryMeeting";
 import ButtonC from "../../commonComponents/Button";
 import { IMinistryMeeting } from "../../contexts/interfaces";
+import { ListItem } from "@rneui/base";
+import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 
 interface MinistryMeetingDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -20,8 +22,31 @@ const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmS
 
     return (
         <View style={styles.container}>
-            <MinistryMeeting meeting={route.params.meeting!} navigate={navigation.navigate} />
-            <Text style={styles.text}>Czy na pewno chcesz usunąć tą zbiórkę (rozwiń po więcej informacji)?</Text>
+            <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
+            
+                <View>
+                    <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <IconDescriptionValue 
+                        iconName={route.params.meeting?.defaultPlace === "Zoom" ? "video-box" : "home"}
+                        description="Miejsce"
+                        value={route.params.meeting?.place || route.params.meeting?.defaultPlace}
+                    />
+                    <IconDescriptionValue 
+                        iconName="account-tie"
+                        description="Prowadzący"
+                        value={route.params.meeting?.lead?.name}
+                    />
+
+                    {route.params.meeting?.topic && <IconDescriptionValue 
+                        iconName="table-of-contents"
+                        description="Temat"
+                        value={route.params.meeting?.topic}
+                    />}
+                </View>
+                
+            
+            </ListItem>
+            <Text style={styles.text}>Czy na pewno chcesz usunąć tą zbiórkę?</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title="Tak" onPress={() => deleteMinistryMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
@@ -46,7 +71,12 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 21,
         marginVertical: 10,
-    }
+    },
+    date: {
+        fontFamily: "MontserratRegular",
+        fontSize: 20,
+        marginBottom: 15
+    },
 })
 
 export default MinistryMeetingDeleteConfirmScreen;
