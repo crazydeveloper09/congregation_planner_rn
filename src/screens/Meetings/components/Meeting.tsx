@@ -13,7 +13,7 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
 import NotFound from "../../../commonComponents/NotFound";
-import { Avatar } from "@rneui/base";
+import { Avatar, Divider } from "@rneui/base";
 import Accordion from "../../../commonComponents/Accordion";
 
 interface MeetingProps {
@@ -186,6 +186,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
               
             
         </ListItem.Accordion>
+        <Divider />
         </View>
        
     )

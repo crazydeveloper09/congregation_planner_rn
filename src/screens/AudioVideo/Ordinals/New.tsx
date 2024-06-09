@@ -3,12 +3,17 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Context as OrdinalContext } from "../../../contexts/OrdinalsContext";
+import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import territories from "../../../api/territories";
 import { IMeeting, IPreacher } from "../../../contexts/interfaces";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../../Meetings/components/Meeting";
+import Label from "../../../commonComponents/Label";
+import AudioVideo from "../components/AudioVideo";
+import { defaultStyles } from "../../defaultStyles";
+import { months } from "../../../../defaultData";
 
 interface OrdinalNewScreenProps {
     route: {
@@ -34,6 +39,7 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
     const [parkingOpen, setParkingOpen] = useState<boolean>(false);
     const [parkingItems, setParkingItems] = useState([]);
     const { state, addOrdinal } = useContext(OrdinalContext);
+    const meetingContext = useContext(MeetingContext)
 
 
     const loadPreachers = async () => {
@@ -44,8 +50,13 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
             }
         })
         .then((response) => {
-            const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_see_audio_video")).map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
+            const meetingDate = new Date(route.params.meeting.date)
+            const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
+            const currentMonthMeetings = meetingContext.state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.ordinal?.hallway1?.name === preacher.name || meeting.ordinal?.hallway2?.name === preacher.name || meeting.ordinal?.auditorium?.name === preacher.name || meeting.ordinal?.parking?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - był porządkowym już ${alreadyAssigned} razy`, value: preacher._id } as never
             })
             setHallway1Items(selectItems)
             setAuditoriumItems(selectItems)
@@ -63,19 +74,24 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
         <View style={styles.container}>
             <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
             <Meeting meeting={route.params.meeting} filter="Wszystkie" />
-            <Text style={styles.labelStyle}>Porządkowy (1)</Text>
+
+            <Text style={[styles.meeting, { marginTop: 15 }]}>Audio-video</Text>
+            <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
+            
+            <Label text="Porządkowy (1)" />
             <DropDownPicker 
                 value={hallway1Value}
                 setValue={setHallway1Value}
                 open={hallway1Open}
                 setOpen={setHallway1Open}
                 items={hallway1Items}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Porządkowy (1)"
                 placeholder="Wybierz porządkowego (1)"
             />
-
-            <Text style={styles.labelStyle}>Czy jest potrzebny porządkowy 2?</Text>
+            <Label text="Czy jest potrzebny porządkowy 2?" />
             <Switch  
                 value={isHallway2}
                 onValueChange={(value) => setIsHallway2(value)}
@@ -84,34 +100,35 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
             />
 
             { isHallway2 && <>
-                <Text style={styles.labelStyle}>Porządkowy 2</Text>
+                <Label text="Porządkowy 2" />
                 <DropDownPicker 
                     value={hallway2Value}
                     setValue={setHallway2Value}
                     open={hallway2Open}
                     setOpen={setHallway2Open}
                     items={hallway2Items}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
                     modalTitle="Porządkowy 2"
                     placeholder="Wybierz porządkowego 2"
                 />
             </>}
-
-            <Text style={styles.labelStyle}>Porządkowy audytorium</Text>
+            <Label text="Porządkowy audytorium" />
             <DropDownPicker 
                 value={auditoriumValue}
                 setValue={setAuditoriumValue}
                 open={auditoriumOpen}
                 setOpen={setAuditoriumOpen}
                 items={auditoriumItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Porządkowy audytorium"
                 placeholder="Wybierz porządkowego audytorium"
             />
 
-            
-
-            <Text style={styles.labelStyle}>Czy jest potrzebny porządkowy na parkingu?</Text>
+            <Label text="Czy jest potrzebny porządkowy na parkingu?" />
             <Switch  
                 value={isParking}
                 onValueChange={(value) => setIsParking(value)}
@@ -128,6 +145,8 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
                     containerStyle={{
                         marginVertical: 10
                     }}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
                     modalTitle="Porządkowy parking"
                     placeholder="Wybierz porządkowego na parkingu"
@@ -151,22 +170,6 @@ const styles = StyleSheet.create({
         fontSize: 21,
         color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     switch: {
         alignSelf: 'flex-start',  

@@ -15,7 +15,6 @@ import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
 import { useEffect, useState } from 'react';
 
-
 StatusBar.setBarStyle('light-content')
 
 function App() {

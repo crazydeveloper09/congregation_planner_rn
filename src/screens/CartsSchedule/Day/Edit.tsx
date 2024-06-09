@@ -4,6 +4,7 @@ import { Context as CartsScheduleContext } from "../../../contexts/CartsSchedule
 import { Input } from "react-native-elements";
 import ButtonC from "../../../commonComponents/Button";
 import { ICartDay } from "../../../contexts/interfaces";
+import MyInput from "../../../commonComponents/MyInput";
 
 interface CartDayEditScreenProps {
     route: {
@@ -23,12 +24,10 @@ const CartDayEditScreen: React.FC<CartDayEditScreenProps> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Input 
+            <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label={<Text style={styles.labelStyle}>Miejsce</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Miejsce"
                 placeholder="Wpisz lokalizację wózka"
             />
            
@@ -45,22 +44,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 15
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default CartDayEditScreen;

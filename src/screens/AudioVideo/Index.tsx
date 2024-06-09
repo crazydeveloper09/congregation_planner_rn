@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
 import { groupBy } from "../../helpers/arrays";
@@ -17,6 +17,8 @@ import AudioVideoAssignment from "./components/AudioVideoAssignment";
 import OrdinalAssignment from "./components/OrdinalAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
+import HeaderRight from "../../commonComponents/HeaderRight";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -35,15 +37,35 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   const audioVideoContext = useContext(AudioVideoContext)
   const preachersContext = useContext(PreachersContext);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+
   useEffect(() => {
     currentFilter === "Wszystkie" ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRight>
+          <TouchableOpacity
+            onPress={onRefresh}
+          >
+            <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
+          </TouchableOpacity>
+        </HeaderRight>
+      ),
+    });
   
     const unsubscribe = navigation.addListener("focus", () => {
       currentFilter === "Wszystkie" ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
     });
 
     return unsubscribe;
-  }, [currentFilter]);
+  }, [currentFilter, refreshing]);
 
 
   if (state.isLoading || audioVideoContext.state.isLoading) {
@@ -53,7 +75,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   const meetingsGroup = groupBy<IMeeting>(state.meetings!, "month");
   
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === "Wszystkie" && <>
         <TopMenu state={type} data={types} updateState={setType} />
         <TopMenu state={currentMonth} data={meetingsGroup && Object.keys(meetingsGroup)} updateState={setCurrentMonth} />

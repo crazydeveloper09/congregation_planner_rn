@@ -12,6 +12,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMinistryMeeting, IPreacher } from "../../contexts/interfaces";
 import { Switch } from "@rneui/base";
 import { NavigationProp } from "@react-navigation/native";
+import MyInput from "../../commonComponents/MyInput";
+import ChooseDate from "../../commonComponents/ChooseDate";
+import Label from "../../commonComponents/Label";
+import { months } from "../../../defaultData";
+import { defaultStyles } from "../defaultStyles";
 
 interface MinistryMeetingEditScreenProps {
     navigation: NavigationProp<any>;
@@ -50,9 +55,13 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             }
         })
         .then((response) => {
-        
+            const meetingDate = new Date(route.params.meeting?.date)
+            const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
+            const currentMonthMeetings = state.ministryMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - prowadzi już ${alreadyAssigned} zbiórek`, value: preacher._id } as never
             })
             setLeadItems(selectItems)
         })
@@ -75,53 +84,47 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
 
     return (
         <View style={styles.container}>
-            <Text style={styles.labelStyle}>Data</Text>
-            <TouchableOpacity onPress={() => setDateOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    {date.toLocaleDateString()} 
-                </Text>
-            </TouchableOpacity>
-            <DateTimePicker date={date} onConfirm={(date) => {
-                setDate(date)
-                setDateOpen(false)
-            }} onCancel={() => setDateOpen(false)} isVisible={dateOpen} mode="datetime" />
-          
-            <DateTimePicker mode="time" date={time} onConfirm={(date) => {
-                setTime(date)
-                setTimeOpen(false)
-            }} onCancel={() => setTimeOpen(false)} isVisible={timeOpen} />
-            <Text style={styles.labelStyle}>Domyślne miejsce</Text>
+            <ChooseDate 
+                label="Data"
+                date={date}
+                dateOpen={dateOpen}
+                setDate={setDate}
+                setDateOpen={setDateOpen}
+                mode="datetime"
+            />
+            <Label text="Domyślne miejsce" />
                 <DropDownPicker 
                     value={defaultPlaceValue}
                     setValue={setDefaultPlaceValue}
                     open={defaultPlaceOpen}
                     setOpen={setDefaultPlaceOpen}
                     items={defaultPlaceItems}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
                     modalTitle="Domyślne miejsce"
                     placeholder="Wybierz domyślne miejsce zbiórki"
                 />
-            {defaultPlaceValue === '' && <Input 
+            {defaultPlaceValue === '' && <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label={<Text style={styles.labelStyle}>Miejsce</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Miejsce"
                 placeholder="Wpisz miejsce zbiórki"
             />}
-    
-            <Text style={styles.labelStyle}>Prowadzący</Text>
+            <Label text="Prowadzący" />
             <DropDownPicker 
                 value={leadValue}
                 setValue={setLeadValue}
                 open={leadOpen}
                 setOpen={setLeadOpen}
                 items={leadItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Prowadzący zbiórkę"
                 placeholder="Wybierz prowadzącego"
             />
-            <Text style={styles.labelStyle}>Czy jest ustalony temat zbiórki</Text>
+            <Label text="Czy jest ustalony temat zbiórki?" />
             <Switch  
                 value={isTopic}
                 onValueChange={(value) => setIsTopic(value)}
@@ -129,12 +132,10 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 color={'#1F8AAD'}
             />
             {isTopic && <>
-                <Input 
+                <MyInput 
                     value={topic}
                     onChangeText={setTopic}
-                    label={<Text style={styles.labelStyle}>Temat</Text>}
-                    inputContainerStyle={styles.inputContainer}
-                    containerStyle={styles.containerInput}
+                    label="Temat"
                     placeholder="Wpisz temat zbiórki"
                 />
 
@@ -151,22 +152,6 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
 const styles = StyleSheet.create({
     container: {
         padding: 15
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     }
 })
 

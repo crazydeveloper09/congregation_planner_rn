@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Context as AudioVideoContext } from "../../contexts/AudioVideoContext";
+import { Context as MeetingContext } from "../../contexts/MeetingContext";
 import territories from "../../api/territories";
 import { IMeeting, IPreacher } from "../../contexts/interfaces";
 import ButtonC from "../../commonComponents/Button";
@@ -10,6 +11,10 @@ import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../Meetings/components/Meeting";
 import { ScrollView } from "react-native-gesture-handler";
+import Label from "../../commonComponents/Label";
+import Ordinal from "./components/Ordinal";
+import { defaultStyles } from "../defaultStyles";
+import { months } from "../../../defaultData";
 
 interface AudioVideoNewScreenProps {
     route: {
@@ -35,6 +40,7 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
     const [microphone2Open, setMicrophone2Open] = useState<boolean>(false);
     const [microphone2Items, setMicrophone2Items] = useState([]);
     const { state, addAudioVideo } = useContext(AudioVideoContext);
+    const meetingContext = useContext(MeetingContext)
 
 
     const loadPreachers = async () => {
@@ -45,13 +51,28 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
             }
         })
         .then((response) => {
-            const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_see_audio_video")).map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
+            const meetingDate = new Date(route.params.meeting.date)
+            const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
+            const currentMonthMeetings = meetingContext.state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const selectVideoItems = response.data.filter((preacher) => preacher.roles.includes("can_be_video")).map((preacher) => {
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.videoOperator?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - był na wideo już ${alreadyAssigned} razy`, value: preacher._id } as never
             })
-            setVideoOperatorItems(selectItems)
-            setMicrophone1Items(selectItems)
-            setAudioOperatorItems(selectItems)
-            setMicrophone2Items(selectItems)
+            const selectAudioItems = response.data.filter((preacher) => preacher.roles.includes("can_be_audio")).map((preacher) => {
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.audioOperator?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - był na audio już ${alreadyAssigned} razy`, value: preacher._id } as never
+            })
+            const selectMicItems = response.data.filter((preacher) => preacher.roles.includes("can_take_mic")).map((preacher) => {
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.microphone1Operator?.name === preacher.name || meeting.audioVideo?.microphone2Operator?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - nosił mikrofony już ${alreadyAssigned} razy`, value: preacher._id } as never
+            })
+            setVideoOperatorItems(selectVideoItems)
+            setMicrophone1Items(selectMicItems)
+            setAudioOperatorItems(selectAudioItems)
+            setMicrophone2Items(selectMicItems)
         })
         .catch((err) => console.log(err))
     }
@@ -64,19 +85,24 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
         <ScrollView style={styles.container}>
             <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
             <Meeting meeting={route.params.meeting} filter="Wszystkie" />
-            <Text style={styles.labelStyle}>Operator wideo</Text>
+
+            <Text style={[styles.meeting, { marginTop: 15 }]}>Porządkowi</Text>
+            <Ordinal meeting={route.params.meeting} ordinal={route.params.meeting.ordinal} />
+
+            <Label text="Operator wideo" />
             <DropDownPicker 
                 value={videoOperatorValue}
                 setValue={setVideoOperatorValue}
                 open={videoOperatorOpen}
                 setOpen={setVideoOperatorOpen}
                 items={videoOperatorItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Operator wideo"
                 placeholder="Wybierz operatora wideo"
             />
-
-            <Text style={styles.labelStyle}>Czy jest potrzebny operator audio?</Text>
+            <Label text="Czy jest potrzebny operator audio?" />
             <Switch  
                 value={isAudioOperator}
                 onValueChange={(value) => setIsAudioOperator(value)}
@@ -85,34 +111,35 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
             />
 
             { isAudioOperator && <>
-                <Text style={styles.labelStyle}>Operator audio</Text>
+                <Label text="Operator audio" />
                 <DropDownPicker 
                     value={audioOperatorValue}
                     setValue={setAudioOperatorValue}
                     open={audioOperatorOpen}
                     setOpen={setAudioOperatorOpen}
                     items={audioOperatorItems}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
                     modalTitle="Operator audio"
                     placeholder="Wybierz operatora audio"
                 />
             </>}
-
-            <Text style={styles.labelStyle}>Mikrofon 1 (lewy)</Text>
+            <Label text="Mikrofon 1 (lewy)" />
             <DropDownPicker 
                 value={microphone1Value}
                 setValue={setMicrophone1Value}
                 open={microphone1Open}
                 setOpen={setMicrophone1Open}
                 items={microphone1Items}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Mikrofon 1"
                 placeholder="Wybierz głosiciela do mikrofonu 1"
             />
 
-            
-
-            <Text style={styles.labelStyle}>Czy jest potrzebny mikrofon 2 (prawy)?</Text>
+            <Label text="Czy jest potrzebny mikrofon 2 (prawy)?" />
             <Switch  
                 value={isMicrophone2}
                 onValueChange={(value) => setIsMicrophone2(value)}
@@ -129,6 +156,8 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
                     containerStyle={{
                         marginVertical: 10
                     }}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
                     modalTitle="Mikrofon 2"
                     placeholder="Wybierz głosiciela do mikrofonu 2"
@@ -152,22 +181,6 @@ const styles = StyleSheet.create({
         fontSize: 21,
         color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     switch: {
         alignSelf: 'flex-start',  

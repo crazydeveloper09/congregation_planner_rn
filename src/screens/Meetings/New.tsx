@@ -4,7 +4,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
 import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
-import { Input } from "react-native-elements";
+import { Input } from "@rneui/base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../commonComponents/Button";
 import Loading from "../../commonComponents/Loading";
@@ -13,6 +13,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMinistryGroup, IPreacher } from "../../contexts/interfaces";
 import { Switch } from "@rneui/base";
 import { ScrollView } from "react-native-gesture-handler";
+import MyInput from "../../commonComponents/MyInput";
+import ChooseDate from "../../commonComponents/ChooseDate";
+import Label from "../../commonComponents/Label";
+import { months } from "../../../defaultData";
+import { defaultStyles } from "../defaultStyles";
 
 const MeetingNewScreen: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date())
@@ -37,7 +42,9 @@ const MeetingNewScreen: React.FC = () => {
     const [leadItems, setLeadItems] = useState([]);
     const [endPrayerValue, setEndPrayerValue] = useState<string>('')
     const [endPrayerOpen, setEndPrayerOpen] = useState<boolean>(false);
-    const [endPrayerItems, setEndPrayerItems] = useState([]);
+    const [endPrayerItems, setEndPrayerItems] = useState([
+        { label: 'Wybierz głosiciela z innego zboru', value: ''}
+    ]);
     const [isOtherEndPrayer, setIsOtherEndPrayer] = useState<boolean>(false);
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
     const { state, addMeeting } = useContext(MeetingContext)
@@ -52,15 +59,22 @@ const MeetingNewScreen: React.FC = () => {
             }
         })
         .then((response) => {
+            const meetingDate = new Date()
+            const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
+            const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`);
             const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.beginPrayer?.name === preacher.name || meeting.endPrayer?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - modli się już ${alreadyAssigned} razy`, value: preacher._id } as never
             })
             const selectLeadItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_meetings")).map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
+                let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
+
+                return { label: `${preacher.name} - ${currentMonth} - prowadzi już ${alreadyAssigned} zebrań`, value: preacher._id } as never
             })
             setLeadItems(selectLeadItems)
             setBeginPrayerItems(selectPrayerItems)
-            setEndPrayerItems(selectPrayerItems)
+            setEndPrayerItems([...endPrayerItems, ...selectPrayerItems])
         })
         .catch((err) => console.log(err))
     }
@@ -89,100 +103,100 @@ const MeetingNewScreen: React.FC = () => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.labelStyle}>Data</Text>
-            <TouchableOpacity onPress={() => setDateOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    {date.toLocaleString()} 
-                </Text>
-            </TouchableOpacity>
-            <DateTimePicker date={date} onConfirm={(date) => {
-                setDate(date)
-                setDateOpen(false)
-            }} onCancel={() => setDateOpen(false)} isVisible={dateOpen} mode="datetime" />
-            <Text style={styles.labelStyle}>Typ</Text>
+            <ChooseDate 
+                label="Data"
+                date={date}
+                dateOpen={dateOpen}
+                setDate={setDate}
+                setDateOpen={setDateOpen}
+                mode="datetime"
+            />
+            <Label text="Typ" />
             <DropDownPicker 
                 value={typeValue}
                 setValue={setTypeValue}
                 open={typeOpen}
                 setOpen={setTypeOpen}
                 items={typeItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Wybierz typ zebrania"
                 placeholder="Wybierz typ zebrania"
             />
-
-            <Text style={styles.labelStyle}>Grupa służby, która sprząta</Text>
+            <Label text="Grupa służby, która sprząta" />
             <DropDownPicker 
                 value={cleaningGroupValue}
                 setValue={setCleaningGroupValue}
                 open={cleaningGroupOpen}
                 setOpen={setCleaningGroupOpen}
                 items={cleaningGroupItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Wybierz grupę służby, która sprząta"
                 placeholder="Wybierz grupę służby, która sprząta"
             />
         
-            <Input 
+            <MyInput 
                 value={beginSong}
                 onChangeText={setBeginSong}
-                label={<Text style={styles.labelStyle}>Pieśń początkowa</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Pieśń początkowa"
                 placeholder="Wpisz numer pieśni początkowej"
             />
-            <Text style={styles.labelStyle}>Prowadzący</Text>
+
+            <Label text="Prowadzący" />
             <DropDownPicker 
                 value={leadValue}
                 setValue={setLeadValue}
                 open={leadOpen}
                 setOpen={setLeadOpen}
                 items={leadItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Wybierz prowadzącego"
                 placeholder="Wybierz prowadzącego"
             />
-            <Text style={styles.labelStyle}>Modlitwa początkowa</Text>
+            <Label text="Modlitwa początkowa" />
             <DropDownPicker 
                 value={beginPrayerValue}
                 setValue={setBeginPrayerValue}
                 open={beginPrayerOpen}
                 setOpen={setBeginPrayerOpen}
                 items={beginPrayerItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Wybierz głosiciela do modlitwy początkowej"
                 placeholder="Wybierz głosiciela do modlitwy początkowej"
             />
-            <Input 
+            <MyInput 
                 value={midSong}
                 onChangeText={setMidSong}
-                label={<Text style={styles.labelStyle}>Pieśń środkowa</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Pieśń środkowa"
                 placeholder="Wpisz numer pieśni środkowej"
             />
-            <Input 
+            <MyInput 
                 value={endSong}
                 onChangeText={setEndSong}
-                label={<Text style={styles.labelStyle}>Pieśń końcowa</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Pieśń końcowa"
                 placeholder="Wpisz numer pieśni końcowej"
             />
-
-            <Text style={styles.labelStyle}>Modlitwa końcowa</Text>
+            <Label text="Modlitwa końcowa" />
             <DropDownPicker 
                 value={endPrayerValue}
                 setValue={setEndPrayerValue}
                 open={endPrayerOpen}
                 setOpen={setEndPrayerOpen}
                 items={endPrayerItems}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 modalTitle="Wybierz głosiciela do modlitwy końcowej"
                 placeholder="Wybierz głosiciela do modlitwy końcowej"
             />
-
-            <Text style={styles.labelStyle}>Czy modlitwę końcową powie głosiciel z innego zboru?</Text>
+            <Label text="Czy modlitwę końcową powie głosiciel z innego zboru?" />
             <Switch  
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
@@ -190,21 +204,22 @@ const MeetingNewScreen: React.FC = () => {
                 color={'#1F8AAD'}
             />
             {isOtherEndPrayer && <>
-                <Input 
+                <MyInput 
                     value={otherEndPrayer}
                     onChangeText={setOtherEndPrayer}
-                    label={<Text style={styles.labelStyle}>Modlitwa końcowa - głosiciel z innego zboru</Text>}
-                    inputContainerStyle={styles.inputContainer}
-                    containerStyle={styles.containerInput}
+                    label="Modlitwa końcowa - głosiciel z innego zboru"
                     placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
                 />
 
             </>}
-            <ButtonC 
-                title="Dodaj zebranie"
-                isLoading={state.isLoading}
-                onPress={() => addMeeting(typeValue, cleaningGroupValue, leadValue, date, beginPrayerValue, beginSong, midSong, endSong, endPrayerValue, otherEndPrayer)}
-            />
+            <View style={{ marginBottom: 40 }}>
+                <ButtonC 
+                    title="Dodaj zebranie"
+                    isLoading={state.isLoading}
+                    onPress={() => addMeeting(typeValue, cleaningGroupValue, leadValue, date, beginPrayerValue, beginSong, midSong, endSong, endPrayerValue, otherEndPrayer)}
+                />
+            </View>
+        
         </ScrollView>
     )
 }
@@ -212,22 +227,6 @@ const MeetingNewScreen: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 15
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     }
 })
 

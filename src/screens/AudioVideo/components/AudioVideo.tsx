@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconContainer from "../../../commonComponents/IconContainer";
 import IconLink from "../../../commonComponents/IconLink";
+import { Divider } from "@rneui/base";
 
 interface AudioVideoProps {
     meeting: IMeeting,
@@ -95,6 +96,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
             </>}
             
         </ListItem.Accordion>
+        <Divider />
         </View>
        
     )

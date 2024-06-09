@@ -8,6 +8,7 @@ import { addMinistryMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
+import { Divider } from "@rneui/base";
 
 interface MinistryMeetingProps {
     meeting: IMinistryMeeting;
@@ -86,6 +87,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                     )}
            
         </ListItem.Accordion>
+        <Divider />
         </View>
        
     )

@@ -38,9 +38,6 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
 }) => {
   const filters = ["Wszystkie", "Moje przydziały"];
   const [currentFilter, setCurrentFilter] = useState<string>("Wszystkie");
-  const [isScrolledDate, setIsScrolledDate] = useState<boolean>(false);
-  const [scrollPosition, setScrollPosition] = useState<number>(-1);
-  const scrollViewRef = useRef<ScrollView>(null)
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(
     route.params?.date ? new Date(route.params.date) : new Date()
   );
@@ -66,24 +63,11 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   };
 
   useEffect(() => {
-    if (scrollPosition >= 441) {
-      setIsScrolledDate(true);
-    }
-    if (scrollPosition <= 441) {
-      setIsScrolledDate(false);
-    }
-  }, [scrollPosition]);
-
-  const getScrollPosition = (e: any) => {
-    const y = e.nativeEvent.contentOffset.y;
-    setScrollPosition(y);
-  };
-
-  useEffect(() => {
     currentFilter === "Wszystkie"
       ? loadCartDayInfo(startDate)
       : loadPreacherHours();
     preachersContext.loadAllPreachers();
+
 
     const unsubscribe = navigation.addListener("focus", () => {
       currentFilter === "Wszystkie"
@@ -98,62 +82,62 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     return <Loading />;
   }
 
-  if (
-    (preachersContext.state.preacher &&
-      preachersContext.state.preacher.roles?.includes(
-        "can_edit_cartSchedule"
-      )) ||
-    authContext.state.whoIsLoggedIn === "admin" && currentFilter !== "Moje przydziały"
-  ) {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderRight>
-          {!state.cartDay && <TouchableOpacity
-            onPress={() => navigation.navigate("Carts Day New", {date: selectedStartDate})}
-          >
-            <MaterialCommunityIcons name="plus" size={30} color={"white"} />
-          </TouchableOpacity>}
-          
-          {state.cartDay && (
-            <>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Carts Day Edit", {
-                    cartDay: state.cartDay,
-                  })
-                }
-              >
-                <MaterialCommunityIcons
-                  name="pencil"
-                  size={28}
-                  color={"white"}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Carts Day Delete Confirm", {
-                    cartDay: state.cartDay,
-                  })
-                }
-              >
-                <MaterialCommunityIcons
-                  name="trash-can"
-                  size={28}
-                  color={"white"}
-                />
-              </TouchableOpacity>
-            </>
-          )}
-        </HeaderRight>
-      ),
-    });
-  }
+  navigation.setOptions({
+    headerRight: () => (
+      <HeaderRight>
+        <TouchableOpacity
+          onPress={onRefresh}
+        >
+          <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
+        </TouchableOpacity>
+        {!state.cartDay && <TouchableOpacity
+              onPress={() => navigation.navigate("Carts Day New", {date: selectedStartDate})}
+            >
+              <MaterialCommunityIcons name="plus" size={30} color={"white"} />
+            </TouchableOpacity>}
+            
+            {state.cartDay && (
+              <>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Carts Day Edit", {
+                      cartDay: state.cartDay,
+                    })
+                  }
+                >
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={28}
+                    color={"white"}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Carts Day Delete Confirm", {
+                      cartDay: state.cartDay,
+                    })
+                  }
+                >
+                  <MaterialCommunityIcons
+                    name="trash-can"
+                    size={28}
+                    color={"white"}
+                  />
+                </TouchableOpacity>
+              </>
+            )}
+      </HeaderRight>
+    ),
+  });
 
   return (
-    <ScrollView onScroll={getScrollPosition} scrollEventThrottle={8} stickyHeaderIndices={[0]} ref={scrollViewRef} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === "Wszystkie" && <View style={{ paddingHorizontal: 15, paddingVertical: 7, backgroundColor: '#1f8aad' }}>
-            <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
-            {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
+    <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      {currentFilter === "Wszystkie" && <View style={styles.titleContainer}>
+            <>
+              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
+              {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
+            </>
+            
         </View>}
       {authContext.state.whoIsLoggedIn !== "admin" && (
        <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />
@@ -235,6 +219,16 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 20,
+  },
+  titleContainer: { 
+    display: "flex",
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 15, 
+    paddingVertical: 7, 
+    backgroundColor: '#1f8aad',
   },
   myDate: {
     fontSize: 18,

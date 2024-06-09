@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { meetings } from "./data.mock";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -39,12 +39,25 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   const { state, loadMeetings, loadPreacherMeetingAssignments } = useContext(MeetingContext);
   const preachersContext = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
+  const [refreshing, setRefreshing] = React.useState(false);
+
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
 
   useEffect(() => {
     currentFilter === "Wszystkie" ? loadMeetings() : loadPreacherMeetingAssignments();
     if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin")) {
       navigation.setOptions({
         headerRight: () => <HeaderRight>
+          <TouchableOpacity
+            onPress={onRefresh}
+          >
+            <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
+          </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Meetings New')}>
                 <MaterialCommunityIcons name='plus' size={30} color={'white'} />
             </TouchableOpacity>
@@ -58,7 +71,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     });
 
     return unsubscribe;
-  }, [currentFilter]);
+  }, [currentFilter, refreshing]);
 
 
   if (state.isLoading) {
@@ -66,7 +79,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   }
 
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === "Wszystkie" && state.meetings?.length !== 0 && <>
         <TopMenu state={type} data={state?.meetings && Object.keys(groupBy(state?.meetings, "type"))!} updateState={setType} />
         <TopMenu state={currentMonth} data={state?.meetings && Object.keys(groupBy(state?.meetings, "month"))!} updateState={setCurrentMonth} />

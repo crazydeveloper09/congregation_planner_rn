@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Input, Text, Button } from '@rneui/themed';
 import ButtonC from '../../commonComponents/Button';
 import { Context as AuthContext } from '../../contexts/AuthContext';
+import MyInput from '../../commonComponents/MyInput';
 
 interface CongregationsLoginScreenProps {
     route: {
@@ -24,23 +25,17 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             {route.params.type === "admin" ? <>
-            <Input 
+            <MyInput 
                 label="Nazwa zboru"
                 placeholder='Wpisz nazwę zboru'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize='none'
                 autoCorrect={false}
             />
-            <Input 
+            <MyInput 
                 label="Hasło"
                 placeholder='Wpisz hasło'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -54,12 +49,9 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
                 isLoading={state.isLoading}
             />
             </> : <>
-            <Input 
+            <MyInput 
                 label="Specjalny link"
                 placeholder='Wklej specjalny link'
-                inputContainerStyle={styles.inputContainer}
-                labelStyle={styles.labelStyle}
-                containerStyle={styles.containerInput}
                 value={link}
                 onChangeText={setLink}
                 autoCapitalize='none'
@@ -90,22 +82,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'MontserratSemiBold',
         color: '#1F8AAD'
-    },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginBottom: 6,
-        color: 'black'
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     button: {
         backgroundColor: '#28a745'

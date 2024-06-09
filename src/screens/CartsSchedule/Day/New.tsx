@@ -6,6 +6,8 @@ import { Input } from "@rneui/base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
+import MyInput from "../../../commonComponents/MyInput";
+import ChooseDate from "../../../commonComponents/ChooseDate";
 
 interface CartDayNewScreenProps {
     route: {
@@ -29,42 +31,33 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.labelStyle}>Data</Text>
-            <TouchableOpacity onPress={() => setDateOpen(true)} style={{...styles.inputContainer, padding: 15}}>
-                <Text>
-                    {date.toLocaleDateString()} 
-                </Text>
-            </TouchableOpacity>
-            <DateTimePicker date={date} onConfirm={(date) => {
-                setDate(date)
-                setDateOpen(false)
-            }} onCancel={() => setDateOpen(false)} isVisible={dateOpen} />
+            <ChooseDate 
+                label="Data"
+                date={date}
+                dateOpen={dateOpen}
+                setDate={setDate}
+                setDateOpen={setDateOpen}
+            />
     
-            <Input 
+            <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label={<Text style={styles.labelStyle}>Miejsce</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Miejsce"
                 placeholder="Wpisz lokalizację wózka"
             />
 
-            <Input 
+            <MyInput 
                 value={startHour}
                 onChangeText={setStartHour}
-                label={<Text style={styles.labelStyle}>Godzina początkowa wózka</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Godzina początkowa wózka"
                 keyboardType="numeric"
                 placeholder="Wpisz godzinę początkową wózka"
             />
 
-            <Input 
+            <MyInput 
                 value={finalHour}
                 onChangeText={setFinalHour}
-                label={<Text style={styles.labelStyle}>Godzina końcowa wózka</Text>}
-                inputContainerStyle={styles.inputContainer}
-                containerStyle={styles.containerInput}
+                label="Godzina końcowa wózka"
                 keyboardType="numeric"
                 placeholder="Wpisz godzinę końcową wózka"
     
@@ -83,22 +76,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 15
     },
-    inputContainer: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: 5,
-        borderColor: 'black',
-    },
-    labelStyle: {
-        fontFamily: 'MontserratSemiBold',
-        marginVertical: 8,
-        color: 'black',
-    },
-    containerInput: {
-        paddingHorizontal: 0,
-        paddingVertical: 0,
-    }
 })
 
 export default CartDayNewScreen;

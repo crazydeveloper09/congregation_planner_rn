@@ -9,6 +9,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../../commonComponents/Button";
 import { Input } from "react-native-elements";
 import { Switch } from "@rneui/base";
+import Label from "../../../commonComponents/Label";
+import MyInput from "../../../commonComponents/MyInput";
+import { defaultStyles } from "../../defaultStyles";
 
 interface CartsScheduleHoursProps {
   hour: ICartHour;
@@ -53,7 +56,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{hour?.timeDescription}</Text>
-        {((state.preacher && state.preacher.roles?.includes("can_edit_cartSchedule")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+        {((state.preacher && state.preacher.roles?.includes("can_edit_cartSchedule") || state.preacher?.roles?.includes("can_self-assign_cartHour")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
         {editMode ? <MaterialCommunityIcons name="eye-outline" size={23} /> : <MaterialCommunityIcons name="pencil" size={23} />}
         </TouchableOpacity>}
       
@@ -69,24 +72,24 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 containerStyle={{
                   marginVertical: 10
                 }}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 modalTitle={`Wybierz głosiciela nr 1 na godzinę ${hour?.timeDescription}`}
                 placeholder="Wybierz głosiciela nr 1"
             />}
-            
-            <Text style={styles.labelStyle}>Czy na miejscu nr 1 stanie głosiciel z innego zboru?</Text>
+            <Label text="Czy na miejscu nr 1 stanie głosiciel z innego zboru?" />
             <Switch  
                 value={isOtherPreacher1}
                 onValueChange={(value) => setIsOtherPreacher1(value)}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
                 color={'#1F8AAD'}
             />
+
             {isOtherPreacher1 && <>
-                <Input 
+                <MyInput 
                     value={otherPreacher1}
                     onChangeText={setOtherPreacher1}
-                    label={<Text style={styles.labelStyle}>Miejsce nr 1 - głosiciel z innego zboru</Text>}
-                    inputContainerStyle={styles.inputContainer}
-                    containerStyle={styles.containerInput}
+                    label="Miejsce nr 1 - głosiciel z innego zboru"
                     placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
                 />
 
@@ -97,6 +100,8 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 open={preacher2Open}
                 setOpen={setPreacher2Open}
                 items={preacher2Items}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
                 containerStyle={{
                   marginVertical: 10
@@ -104,8 +109,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 modalTitle={`Wybierz głosiciela nr 2 na godzinę ${hour?.timeDescription}`}
                 placeholder="Wybierz głosiciela nr 2"
             />}
-            
-            <Text style={styles.labelStyle}>Czy na miejscu nr 2 stanie głosiciel z innego zboru?</Text>
+            <Label text="Czy na miejscu nr 2 stanie głosiciel z innego zboru?" />
             <Switch  
                 value={isOtherPreacher2}
                 onValueChange={(value) => setIsOtherPreacher2(value)}
@@ -113,12 +117,10 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 color={'#1F8AAD'}
             />
             {isOtherPreacher2 && <>
-                <Input 
+                <MyInput 
                     value={otherPreacher2}
                     onChangeText={setOtherPreacher2}
-                    label={<Text style={styles.labelStyle}>Miejsce wózku nr 2 - głosiciel z innego zboru</Text>}
-                    inputContainerStyle={styles.inputContainer}
-                    containerStyle={styles.containerInput}
+                    label="Miejsce wózku nr 2 - głosiciel z innego zboru"
                     placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
                 />
 
@@ -146,22 +148,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 15,
   },
-  inputContainer: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderRadius: 6,
-    padding: 5,
-    borderColor: 'black',
-},
-labelStyle: {
-    fontFamily: 'MontserratSemiBold',
-    marginVertical: 8,
-    color: 'black',
-},
-containerInput: {
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-},
   titleContainer: {
     paddingVertical: 5,
     borderBottomWidth: 1,
@@ -175,10 +161,8 @@ containerInput: {
     fontWeight: "700",
   },
   preacher: {
-    paddingVertical: 5,
+    paddingVertical: 8,
     fontSize: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
   },
 });
 

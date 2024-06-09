@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const ButtonC: React.FC<ButtonProps> = ({ title, onPress, isLoading, color }) => {
 
-    return <Button mode="contained" buttonColor={color ? color: "#1F8AAD"} style={styles.button} onPress={onPress} loading={isLoading}>
+    return <Button mode="contained" buttonColor={color ? color: "#1F8AAD"} labelStyle={{ fontSize: 18 }} style={styles.button} onPress={onPress} loading={isLoading}>
    
         <Text>{title}</Text>
    
@@ -22,7 +22,8 @@ const ButtonC: React.FC<ButtonProps> = ({ title, onPress, isLoading, color }) =>
 const styles = StyleSheet.create({
     button: {
         width: '100%',
-        borderRadius: 6
+        borderRadius: 6,
+        paddingVertical: 4,
     }
 })
 

@@ -1,3 +1,4 @@
+import { Divider } from "@rneui/base";
 import React from "react";
 import { FlatList, TouchableOpacity, StyleSheet, Text } from "react-native";
 
@@ -11,14 +12,19 @@ const TopMenu: React.FC<TopMenuProps> = ({ state, data, updateState }) => {
   return (
     <FlatList
       data={data}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => updateState(item)}>
-          {state === item ? (
-            <Text style={styles.activeItem}>{item}</Text>
-          ) : (
-            <Text style={styles.item}>{item}</Text>
-          )}
-        </TouchableOpacity>
+      renderItem={({ item, index }) => (
+        <>
+          <TouchableOpacity onPress={() => updateState(item)} style={{ marginRight: 10 }}>
+            {state === item ? (
+              <Text style={styles.activeItem}>{item}</Text>
+            ) : (
+              <Text style={styles.item}>{item}</Text>
+            )}
+          </TouchableOpacity>
+          { index !== data.length - 1 && <Divider orientation="vertical" color="black" />}
+
+        </>
+       
       )}
       contentContainerStyle={styles.container}
       horizontal
@@ -33,16 +39,17 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         gap: 10,
         backgroundColor: "white",
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 13
     },
     item: {
         fontFamily: "MontserratRegular",
-        fontSize: 17,
+        fontSize: 18,
     },
     activeItem: { 
         color: '#1F8AAD', 
         fontFamily: 'MontserratSemiBold', 
-        fontSize: 17
+        fontSize: 18
     }
 })
 

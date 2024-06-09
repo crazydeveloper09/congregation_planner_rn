@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
 import { MinistryMeeting as IMinistryMeeting} from "./data.mock";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
@@ -28,11 +28,24 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
     const { state, loadMinistryMeetings, loadMinistryMeetingsOfPreacher } = useContext(MinistryMeetingContext)
     const preachersContext = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+
     useEffect(() => {
         currentFilter === "Wszystkie" ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
         if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin")) {
             navigation.setOptions({
                 headerRight: () => <HeaderRight>
+                <TouchableOpacity onPress={onRefresh}>
+                    <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Ministry Meeting New')}>
                     <MaterialCommunityIcons name='plus' size={30} color={'white'} />
                 </TouchableOpacity>
@@ -46,7 +59,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
         });
     
         return unsubscribe;
-    }, [currentFilter])
+    }, [currentFilter, refreshing])
 
     if(state.isLoading){
         return <Loading />
@@ -54,7 +67,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
 
     const ministryMeetingsGroup = groupBy<IMinistryMeeting>(state.ministryMeetings!, 'month');
     return (
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             {state.ministryMeetings?.length !== 0 && <>
                 <TopMenu state={currentMonth} data={ministryMeetingsGroup && Object.keys(ministryMeetingsGroup)} updateState={setCurrentMonth} />
                 {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_minimeetings")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}

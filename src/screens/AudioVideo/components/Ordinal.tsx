@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
+import { Divider } from "@rneui/base";
 
 interface OrdinalProps {
     meeting: IMeeting,
@@ -93,6 +94,7 @@ const Ordinal: React.FC<OrdinalProps> = ({ ordinal, meeting }) => {
             </>}
            
         </ListItem.Accordion>
+        <Divider />
         </>
        
     )

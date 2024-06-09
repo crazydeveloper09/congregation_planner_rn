@@ -13,11 +13,11 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         <View style={styles.container}>
             <Image source={logo_transparent} width={200} height={200} />
             <Text style={styles.title}>Witaj w Congregation Planner</Text>
-            <Button mode="contained" buttonColor="#25A5D0" style={styles.button} onPress={() => navigation.navigate("Log in", { type: "admin" })}>
+            <Button mode="contained" buttonColor="#25A5D0" style={styles.button} labelStyle={{ fontSize: 18 }} onPress={() => navigation.navigate("Log in", { type: "admin" })}>
                     <Text>Logowanie administratora</Text>
             </Button>
             
-            <Button mode="contained" buttonColor="white" textColor="#1F8AAD" style={styles.button} onPress={() => navigation.navigate("Log in", { type: "preacher" })}>
+            <Button mode="contained" buttonColor="white" textColor="#1F8AAD" labelStyle={{ fontSize: 18 }} style={styles.button} onPress={() => navigation.navigate("Log in", { type: "preacher" })}>
                 <Text>Logowanie głosiciela</Text>
             </Button>
             
@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         marginBottom: 20,
-        borderRadius: 6
+        borderRadius: 6,
+        padding: 4
     }
 })
 
