@@ -65,7 +65,7 @@ const addMinistryGroup = (dispatch: Function) => {
                 }
             });
             dispatch({ type: 'turn_off_loading' })
-            navigate('CongInfo')
+            navigate('PreachersList')
             showMessage({
                 message: `Poprawnie dodano grupę służby: ${name}`,
                 type: 'success',
@@ -89,7 +89,7 @@ const editMinistryGroup = (dispatch: Function) => {
                     'Authorization': `bearer ${token}`
                 }
             });
-            navigate('CongInfo')
+            navigate('PreachersList')
             dispatch({ type: 'turn_off_loading' })
             showMessage({
                 message: `Poprawnie edytowano grupę służby: ${name}`,
@@ -115,7 +115,7 @@ const deleteMinistryGroup = (dispatch: Function) => {
                 }
             });
             dispatch({ type: 'turn_off_loading' })
-            navigate('CongInfo')
+            navigate('PreachersList')
             showMessage({
                 message: `Poprawnie usunięto grupę służby`,
                 type: 'success',

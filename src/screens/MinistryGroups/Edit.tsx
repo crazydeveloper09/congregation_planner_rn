@@ -11,6 +11,7 @@ import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
 import MyInput from "../../commonComponents/MyInput";
 import { defaultStyles } from "../defaultStyles";
+import Label from "../../commonComponents/Label";
 
 interface MinistryGroupEditScreenProps {
     route: {
@@ -79,6 +80,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 value={name}
                 onChangeText={setName}
             />
+            <Label text="Wybierz głosicieli" />
             <DropDownPicker
                 multiple={true}
                 open={preachersOpen}
@@ -89,21 +91,25 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 searchable={true}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
-                containerStyle={{
-                    marginVertical: 20
-                }}
             />
 
-            {!preachersOpen && <DropDownPicker
-                open={overseerOpen}
-                value={overseerValue}
-                items={overseerItems}
-                setOpen={setOverseerOpen}
-                setValue={setOverseerValue}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
-                searchable={true}
-            />}
+            {!preachersOpen && <>
+                <Label text="Wybierz nadzorcę służby" />
+                <DropDownPicker
+                    open={overseerOpen}
+                    value={overseerValue}
+                    items={overseerItems}
+                    setOpen={setOverseerOpen}
+                    setValue={setOverseerValue}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
+                    searchable={true}
+                    containerStyle={{
+                        marginBottom: 20
+                    }}
+                    placeholder="Wybierz nadzorcę grupy"
+                />
+            </>}
 
             <ButtonC title="Edytuj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.editMinistryGroup(route.params.congregationID, ministryGroupID, name, preachersValue, overseerValue)} />
         </View>

@@ -10,6 +10,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
 import MyInput from "../../commonComponents/MyInput";
+import { defaultStyles } from "../defaultStyles";
+import Label from "../../commonComponents/Label";
 
 interface MinistryGroupNewScreenProps {
     route: {
@@ -69,6 +71,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 value={name}
                 onChangeText={setName}
             />
+            <Label text="Wybierz głosicieli" />
             <DropDownPicker
                 multiple={true}
                 open={preachersOpen}
@@ -76,25 +79,29 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 items={preachersItems}
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
+                labelStyle={defaultStyles.dropdown}
+                placeholderStyle={defaultStyles.dropdown}
                 searchable={true}
-                containerStyle={{
-                    marginVertical: 20
-                }}
                 placeholder="Dodaj głosicieli"
             />
 
-            {!preachersOpen && <DropDownPicker
-                open={overseerOpen}
-                value={overseerValue}
-                items={overseerItems}
-                setOpen={setOverseerOpen}
-                setValue={setOverseerValue}
-                searchable={true}
-                containerStyle={{
-                    marginBottom: 20
-                }}
-                placeholder="Wybierz nadzorcę grupy"
-            />}
+            {!preachersOpen && <>
+                <Label text="Wybierz nadzorcę służby" />
+                <DropDownPicker
+                    open={overseerOpen}
+                    value={overseerValue}
+                    items={overseerItems}
+                    setOpen={setOverseerOpen}
+                    setValue={setOverseerValue}
+                    labelStyle={defaultStyles.dropdown}
+                    placeholderStyle={defaultStyles.dropdown}
+                    searchable={true}
+                    containerStyle={{
+                        marginBottom: 20
+                    }}
+                    placeholder="Wybierz nadzorcę grupy"
+                />
+            </> }
 
             <ButtonC title="Dodaj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
         </View>

@@ -65,6 +65,13 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
                 numColumns={columnsNum}
             />
             <Pagination activePage={state.preachers?.page!} totalPages={state.preachers?.totalPages!} updateState={setPage}/>
+            <View style={styles.ministryGroupTitleContainer}>
+                <Text style={styles.header}>Grupy służby</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('AddMinistryGroup', { congregationID: authContext.state.userID })}>
+                    <MaterialCommunityIcons name='plus' size={30} />
+                </TouchableOpacity>
+        
+            </View>
             <MinistryGroups congregationID={authContext.state.userID!} />
         </ScrollView>
     )
@@ -76,7 +83,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 15,
         marginRight: 15
-    }
+    },
+    header: {
+        fontFamily: 'InterSemiBold',
+        fontSize: 21
+    },
+    ministryGroupTitleContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        marginTop: 15
+    },
 })
 
 export default PreachersIndexScreen;

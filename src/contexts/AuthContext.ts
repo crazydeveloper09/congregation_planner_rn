@@ -119,7 +119,6 @@ const verifyUser = (dispatch: Function) => {
             await AsyncStorage.setItem('token', response.data.token);
             await AsyncStorage.setItem('whoIsLoggedIn', 'admin')
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'admin' } });
-            dispatch({ type: 'debug' })
             mainNavNavigate('Meetings')
         } catch (err) {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
