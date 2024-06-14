@@ -29,7 +29,7 @@ interface MinistryMeetingEditScreenProps {
 
 const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ navigation, route }) => {
     const { state, editMinistryMeeting } = useContext(MinistryMeetingContext)
-    const [date, setDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<Date>(new Date(route.params.meeting.date))
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const [time, setTime] = useState<Date>(new Date())
     const [timeOpen, setTimeOpen] = useState<boolean>(false);
@@ -37,6 +37,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [defaultPlaceValue, setDefaultPlaceValue] = useState<string>('')
     const [defaultPlaceOpen, setDefaultPlaceOpen] = useState<boolean>(false);
     const [defaultPlaceItems, setDefaultPlaceItems] = useState([
+        { label: 'Wpisz sam miejsce', value: '' },
         { label: 'Sala Królestwa', value: 'Sala Królestwa' },
         { label: 'Zoom', value: 'Zoom' },
     ]);
@@ -47,7 +48,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [topic, setTopic] = useState<string>('')
     const preachersContext = useContext(PreachersContext)
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -55,7 +56,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             }
         })
         .then((response) => {
-            const meetingDate = new Date(route.params.meeting?.date)
+            const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.ministryMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
@@ -69,10 +70,8 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     }
 
     useEffect(() => {
-        loadPreachers()
+        loadPreachers(date)
         setLeadValue(route.params.meeting?.lead._id!)
-        setDate(new Date(route.params.meeting.date))
-        setTime(new Date(route.params.meeting.date))
         setPlace(route.params.meeting.place)
         setDefaultPlaceValue(route.params.meeting?.defaultPlace || '')
         if(route.params.meeting.topic) {
@@ -80,7 +79,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             setIsTopic(true)
         }
         
-    }, [])
+    }, [date])
 
     return (
         <View style={styles.container}>

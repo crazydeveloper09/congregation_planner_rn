@@ -41,6 +41,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
     const [defaultTopicValue, setDefaultTopicValue] = useState<string>('')
     const [defaultTopicOpen, setDefaultTopicOpen] = useState<boolean>(false);
     const [defaultTopicItems, setDefaultTopicItems] = useState([
+        { label: 'Wpisz sam temat', value: ''},
         { label: 'Wyszukujemy duchowe skarby', value: 'Wyszukujemy duchowe skarby' },
         { label: 'Czytanie Biblii', value: 'Czytanie Biblii' },
         { label: 'Rozpoczynanie rozmowy', value: 'Rozpoczynanie rozmowy' },

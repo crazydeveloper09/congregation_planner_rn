@@ -26,7 +26,7 @@ interface MeetingEditScreenProps {
 }
 
 const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
-    const [date, setDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<Date>(new Date(route.params.meeting.date))
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const [beginPrayerValue, setBeginPrayerValue] = useState<string>('')
     const [beginPrayerOpen, setBeginPrayerOpen] = useState<boolean>(false);
@@ -55,7 +55,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
     const { state, editMeeting } = useContext(MeetingContext)
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -63,7 +63,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             }
         })
         .then((response) => {
-            const meetingDate = new Date()
+            const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
             const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
@@ -78,7 +78,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             })
             setLeadItems(selectLeadItems)
             setBeginPrayerItems(selectPrayerItems)
-            setEndPrayerItems([...endPrayerItems, ...selectPrayerItems])
+            setEndPrayerItems([{ label: 'Wybierz głosiciela z innego zboru', value: ''}, ...selectPrayerItems])
         })
         .catch((err) => console.log(err))
     }
@@ -102,9 +102,8 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
 
 
     useEffect(() => {
-        loadPreachers()
+        loadPreachers(date)
         loadMinistryGroups()
-        setDate(new Date(route.params.meeting?.date))
         setBeginPrayerValue(route.params.meeting.beginPrayer?._id || '')
         setTypeValue(route.params.meeting.type)
         setBeginSong(route.params.meeting.beginSong?.toString() || '')
@@ -117,7 +116,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             setIsOtherEndPrayer(true);
             setOtherEndPrayer(route.params.meeting.otherEndPrayer)
         }
-    }, [route.params.meeting])
+    }, [route.params.meeting, date])
 
 
     return (

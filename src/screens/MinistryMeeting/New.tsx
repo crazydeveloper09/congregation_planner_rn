@@ -26,6 +26,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
     const [defaultPlaceValue, setDefaultPlaceValue] = useState<string>('')
     const [defaultPlaceOpen, setDefaultPlaceOpen] = useState<boolean>(false);
     const [defaultPlaceItems, setDefaultPlaceItems] = useState([
+        { label: 'Wpisz sam miejsce', value: ''},
         { label: 'Sala Królestwa', value: 'Sala Królestwa' },
         { label: 'Zoom', value: 'Zoom' },
     ]);
@@ -37,7 +38,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
     const { state, addMinistryMeeting } = useContext(MinistryMeetingContext)
     const preachersContext = useContext(PreachersContext)
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -45,7 +46,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
             }
         })
         .then((response) => {
-            const meetingDate = new Date()
+            const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.ministryMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
@@ -59,8 +60,8 @@ const MinistryMeetingNewScreen: React.FC = () => {
     }
 
     useEffect(() => {
-        loadPreachers()
-    }, [])
+        loadPreachers(date)
+    }, [date])
 
     if(preachersContext.state.isLoading){
         return <Loading />

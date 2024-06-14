@@ -51,7 +51,7 @@ const MeetingNewScreen: React.FC = () => {
     const preachersContext = useContext(PreachersContext)
     const ministryGroupContext = useContext(MinistryGroupContext)
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -59,7 +59,7 @@ const MeetingNewScreen: React.FC = () => {
             }
         })
         .then((response) => {
-            const meetingDate = new Date()
+            const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`);
             const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
@@ -74,7 +74,7 @@ const MeetingNewScreen: React.FC = () => {
             })
             setLeadItems(selectLeadItems)
             setBeginPrayerItems(selectPrayerItems)
-            setEndPrayerItems([...endPrayerItems, ...selectPrayerItems])
+            setEndPrayerItems([{ label: 'Wybierz głosiciela z innego zboru', value: '' }, ...selectPrayerItems])
         })
         .catch((err) => console.log(err))
     }
@@ -96,9 +96,9 @@ const MeetingNewScreen: React.FC = () => {
     }
 
     useEffect(() => {
-        loadPreachers()
+        loadPreachers(date)
         loadMinistryGroups()
-    }, [])
+    }, [date])
 
 
     return (

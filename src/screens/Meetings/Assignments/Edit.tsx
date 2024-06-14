@@ -27,7 +27,9 @@ interface MeetingAssignmentEditScreenProps {
 const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = ({ route }) => {
     const [participantValue, setParticipantValue] = useState("");
     const [participantOpen, setParticipantOpen] = useState(false);
-    const [participantItems, setParticipantItems] = useState([]);
+    const [participantItems, setParticipantItems] = useState([
+        { label: 'Wybierz głosiciela z innego zboru', value: ''}
+    ]);
     const [typeValue, setTypeValue] = useState<string>('')
     const [typeOpen, setTypeOpen] = useState<boolean>(false);
     const [typeItems, setTypeItems] = useState(route.params.meeting.type === "Zebranie w weekend" ? [
@@ -41,6 +43,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     const [defaultTopicValue, setDefaultTopicValue] = useState<string>('')
     const [defaultTopicOpen, setDefaultTopicOpen] = useState<boolean>(false);
     const [defaultTopicItems, setDefaultTopicItems] = useState([
+        { label: 'Wpisz sam temat', value: ''},
         { label: 'Wyszukujemy duchowe skarby', value: 'Wyszukujemy duchowe skarby' },
         { label: 'Czytanie Biblii', value: 'Czytanie Biblii' },
         { label: 'Rozpoczynanie rozmowy', value: 'Rozpoczynanie rozmowy' },
@@ -74,7 +77,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
-            const participantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
+            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
@@ -89,7 +92,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 })
                 return { label: `${preacher.name} - ${currentMonth} - lektorował ${alreadyRead} razy`, value: preacher._id } as never
             })
-            setParticipantItems(participantItems)
+            setParticipantItems([...participantItems, ...selectParticipantItems])
             setReaderItems(readerItems)
         })
         .catch((err) => console.log(err))
