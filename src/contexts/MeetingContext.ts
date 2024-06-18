@@ -260,7 +260,8 @@ const editAssignment = (dispatch: Function) => {
     type: string,
     participant: string,
     reader: string,
-    otherParticipant: string
+    otherParticipant: string,
+    defaultTopic: string,
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
@@ -268,7 +269,7 @@ const editAssignment = (dispatch: Function) => {
       const congregationID = await AsyncStorage.getItem("congregationID");
       const response = await territories.put(
         `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}`,
-        {assignment: { topic, type, participant, reader, otherParticipant }},
+        {assignment: { topic, type, participant, reader, otherParticipant, defaultTopic }},
         {
           headers: {
             Authorization: `bearer ${token}`,
@@ -278,7 +279,7 @@ const editAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie edytowano zadanie na zebraniu: ${topic}`,
+        message: `Poprawnie edytowano zadanie na zebraniu: ${topic || defaultTopic}`,
         type: "success",
       });
     } catch (err) {
