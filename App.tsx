@@ -14,11 +14,10 @@ import SwitchNavigator from './src/navigators/Switch';
 import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
 import { useEffect, useState } from 'react';
-
 StatusBar.setBarStyle('light-content')
 
 function App() {
-
+  
   const [fontsLoaded] = useFonts({
     'FontAwesome': require('./assets/fonts/FontAwesome.ttf'),
     'InterThin': require('./assets/fonts/inter/Inter-Thin.ttf'),

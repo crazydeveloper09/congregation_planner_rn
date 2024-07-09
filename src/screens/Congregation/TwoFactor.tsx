@@ -4,24 +4,27 @@ import { Text } from '@rneui/themed';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import ButtonC from '../../commonComponents/Button';
 import MyInput from '../../commonComponents/MyInput';
+import useLocaLization from '../../hooks/useLocalization';
+import { authTranslations } from './translations';
 
 const CongregationsTwoFactorScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
     const { state, verifyUser } = useContext(AuthContext)
+    const i18n = useLocaLization(authTranslations);
 
     return (
         <View style={styles.container}>
-            <Text h3 style={styles.header}>Dwustopniowa weryfikacja w Congregation Planner</Text>
+            <Text h3 style={styles.header}>{i18n.t('twoFactorHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             <MyInput 
-                label='Kod dostępu'
-                placeholder='Wpisz kod dostępu'
+                label={i18n.t('codeLabel')}
+                placeholder={i18n.t('codePlaceholder')}
                 value={code}
                 onChangeText={setCode}
             />
             <ButtonC 
-                title={'Zweryfikuj konto'}
+                title={i18n.t('twoFactorButtonText')}
                 onPress={() => verifyUser({ code, userID: state.userID })}
                 isLoading={state.isLoading}
             />
