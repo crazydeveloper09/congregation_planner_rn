@@ -1,8 +1,12 @@
 import * as Calendar from 'expo-calendar';
 import { showMessage } from 'react-native-flash-message';
+import useLocaLization from '../../../hooks/useLocalization';
+import { mainTranslations } from '../../../../localization';
 
 export const addCartAssignmentToCalendar = async (date: string, time: string, location: string) => {
     const calendars = await Calendar.getCalendarsAsync();
+    const mainTranslate = useLocaLization(mainTranslations)
+
     const [startHour, endHour] = time.split(' - ');
     const [day, month, year] = date.split('.')
 
@@ -15,7 +19,7 @@ export const addCartAssignmentToCalendar = async (date: string, time: string, lo
         await Calendar.createEventAsync(calendars[0].id, { startDate: generateStartDate, endDate: generateEndDate, location, title: "Wózek" })
         showMessage({
             type: 'success',
-            message: 'Poprawnie dodano wydarzenie z kalendarza'
+            message: mainTranslate.t("successfullyAddedEventMessage")
         })
     } catch(error) {
         showMessage({

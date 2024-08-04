@@ -8,11 +8,14 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "./components/Preacher";
 import Pagination from "../../commonComponents/Pagination";
 import { columnsNum } from "../../helpers/devices";
+import useLocaLization from "../../hooks/useLocalization";
+import { preachersTranslations } from "./translations";
 
 const PreachersSearchScreen: React.FC = () => {
   const [param, setParam] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const { searchPreacher, state } = useContext(PreachersContext);
+  const preacherTranslate = useLocaLization(preachersTranslations);
 
   
   if(state.errMessage){
@@ -22,7 +25,7 @@ const PreachersSearchScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <Input
-        placeholder="Imię i nazwisko"
+        placeholder={preacherTranslate.t("nameLabel")}
         value={param}
         onChangeText={setParam}
         inputContainerStyle={styles.inputContainer}
@@ -39,19 +42,19 @@ const PreachersSearchScreen: React.FC = () => {
       {!submitted ? (
         <View style={styles.noParamContainer}>
           <FontAwesome name="search" size={45} sty />
-          <Text style={styles.noParamText}>Wpisz parametr, by wyszukać</Text>
+          <Text style={styles.noParamText}>{preacherTranslate.t("searchPlaceholderText")}</Text>
         </View>
       ) : state.isLoading ? (
         <Loading />
       ) : state.searchResults?.length === 0 ? (
         <View style={styles.noParamContainer}>
             <Entypo name="emoji-sad" size={45} />
-          <Text style={styles.noParamText}>Niestety, nic nie znaleźliśmy dla takiego parametru</Text>
+          <Text style={styles.noParamText}>{preacherTranslate.t("noEntryFoundText")}</Text>
         </View>
       ) : (
         <View style={styles.resultsContainer}>
           <Text style={styles.resultsText}>
-            Rezultaty wyszukiwania: {state.searchResults?.length}
+          {preacherTranslate.t("resultsLabelText")}: {state.searchResults?.length}
           </Text>
           <FlatList
             keyExtractor={((preacher) => preacher._id)}

@@ -1,40 +1,40 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import { IAudioVideo, IPreacher } from "../../../contexts/interfaces";
+import { IAttendant, IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addAudioVideoAssignmentToCalendar } from "../helpers/calendar";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
-import { audioVideoTranslations } from "../translations";
+import { attendantTranslations } from "../Attendants/translations";
 import { mainTranslations } from "../../../../localization";
 import { meetingsTranslations } from "../../Meetings/translations";
 
-interface AudioVideoAssignmentProps {
-  assignment: IAudioVideo;
+interface AttendantAssignmentProps {
+  assignment: IAttendant;
   preacher: IPreacher;
 }
 
-const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
+const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
   assignment,
   preacher,
 }) => {
-  const audioVideoTranslate = useLocaLization(audioVideoTranslations);
+  const attendantTranslate = useLocaLization(attendantTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
   return (
     <View>
-      {preacher && preacher._id === assignment.videoOperator?._id && (
+      {preacher && preacher._id === assignment.hallway1?._id && (
         <View>
           <Text style={styles.title}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
-            {audioVideoTranslate.t("videoOperatorLabel")}
+            {attendantTranslate.t("hallwayLabel")}
           </Text>
           <IconLink
             onPress={() =>
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
-                audioVideoTranslate.t("videoOperatorLabel"),
-                meetingTranslate.t("kingdomHallText")
+                attendantTranslate.t("hallwayLabel"),
+                meetingTranslate.t("kingdomHall")
               )
             }
             iconName="calendar-month-outline"
@@ -43,18 +43,18 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
           />
         </View>
       )}
-      {preacher && preacher._id === assignment.audioOperator?._id && (
+      {preacher && preacher._id === assignment.hallway2?._id && (
         <View>
           <Text style={styles.title}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
-            {audioVideoTranslate.t("audioOperatorLabel")}
+            {attendantTranslate.t("hallway2Label")}
           </Text>
           <IconLink
             onPress={() =>
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
-                audioVideoTranslate.t("audioOperatorLabel"),
-                meetingTranslate.t("kingdomHallText")
+                attendantTranslate.t("hallway2Label"),
+                meetingTranslate.t("kingdomHall")
               )
             }
             iconName="calendar-month-outline"
@@ -63,18 +63,18 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
           />
         </View>
       )}
-      {preacher && preacher._id === assignment.microphone1Operator?._id && (
+      {preacher && preacher._id === assignment.auditorium?._id && (
         <View>
           <Text style={styles.title}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
-            {audioVideoTranslate.t("mic1Label")}
+            {attendantTranslate.t("auditoriumLabel")}
           </Text>
           <IconLink
             onPress={() =>
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
-                audioVideoTranslate.t("mic1Label"),
-                meetingTranslate.t("kingdomHallText")
+                attendantTranslate.t("auditoriumLabel"),
+                meetingTranslate.t("kingdomHall")
               )
             }
             iconName="calendar-month-outline"
@@ -83,18 +83,18 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
           />
         </View>
       )}
-      {preacher && preacher._id === assignment.microphone2Operator?._id && (
+      {preacher && preacher._id === assignment.parking?._id && (
         <View>
           <Text style={styles.title}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
-            {audioVideoTranslate.t("mic2Label")}
+            {attendantTranslate.t("parkingLabel")}
           </Text>
           <IconLink
             onPress={() =>
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
-                audioVideoTranslate.t("mic2Label"),
-                meetingTranslate.t("kingdomHallText")
+                attendantTranslate.t("parkingLabel"),
+                meetingTranslate.t("kingdomHall")
               )
             }
             iconName="calendar-month-outline"
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AudioVideoAssignment;
+export default AttendantAssignment;

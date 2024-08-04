@@ -4,7 +4,7 @@ import { Provider as MeetingProvider } from './src/contexts/MeetingContext';
 import { Provider as MinistryMeetingProvider } from './src/contexts/MinistryMeetingContext';
 import { Provider as CartsScheduleProvider } from './src/contexts/CartsScheduleContext';
 import { Provider as AudioVideoProvider } from './src/contexts/AudioVideoContext';
-import { Provider as OrdinalsProvider } from './src/contexts/OrdinalsContext';
+import { Provider as OrdinalsProvider } from './src/contexts/AttendantsContext';
 import { Provider as PreachersProvider } from './src/contexts/PreachersContext';
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { StatusBar } from 'react-native';

@@ -6,15 +6,19 @@ import { IMeeting, IPreacher } from "../../../contexts/interfaces";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import ButtonC from "../../../commonComponents/Button";
-import { Input } from "react-native-elements";
 import { Switch } from "@rneui/base";
 import Meeting from "../components/Meeting";
 import AudioVideo from "../../AudioVideo/components/AudioVideo";
-import Ordinal from "../../AudioVideo/components/Ordinal";
+import Attendant from "../../AudioVideo/components/Attendant";
 import MyInput from "../../../commonComponents/MyInput";
 import Label from "../../../commonComponents/Label";
 import { months } from "../../../../defaultData";
 import { defaultStyles } from "../../defaultStyles";
+import useLocaLization from "../../../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "./translations";
+import { mainTranslations } from "../../../../localization";
+import { attendantTranslations } from "../../AudioVideo/Attendants/translations";
+import { meetingsTranslations } from "../translations";
 
 interface MeetingAssignmentNewScreenProps {
     route: {
@@ -25,33 +29,39 @@ interface MeetingAssignmentNewScreenProps {
 }
 
 const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({ route }) => {
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const mainTranslate = useLocaLization(mainTranslations);
+    const attendantTranslate = useLocaLization(attendantTranslations)
+    const meetingTranslate = useLocaLization(meetingsTranslations)
     const [participantValue, setParticipantValue] = useState("");
     const [participantOpen, setParticipantOpen] = useState(false);
-    const [participantItems, setParticipantItems] = useState([]);
+    const [participantItems, setParticipantItems] = useState([
+        { label: meetingAssignmentsTranslate.t('otherCongPreacherChoose'), value: ''}
+    ]);
     const [typeValue, setTypeValue] = useState<string>('')
     const [typeOpen, setTypeOpen] = useState<boolean>(false);
-    const [typeItems, setTypeItems] = useState(route.params.meeting.type === "Zebranie w weekend" ? [
-        {label: 'Wykład biblijny', value: 'Wykład biblijny'},
-        {label: 'Studium Strażnicy', value: 'Studium Strażnicy'}
+    const [typeItems, setTypeItems] = useState(route.params.meeting.type === meetingTranslate.t("weekend") ? [
+        {label: meetingAssignmentsTranslate.t('bibleTalk'), value: meetingAssignmentsTranslate.t('bibleTalk')},
+        {label: meetingAssignmentsTranslate.t('watchtowerStudy'), value: meetingAssignmentsTranslate.t('watchtowerStudy')}
     ] : [
-        {label: 'Skarby ze Słowa Bożego', value: 'Skarby ze Słowa Bożego'},
-        {label: 'Ulepszajmy swoją służbę', value: 'Ulepszajmy swoją służbę'},
-        {label: 'Chrześcijański tryb życia', value: 'Chrześcijański tryb życia'},
+        {label: meetingAssignmentsTranslate.t('treasuresFromGodsWord'), value: meetingAssignmentsTranslate.t('treasuresFromGodsWord')},
+        {label: meetingAssignmentsTranslate.t('applyYourselfToMinistry'), value: meetingAssignmentsTranslate.t('applyYourselfToMinistry')},
+        {label: meetingAssignmentsTranslate.t('livingAsChristians'), value: meetingAssignmentsTranslate.t('livingAsChristians')},
     ]);
     const [defaultTopicValue, setDefaultTopicValue] = useState<string>('')
     const [defaultTopicOpen, setDefaultTopicOpen] = useState<boolean>(false);
     const [defaultTopicItems, setDefaultTopicItems] = useState([
-        { label: 'Wpisz sam temat', value: ''},
-        { label: 'Wyszukujemy duchowe skarby', value: 'Wyszukujemy duchowe skarby' },
-        { label: 'Czytanie Biblii', value: 'Czytanie Biblii' },
-        { label: 'Rozpoczynanie rozmowy', value: 'Rozpoczynanie rozmowy' },
-        { label: 'Podtrzymywanie zainteresowania', value: 'Podtrzymywanie zainteresowania' },
-        { label: 'Pozyskiwanie uczniów', value: 'Pozyskiwanie uczniów' },
-        { label: 'Wyjaśnianie swoich wierzeń', value: 'Wyjaśnianie swoich wierzeń' },
-        { label: 'Przemówienie', value: 'Przemówienie' },
-        { label: 'Potrzeby zboru', value: 'Potrzeby zboru' },
-        { label: 'Osiągnięcia organizacji', value: 'Osiągnięcia organizacji' },
-        { label: 'Zborowe studium Biblii', value: 'Zborowe studium Biblii' },
+        { label: meetingAssignmentsTranslate.t('chooseTopicByYourself'), value: ''},
+        { label: meetingAssignmentsTranslate.t('spiritualGems'), value: meetingAssignmentsTranslate.t('spiritualGems') },
+        { label: meetingAssignmentsTranslate.t('bibleReading'), value: meetingAssignmentsTranslate.t('bibleReading') },
+        { label: meetingAssignmentsTranslate.t('startConversation'), value: meetingAssignmentsTranslate.t('startConversation') },
+        { label: meetingAssignmentsTranslate.t('followingUp'), value: meetingAssignmentsTranslate.t('followingUp') },
+        { label: meetingAssignmentsTranslate.t('makeDisciples'), value: meetingAssignmentsTranslate.t('makeDisciples') },
+        { label: meetingAssignmentsTranslate.t('explainBeliefs'), value: meetingAssignmentsTranslate.t('explainBeliefs') },
+        { label: meetingAssignmentsTranslate.t('talk'), value: meetingAssignmentsTranslate.t('talk') },
+        { label: meetingAssignmentsTranslate.t('congregationNeeds'), value: meetingAssignmentsTranslate.t('congregationNeeds') },
+        { label: meetingAssignmentsTranslate.t('orgAchievements'), value: meetingAssignmentsTranslate.t('orgAchievements') },
+        { label: meetingAssignmentsTranslate.t('congregationStudy'), value: meetingAssignmentsTranslate.t('congregationStudy') },
     ]);
     const [isReader, setIsReader] = useState(false)
     const [readerValue, setReaderValue] = useState<string>('')
@@ -71,15 +81,16 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
             }
         })
         .then((response) => {
+            
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
-            const participantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
+            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
                 })
-                return { label: `${preacher.name} - ${currentMonth} - ${alreadyAssigned} zadań`, value: preacher._id } as never
+                return { label: meetingAssignmentsTranslate.t('assignmentsCounter', {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             const readerItems = response.data.filter((preacher) => preacher.roles.includes("can_be_reader")).map((preacher) => {
 
@@ -87,9 +98,9 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyRead += meeting.assignments?.filter((assignment) => assignment.reader?.name === preacher.name).length
                 })
-                return { label: `${preacher.name} - ${currentMonth} - lektorował ${alreadyRead} razy`, value: preacher._id } as never
+                return { label: meetingAssignmentsTranslate.t('readerCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
-            setParticipantItems(participantItems)
+            setParticipantItems([...participantItems, ...selectParticipantItems])
             setReaderItems(readerItems)
         })
         .catch((err) => console.log(err))
@@ -101,15 +112,14 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
-            <Meeting meeting={route.params.meeting} filter="Wszystkie" />
-            <Text style={[styles.meeting, { marginTop: 15 }]}>Audio-video</Text>
+           <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
+            <Text style={styles.meeting}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
-            <Text style={[styles.meeting, { marginTop: 15 }]}>Porządkowi</Text>
-            <Ordinal meeting={route.params.meeting} ordinal={route.params.meeting.ordinal} />
-            
-            
-            <Label text="Typ" />
+            <Text style={styles.meeting}>{attendantTranslate.t("sectionText")}</Text>
+            <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
+
+            <Label text={meetingAssignmentsTranslate.t("typeLabel")} />
             <DropDownPicker 
                 value={typeValue}
                 setValue={setTypeValue}
@@ -119,12 +129,12 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Typ zadania"
-                placeholder="Wybierz typ zadania"
+                modalTitle={meetingAssignmentsTranslate.t("typeLabel")}
+                placeholder={meetingAssignmentsTranslate.t("typePlaceholder")}
             />
 
-            {route.params.meeting.type === "Zebranie w tygodniu" && <>
-                <Label text="Domyślny temat" />
+            {route.params.meeting.type === meetingTranslate.t("midWeek") && <>
+                <Label text={meetingAssignmentsTranslate.t("defaultTopicLabel")} />
                 <DropDownPicker 
                     value={defaultTopicValue}
                     setValue={setDefaultTopicValue}
@@ -134,18 +144,19 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Domyślny temat"
-                    placeholder="Wybierz domyślny temat zadania"
+                    modalTitle={meetingAssignmentsTranslate.t("defaultTopicLabel")}
+                    placeholder={meetingAssignmentsTranslate.t("defaultTopicPlaceholder")}
                 />
             </>}
+
                 {defaultTopicValue === '' && <MyInput 
                     value={topic}
                     onChangeText={setTopic}
-                    label="Temat"
-                    placeholder="Wpisz temat"
+                    label={meetingAssignmentsTranslate.t("topicLabel")}
+                    placeholder={meetingAssignmentsTranslate.t("topicPlaceholder")}
                 />}
             
-                <Label text="Uczestnik" />
+                <Label text={meetingAssignmentsTranslate.t("participantLabel")} />
             <DropDownPicker 
                 value={participantValue}
                 setValue={setParticipantValue}
@@ -155,19 +166,22 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Uczestnik"
-                placeholder="Wybierz uczestnika"
+                modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
+                placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
             />
-            <Label text="Czy jest potrzebny lektor?" />
+            <Label text={meetingAssignmentsTranslate.t("isReaderSwitchLabel")} />
             <Switch  
                 value={isReader}
-                onValueChange={(value) => setIsReader(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],marginVertical: 10 }}
+                onValueChange={(value) => {
+                    setIsReader(value)
+                    value === false && setReaderValue('')
+                }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
                 color={'#1F8AAD'}
             />
 
             { isReader && <>
-                <Label text="Lektor" />
+                <Label text={meetingAssignmentsTranslate.t("readerLabel")} />
                 <DropDownPicker 
                     value={readerValue}
                     setValue={setReaderValue}
@@ -177,14 +191,17 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Lektor"
-                    placeholder="Wybierz lektora"
+                    modalTitle={meetingAssignmentsTranslate.t("readerLabel")}
+                    placeholder={meetingAssignmentsTranslate.t("readerPlaceholder")}
                 />
             </>}
-            <Label text="Czy zadanie przedstawi głosiciel z innego zboru?" />
+            <Label text={meetingAssignmentsTranslate.t("isOtherParticipantSwitchLabel")} />
             <Switch  
                 value={isOtherParticipant}
-                onValueChange={(value) => setIsOtherParticipant(value)}
+                onValueChange={(value) => {
+                    setIsOtherParticipant(value)
+                    value === true && setOtherParticipant('')
+                }}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
                 color={'#1F8AAD'}
             />
@@ -192,14 +209,14 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 <MyInput 
                     value={otherParticipant}
                     onChangeText={setOtherParticipant}
-                    label="Uczestnik - głosiciel z innego zboru"
-                    placeholder="Wpisz imię i nazwisko"
+                    label={meetingAssignmentsTranslate.t("otherParticipantLabel")}
+                    placeholder={meetingAssignmentsTranslate.t("otherParticipantPlaceholder")}
                 />
 
             </>}
             <View style={{ marginBottom: 40 }}>
                 <ButtonC 
-                    title="Dodaj zadanie"
+                    title={meetingAssignmentsTranslate.t("addText")}
                     isLoading={state.isLoading}
                     onPress={() => addAssignment(route.params.meeting._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue)}
                 />

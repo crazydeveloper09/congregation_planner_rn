@@ -1,11 +1,14 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ReactElement } from "react";
+import useLocaLization from "../../../../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../translations";
 
 export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontColor: string} => {
     let fontColor: string;
     let icon: ReactElement;
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations)
     switch (type) {
-        case "Studium Strażnicy": {
+        case meetingAssignmentsTranslate.t("watchtowerStudy"): {
           fontColor = "#588D3F";
           icon = <MaterialCommunityIcons
               name="book-open-blank-variant"
@@ -14,7 +17,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
             />;
           break;
         }
-        case "Wykład biblijny": {
+        case meetingAssignmentsTranslate.t("bibleTalk"): {
           fontColor = "#292929";
           icon = (
             <MaterialCommunityIcons
@@ -25,7 +28,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case "Skarby ze Słowa Bożego": {
+        case meetingAssignmentsTranslate.t("treasuresFromGodsWord"): {
           fontColor = "#2A6B77";
           icon = (
             <MaterialCommunityIcons
@@ -36,7 +39,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case "Ulepszajmy swoją służbę": {
+        case meetingAssignmentsTranslate.t("applyYourselfToMinistry"): {
           fontColor = "#9B6D17";
           icon = (
             <MaterialCommunityIcons
@@ -47,7 +50,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case "Chrześcijański tryb życia": {
+        case meetingAssignmentsTranslate.t("livingAsChristians"): {
           fontColor = "#942926";
           icon = <MaterialCommunityIcons name="sheep" size={21} color={"white"} />;
           break;

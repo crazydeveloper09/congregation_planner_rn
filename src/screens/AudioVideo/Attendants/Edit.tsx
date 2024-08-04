@@ -2,10 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { View } from "react-native";
-import { Context as OrdinalContext } from "../../../contexts/OrdinalsContext";
+import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import territories from "../../../api/territories";
-import { IMeeting, IOrdinal, IPreacher } from "../../../contexts/interfaces";
+import { IMeeting, IAttendant, IPreacher } from "../../../contexts/interfaces";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -14,17 +14,21 @@ import Label from "../../../commonComponents/Label";
 import AudioVideo from "../components/AudioVideo";
 import { defaultStyles } from "../../defaultStyles";
 import { months } from "../../../../defaultData";
+import useLocaLization from "../../../hooks/useLocalization";
+import { mainTranslations } from "../../../../localization";
+import { meetingAssignmentTranslations } from "../../Meetings/Assignments/translations";
+import { attendantTranslations } from "./translations";
 
-interface OrdinalEditScreenProps {
+interface AttendantEditScreenProps {
     route: {
         params: {
             meeting: IMeeting,
-            ordinal: IOrdinal
+            attendant: IAttendant
         }
     }
 }
 
-const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
+const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     const [hallway1Value, setHallway1Value] = useState("");
     const [hallway1Open, setHallway1Open] = useState(false);
     const [hallway1Items, setHallway1Items] = useState([]);
@@ -39,7 +43,10 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
     const [parkingValue, setParkingValue] = useState<string>('')
     const [parkingOpen, setParkingOpen] = useState<boolean>(false);
     const [parkingItems, setParkingItems] = useState([]);
-    const { state, editOrdinal } = useContext(OrdinalContext);
+    const mainTranslate = useLocaLization(mainTranslations);
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const attendantTranslate = useLocaLization(attendantTranslations)
+    const { state, editAttendant } = useContext(AttendantContext);
     const meetingContext = useContext(MeetingContext)
 
 
@@ -57,7 +64,7 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.ordinal?.hallway1?.name === preacher.name || meeting.ordinal?.hallway2?.name === preacher.name || meeting.ordinal?.auditorium?.name === preacher.name || meeting.ordinal?.parking?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - był porządkowym już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: attendantTranslate.t("counter", { name: preacher.name, currentMonth, alreadyAssigned }), value: preacher._id } as never
             })
             setHallway1Items(selectItems)
             setAuditoriumItems(selectItems)
@@ -69,21 +76,21 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
 
     useEffect(() => {
         loadPreachers()
-        setHallway1Value(route.params.ordinal.hallway1._id)
-        setAuditoriumValue(route.params.ordinal.auditorium._id)
-        setHallway2Value(route.params.ordinal.hallway2?._id!)
-        setParkingValue(route.params.ordinal.parking?._id!)
+        setHallway1Value(route.params.attendant.hallway1._id)
+        setAuditoriumValue(route.params.attendant.auditorium._id)
+        setHallway2Value(route.params.attendant.hallway2?._id!)
+        setParkingValue(route.params.attendant.parking?._id!)
     }, [])
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
-            <Meeting meeting={route.params.meeting} filter="Wszystkie" />
+            <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
             <Text style={[styles.meeting, { marginTop: 15 }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
 
-            <Label text="Porządkowy (1)" />
+            <Label text={attendantTranslate.t("hallwayLabel")} />
             <DropDownPicker 
                 value={hallway1Value}
                 setValue={setHallway1Value}
@@ -93,10 +100,10 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Porządkowy (1)"
-                placeholder="Wybierz porządkowego (1)"
+                modalTitle={attendantTranslate.t("hallwayLabel")}
+                placeholder={attendantTranslate.t("hallwayPlaceholder")}
             />
-            <Label text="Czy jest potrzebny porządkowy 2?" />
+            <Label text={attendantTranslate.t("isHallway2SwitchText")} />
             <Switch  
                 value={isHallway2}
                 onValueChange={(value) => setIsHallway2(value)}
@@ -105,7 +112,7 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
             />
 
             { isHallway2 && <>
-                <Label text="Porządkowy 2" />
+                <Label text={attendantTranslate.t("hallway2Label")} />
                 <DropDownPicker 
                     value={hallway2Value}
                     setValue={setHallway2Value}
@@ -115,11 +122,11 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Porządkowy 2"
-                    placeholder="Wybierz porządkowego 2"
+                    modalTitle={attendantTranslate.t("hallway2Label")}
+                    placeholder={attendantTranslate.t("hallway2Placeholder")}
                 />
             </>}
-            <Label text="Porządkowy audytorium" />
+            <Label text={attendantTranslate.t("auditoriumLabel")} />
             <DropDownPicker 
                 value={auditoriumValue}
                 setValue={setAuditoriumValue}
@@ -129,11 +136,11 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Porządkowy audytorium"
-                placeholder="Wybierz porządkowego audytorium"
+                modalTitle={attendantTranslate.t("auditoriumLabel")}
+                placeholder={attendantTranslate.t("auditoriumPlaceholder")}
             />
             
-            <Label text="Czy jest potrzebny porządkowy na parkingu?" />
+            <Label text={attendantTranslate.t("isParkingSwitchText")} />
             <Switch  
                 value={isParking}
                 onValueChange={(value) => setIsParking(value)}
@@ -153,15 +160,15 @@ const OrdinalEditScreen: React.FC<OrdinalEditScreenProps> = ({ route }) => {
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Porządkowy parking"
-                    placeholder="Wybierz porządkowego na parkingu"
+                    modalTitle={attendantTranslate.t("parkingLabel")}
+                    placeholder={attendantTranslate.t("parkingPlaceholder")}
                 />
 
             </>}
             <ButtonC 
-                title="Edytuj dane porządkowi"
+                title={attendantTranslate.t("editHeaderText")}
                 isLoading={state.isLoading}
-                onPress={() => editOrdinal(route.params.meeting._id, route.params.ordinal._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                onPress={() => editAttendant(route.params.meeting._id, route.params.attendant._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
             />
         </ScrollView>
     )
@@ -183,4 +190,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default OrdinalEditScreen;
+export default AttendantEditScreen;

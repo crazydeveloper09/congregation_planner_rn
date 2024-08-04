@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
-import { Input } from "@rneui/themed";
 import DropDownPicker from "react-native-dropdown-picker";
 import Loading from "../../commonComponents/Loading";
 import ButtonC from "../../commonComponents/Button";
@@ -12,6 +11,8 @@ import { IPreacher } from "../../contexts/interfaces";
 import MyInput from "../../commonComponents/MyInput";
 import { defaultStyles } from "../defaultStyles";
 import Label from "../../commonComponents/Label";
+import useLocaLization from "../../hooks/useLocalization";
+import { ministryGroupsTranslations } from "./translations";
 
 interface MinistryGroupNewScreenProps {
     route: {
@@ -32,6 +33,8 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
     const [overseerOpen, setOverseerOpen] = useState(false);
     const [overseerValue, setOverseerValue] = useState(null);
     const [overseerItems, setOverseerItems] = useState([]);
+
+    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -66,12 +69,12 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
     return (
         <View style={styles.container}>
             <MyInput 
-                label='Nazwa grupy'
-                placeholder="Wpisz nazwę grupy"
+                label={ministryGroupTranslate.t("nameLabel")}
+                placeholder={ministryGroupTranslate.t("namePlaceholder")}
                 value={name}
                 onChangeText={setName}
             />
-            <Label text="Wybierz głosicieli" />
+            <Label text={ministryGroupTranslate.t("preacherLabel")} />
             <DropDownPicker
                 multiple={true}
                 open={preachersOpen}
@@ -79,14 +82,14 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 items={preachersItems}
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
+                searchable={true}
+                placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
-                searchable={true}
-                placeholder="Dodaj głosicieli"
             />
 
             {!preachersOpen && <>
-                <Label text="Wybierz nadzorcę służby" />
+                <Label text={ministryGroupTranslate.t("overseerLabel")} />
                 <DropDownPicker
                     open={overseerOpen}
                     value={overseerValue}
@@ -99,11 +102,11 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                     containerStyle={{
                         marginBottom: 20
                     }}
-                    placeholder="Wybierz nadzorcę grupy"
+                    placeholder={ministryGroupTranslate.t("overseerPlaceholder")}
                 />
-            </> }
+            </>}
 
-            <ButtonC title="Dodaj grupę" isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
+            <ButtonC title={ministryGroupTranslate.t("addText")} isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
         </View>
     )
 }

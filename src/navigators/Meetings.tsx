@@ -8,59 +8,64 @@ import MeetingAssignmentNewScreen from "../screens/Meetings/Assignments/New";
 import MeetingAssignmentEditScreen from "../screens/Meetings/Assignments/Edit";
 import MeetingAssignmentDeleteConfirmScreen from "../screens/Meetings/Assignments/DeleteConfirm";
 import { StyleSheet } from "react-native";
+import useLocaLization from "../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../screens/Meetings/Assignments/translations";
+import { meetingsTranslations } from "../screens/Meetings/translations";
 
 const Stack = createStackNavigator();
 
 const MeetingsNavigator: React.FC = () => {
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const meetingTranslate = useLocaLization(meetingsTranslations);
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
             <Stack.Screen 
                 name="Meetings Index" 
                 component={MeetingsIndexScreen} 
                 options={{
-                    headerTitle: "Zebrania"
+                    headerTitle: meetingTranslate.t("sectionText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings New" 
                 component={MeetingNewScreen} 
                 options={{
-                    headerTitle: "Dodaj zebranie"
+                    headerTitle: meetingTranslate.t("addText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings Edit" 
                 component={MeetingEditScreen} 
                 options={{
-                    headerTitle: "Edytuj zebranie"
+                    headerTitle: meetingTranslate.t("editText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings Delete Confirm" 
                 component={MeetingDeleteConfirmScreen} 
                 options={{
-                    headerTitle: "Potwierdź usunięcie zebrania"
+                    headerTitle: meetingTranslate.t("deleteConfirmHeaderText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings Assignment New" 
                 component={MeetingAssignmentNewScreen} 
                 options={{
-                    headerTitle: "Dodaj zadanie na zebraniu"
+                    headerTitle: meetingAssignmentsTranslate.t("addHeaderText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings Assignment Edit" 
                 component={MeetingAssignmentEditScreen} 
                 options={{
-                    headerTitle: "Edytuj zadanie na zebraniu"
+                    headerTitle: meetingAssignmentsTranslate.t("editHeaderText")
                 }}
             />
             <Stack.Screen 
                 name="Meetings Assignment Delete Confirm" 
                 component={MeetingAssignmentDeleteConfirmScreen} 
                 options={{
-                    headerTitle: "Potwierdź usunięcie zadania na zebraniu"
+                    headerTitle: meetingAssignmentsTranslate.t("deleteConfirmHeaderText")
                 }}
             />
         </Stack.Navigator>

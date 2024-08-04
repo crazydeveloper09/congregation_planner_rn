@@ -2,13 +2,15 @@ import { NavigationProp } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
 import { IMeeting, IMeetingAssignment } from "../../contexts/interfaces";
-import Meeting from "./components/Meeting";
 import ButtonC from "../../commonComponents/Button";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
 import { groupBy } from "../../helpers/arrays";
 import { ListItem } from "@rneui/base";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import MeetingAssignment from "./components/MeetingAssignment";
+import useLocaLization from "../../hooks/useLocalization";
+import { meetingsTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface MeetingDeleteConfirmScreenProps { 
     navigation: NavigationProp<any>
@@ -21,7 +23,9 @@ interface MeetingDeleteConfirmScreenProps {
 
 const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const { state, deleteMeeting } = useContext(MeetingContext)
-    const assignmentsGroup = groupBy<IMeetingAssignment>(route.params.meeting?.assignments, 'type');;
+    const assignmentsGroup = groupBy<IMeetingAssignment>(route.params.meeting?.assignments, 'type');
+    const meetingTranslate = useLocaLization(meetingsTranslations);
+    const mainTranslate = useLocaLization(mainTranslations);
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
@@ -34,17 +38,17 @@ const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({
                         />}
                         <IconDescriptionValue 
                             iconName="music"
-                            description="Pieśń"
+                            description={meetingTranslate.t("songLabel")}
                             value={route.params.meeting?.beginSong?.toString()}
                         />
                         <IconDescriptionValue 
                             iconName="account-tie"
-                            description="Prowadzący"
+                            description={meetingTranslate.t("leadLabel")}
                             value={route.params.meeting?.lead?.name}
                         />
                         <IconDescriptionValue 
                             iconName="hands-pray"
-                            description="Modlitwa"
+                            description={meetingTranslate.t("prayerLabel")}
                             value={route.params.meeting?.beginPrayer?.name}
                         />
                         <FlatList 
@@ -56,12 +60,12 @@ const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({
                         />
                         <IconDescriptionValue 
                             iconName="music"
-                            description="Pieśń końcowa"
+                            description={meetingTranslate.t("endSongLabel")}
                             value={route.params.meeting?.endSong?.toString()}
                         />
                         <IconDescriptionValue 
                             iconName="hands-pray"
-                            description="Modlitwa końcowa"
+                            description={meetingTranslate.t("endPrayerLabel")}
                             value={route.params.meeting?.endPrayer?.name || route.params.meeting?.otherEndPrayer}
                         />
                 </View>
@@ -69,13 +73,13 @@ const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({
             
             </ListItem>
 
-            <Text style={styles.text}>Czy na pewno chcesz usunąć to zebranie?</Text>
+            <Text style={styles.text}>{meetingTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8, marginBottom: 90 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                <ButtonC title="Nie" onPress={() => navigation.navigate('Meetings Index')} />
+                <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('Meetings Index')} />
                 </View>
             
             </View>

@@ -9,6 +9,8 @@ import Loading from '../../commonComponents/Loading';
 import Pagination from '../../commonComponents/Pagination';
 import { columnsNum } from '../../helpers/devices';
 import MinistryGroups from '../MinistryGroups/components/MinistryGroups';
+import useLocaLization from '../../hooks/useLocalization';
+import { ministryGroupsTranslations } from '../MinistryGroups/translations';
 
 interface PreachersIndexScreenProps {
     navigation: NavigationProp<any>
@@ -20,6 +22,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
     const authContext = useContext(AuthContext);
+    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
     useEffect(() => {
         navigation.setOptions({
@@ -50,11 +53,6 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
         Alert.alert("Server error", state.errMessage)
     }
 
-    navigation.setOptions({
-        headerTitle: `Głosiciele: ${state.preachers?.totalDocs}`,
-    })
-
-    console.log(state.preachers?.totalPages!)
     return (
         <ScrollView style={styles.container}>
             <FlatList 
@@ -66,7 +64,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
             />
             <Pagination activePage={state.preachers?.page!} totalPages={state.preachers?.totalPages!} updateState={setPage}/>
             <View style={styles.ministryGroupTitleContainer}>
-                <Text style={styles.header}>Grupy służby</Text>
+                <Text style={styles.header}>{ministryGroupTranslate.t("sectionText")}</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('AddMinistryGroup', { congregationID: authContext.state.userID })}>
                     <MaterialCommunityIcons name='plus' size={30} />
                 </TouchableOpacity>

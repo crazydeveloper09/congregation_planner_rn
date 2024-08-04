@@ -12,6 +12,8 @@ import { Switch } from "@rneui/base";
 import Label from "../../../commonComponents/Label";
 import MyInput from "../../../commonComponents/MyInput";
 import { defaultStyles } from "../../defaultStyles";
+import useLocaLization from "../../../hooks/useLocalization";
+import { cartScheduleTranslations } from "../translations";
 
 interface CartsScheduleHoursProps {
   hour: ICartHour;
@@ -21,20 +23,21 @@ interface CartsScheduleHoursProps {
 }
 
 const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers, day, refresh }) => {
+  const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
   const [preacher1Value, setPreacher1Value] = useState("");
   const [preacher1Open, setPreacher1Open] = useState(false);
   const [preacher1Items, setPreacher1Items] = useState([
-    {label: "Wolne miejsce", value: ""}
+    {label: cartScheduleTranslate.t("freeSpot"), value: ""}
   ]);
   const [preacher2Value, setPreacher2Value] = useState("");
   const [preacher2Open, setPreacher2Open] = useState(false);
   const [preacher2Items, setPreacher2Items] = useState([
-    {label: "Wolne miejsce", value: ""}
+    {label: cartScheduleTranslate.t("freeSpot"), value: ""}
   ]);
   const [isOtherPreacher1, setIsOtherPreacher1] = useState<boolean>(false);
-  const [otherPreacher1, setOtherPreacher1] = useState<string>('')
+  const [otherPreacher1, setOtherPreacher1] = useState<string>("")
   const [isOtherPreacher2, setIsOtherPreacher2] = useState<boolean>(false);
-  const [otherPreacher2, setOtherPreacher2] = useState<string>('')
+  const [otherPreacher2, setOtherPreacher2] = useState<string>("")
   const [editMode, setEditMode] = useState(false);
   const { assignPreachersToHours } = useContext(CartsScheduleContext);
   const {state} = useContext(PreachersContext)
@@ -74,23 +77,23 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 }}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
-                modalTitle={`Wybierz głosiciela nr 1 na godzinę ${hour?.timeDescription}`}
-                placeholder="Wybierz głosiciela nr 1"
+                modalTitle={cartScheduleTranslate.t("choosePreacher1Label", { timeDescription: hour?.timeDescription })}
+                placeholder={cartScheduleTranslate.t("choosePreacher1Placeholder")}
             />}
-            <Label text="Czy na miejscu nr 1 stanie głosiciel z innego zboru?" />
+            <Label text={cartScheduleTranslate.t("isOtherPreacher1SwitchText")} />
             <Switch  
                 value={isOtherPreacher1}
                 onValueChange={(value) => setIsOtherPreacher1(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={'#1F8AAD'}
+                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                color={"#1F8AAD"}
             />
 
             {isOtherPreacher1 && <>
                 <MyInput 
                     value={otherPreacher1}
                     onChangeText={setOtherPreacher1}
-                    label="Miejsce nr 1 - głosiciel z innego zboru"
-                    placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
+                    label={cartScheduleTranslate.t("otherPreacher1Label")}
+                    placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
                 />
 
             </>}
@@ -106,27 +109,27 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 containerStyle={{
                   marginVertical: 10
                 }}
-                modalTitle={`Wybierz głosiciela nr 2 na godzinę ${hour?.timeDescription}`}
-                placeholder="Wybierz głosiciela nr 2"
+                modalTitle={cartScheduleTranslate.t("choosePreacher2Label", { timeDescription: hour?.timeDescription })}
+                placeholder={cartScheduleTranslate.t("choosePreacher2Placeholder")}
             />}
-            <Label text="Czy na miejscu nr 2 stanie głosiciel z innego zboru?" />
+            <Label text={cartScheduleTranslate.t("isOtherPreacher2SwitchText")} />
             <Switch  
                 value={isOtherPreacher2}
                 onValueChange={(value) => setIsOtherPreacher2(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={'#1F8AAD'}
+                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                color={"#1F8AAD"}
             />
             {isOtherPreacher2 && <>
                 <MyInput 
                     value={otherPreacher2}
                     onChangeText={setOtherPreacher2}
-                    label="Miejsce wózku nr 2 - głosiciel z innego zboru"
-                    placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
+                    label={cartScheduleTranslate.t("otherPreacher2Label")}
+                    placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
                 />
 
             </>}
             <ButtonC 
-              title="Przypisz głosicieli"
+              title={cartScheduleTranslate.t("assignPreacherButtonText")}
               onPress={() => {
                 assignPreachersToHours(hour?._id, preacher1Value, preacher2Value, otherPreacher1, otherPreacher2, day)
                 setEditMode(false)
@@ -135,9 +138,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
             />
       </> : <>
         
-        <Text style={styles.preacher}>{hour?.preacher1?.name || hour.otherPreacher1 || 'Wolne miejsce'}</Text>
+        <Text style={styles.preacher}>{hour?.preacher1?.name || hour.otherPreacher1 || cartScheduleTranslate.t("freeSpot")}</Text>
     
-        <Text style={styles.preacher}>{hour?.preacher2?.name || hour.otherPreacher2 || 'Wolne miejsce'}</Text>
+        <Text style={styles.preacher}>{hour?.preacher2?.name || hour.otherPreacher2 || cartScheduleTranslate.t("freeSpot")}</Text>
       </>}
       
     </View>
@@ -152,9 +155,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: "black",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   title: {
     fontSize: 23,

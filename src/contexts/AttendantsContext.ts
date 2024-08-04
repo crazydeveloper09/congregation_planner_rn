@@ -3,21 +3,25 @@ import createDataContext from "./createDataContext"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
-import { showMessage } from "react-native-flash-message"
+import { showMessage } from "react-native-flash-message";
+import useLocaLization from "../hooks/useLocalization"
+import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations"
 
-interface IOrdinalState {
+const attendantTranslate = useLocaLization(attendantTranslations)
+
+interface IAttendantState {
     isLoading?: boolean,
     errMessage?: string
 }
 
-interface IOrdinalContext {
-    state: IOrdinalState
-    addOrdinal: Function,
-    editOrdinal: Function,
-    deleteOrdinal: Function,
+interface IAttendantContext {
+    state: IAttendantState
+    addAttendant: Function,
+    editAttendant: Function,
+    deleteAttendant: Function,
 }
 
-const OrdinalReducer = (state: IOrdinalState, action: { type: string, payload: any }) => {
+const AttendantReducer = (state: IAttendantState, action: { type: string, payload: any }) => {
     switch(action.type) {
         case 'turn_on_loading':
             return { ...state, isLoading: true, errMessage: '' }
@@ -30,7 +34,7 @@ const OrdinalReducer = (state: IOrdinalState, action: { type: string, payload: a
     }
 }
 
-const addOrdinal = (dispatch: Function) => {
+const addAttendant = (dispatch: Function) => {
     return async (
       meetingID: string,
       hallway1: string,
@@ -43,7 +47,7 @@ const addOrdinal = (dispatch: Function) => {
         const token = await AsyncStorage.getItem("token");
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.post(
-          `/meetings/${meetingID}/ordinals?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/attendants?congregationID=${congregationID}`,
           { hallway1, hallway2, auditorium, parking },
           {
             headers: {
@@ -54,7 +58,7 @@ const addOrdinal = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie dodano dane o porządkowych na zebranie`,
+          message: attendantTranslate.t("successfullyAddedMessage"),
           type: "success",
         });
       } catch (err) {
@@ -63,10 +67,10 @@ const addOrdinal = (dispatch: Function) => {
     };
   };
   
-  const editOrdinal = (dispatch: Function) => {
+  const editAttendant = (dispatch: Function) => {
     return async (
       meetingID: string,
-      meetingOrdinalID: string,
+      meetingAttendantID: string,
       hallway1: string,
       hallway2: string,
       auditorium: string,
@@ -77,8 +81,8 @@ const addOrdinal = (dispatch: Function) => {
         const token = await AsyncStorage.getItem("token");
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.put(
-          `/meetings/${meetingID}/ordinals/${meetingOrdinalID}?congregationID=${congregationID}`,
-          {ordinal: { hallway1, hallway2, auditorium, parking }},
+          `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}`,
+          {attendant: { hallway1, hallway2, auditorium, parking }},
           {
             headers: {
               Authorization: `bearer ${token}`,
@@ -88,7 +92,7 @@ const addOrdinal = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie edytowano dane o porządkowych na zebranie`,
+          message: attendantTranslate.t("successfullyEditedMessage"),
           type: "success",
         });
       } catch (err) {
@@ -97,14 +101,14 @@ const addOrdinal = (dispatch: Function) => {
     };
   };
   
-  const deleteOrdinal = (dispatch: Function) => {
-    return async (meetingID: string, meetingOrdinalID: string) => {
+  const deleteAttendant = (dispatch: Function) => {
+    return async (meetingID: string, meetingAttendantID: string) => {
       try {
         dispatch({ type: "turn_on_loading" });
         const token = await AsyncStorage.getItem("token");
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.delete(
-          `/meetings/${meetingID}/ordinals/${meetingOrdinalID}?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}`,
           {
             headers: {
               Authorization: `bearer ${token}`,
@@ -114,7 +118,7 @@ const addOrdinal = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie usunięto dane o porządkowych na zebranie`,
+          message: attendantTranslate.t("successfullyDeletedMessage"),
           type: "success",
         });
       } catch (err) {
@@ -123,4 +127,4 @@ const addOrdinal = (dispatch: Function) => {
     };
   };
 
-export const { Context, Provider } = createDataContext<IOrdinalState, IOrdinalContext>(OrdinalReducer, { addOrdinal, editOrdinal, deleteOrdinal}, { isLoading: false})
+export const { Context, Provider } = createDataContext<IAttendantState, IAttendantContext>(AttendantReducer, { addAttendant, editAttendant, deleteAttendant}, { isLoading: false})

@@ -16,14 +16,19 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderRight from "../../commonComponents/HeaderRight";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
+import useLocaLization from "../../hooks/useLocalization";
+import { ministryMeetingsTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
 }
 
 const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({ navigation }) => {
-    const filters = ["Wszystkie", "Moje przydziały"]
-    const [currentFilter, setCurrentFilter] = useState<string>("Wszystkie")
+    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
+    const mainTranslate = useLocaLization(mainTranslations)
+    const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")]
+    const [currentFilter, setCurrentFilter] = useState<string>(mainTranslate.t("all"))
     const [currentMonth, setCurrentMonth] = useState<string>(`${months[new Date().getMonth()] + ' ' + new Date().getFullYear()}`)
     const { state, loadMinistryMeetings, loadMinistryMeetingsOfPreacher } = useContext(MinistryMeetingContext)
     const preachersContext = useContext(PreachersContext)
@@ -39,7 +44,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
       }, []);
 
     useEffect(() => {
-        currentFilter === "Wszystkie" ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
+        currentFilter === mainTranslate.t("all") ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
         if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin")) {
             navigation.setOptions({
                 headerRight: () => <HeaderRight>
@@ -55,7 +60,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
           }
         
         const unsubscribe = navigation.addListener('focus', () => {
-            currentFilter === "Wszystkie" ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
+            currentFilter === mainTranslate.t("all") ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
         });
     
         return unsubscribe;
@@ -74,7 +79,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
             </> }
             
             <View style={styles.container}>
-                { state.ministryMeetings?.length === 0 ? <NotFound title="Niestety nie znaleziono zbiórek" /> : <FlatList
+                { state.ministryMeetings?.length === 0 ? <NotFound title={ministryMeetingTranslate.t("noEntryText")} /> : <FlatList
                     keyExtractor={(ministryMeeting) => ministryMeeting._id} 
                     data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
                     renderItem={({ item }) => <MinistryMeeting meeting={item} navigate={navigation.navigate} />}
@@ -84,7 +89,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
 
                 { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
                     iconName="download"
-                    value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+                    value={mainTranslate.t("pdfInfo")}
                 />}
             </View>
             

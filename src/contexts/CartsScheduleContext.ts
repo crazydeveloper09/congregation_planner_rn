@@ -4,7 +4,11 @@ import { ICartDay, ICartHour, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
-import { showMessage } from "react-native-flash-message"
+import { showMessage } from "react-native-flash-message";
+import useLocaLization from "../hooks/useLocalization"
+import { cartScheduleTranslations } from "../screens/CartsSchedule/translations"
+
+const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
 
 interface ICartDayState {
     isLoading?: boolean,
@@ -96,7 +100,7 @@ const addCartDay = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('Carts Schedule Index', { date: date.toLocaleDateString('pl-PL')})
             showMessage({
-                message: `Poprawnie dzień wózka: ${date.toLocaleDateString('pl-PL')}`,
+                message: `${cartScheduleTranslate.t("successfullyAddedMessage")}: ${date.toLocaleDateString('pl-PL')}`,
                 type: 'success',
             })
         } catch (err) {
@@ -121,7 +125,7 @@ const editCartDay = (dispatch: Function) => {
             navigate('Carts Schedule Index')
             dispatch({ type: 'turn_off_loading' })
             showMessage({
-                message: `Poprawnie edytowano dzień wózkowy`,
+                message: cartScheduleTranslate.t("successfullyEditedMessage"),
                 type: 'success',
             })
         } catch (err) {
@@ -146,7 +150,7 @@ const deleteCartDay = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('Carts Schedule Index')
             showMessage({
-                message: `Poprawnie usunięto dzień wózkowy`,
+                message: cartScheduleTranslate.t("successfullyDeletedMessage"),
                 type: 'success',
             })
         } catch (err) {
@@ -172,7 +176,7 @@ const assignPreachersToHours = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('Carts Schedule Index', { date: day })
             showMessage({
-                message: `Poprawnie przydzielano głosicieli do wózka`,
+                message: cartScheduleTranslate.t("successfullyAssignedMessage"),
                 type: 'success',
             })
         } catch (err) {

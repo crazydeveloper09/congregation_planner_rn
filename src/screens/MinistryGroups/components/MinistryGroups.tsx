@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Context as MinistryGroupContext } from "../../../contexts/MinistryGroupContext";
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -40,7 +39,7 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
                 preacher.item?.name === ministryGroup.item.overseer?.name ? (
-                  <Text style={[styles.preacher, { fontWeight: "bold" }]}>
+                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: "#CBEBF6" }]}>
                     {preacher.item?.name}
                   </Text>
                 ) : (
@@ -69,8 +68,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   title: {
-    padding: 10,
+    padding: 13,
     backgroundColor: "#1f8aad",
+    fontSize: 16,
     color: "white",
     width: 200,
     textAlign: "center",
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   preacher: {
     width: 200,
-    padding: 5,
+    padding: 8,
     textAlign: "center",
   },
   iconContainer: {

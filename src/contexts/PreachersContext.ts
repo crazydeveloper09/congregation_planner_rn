@@ -5,7 +5,11 @@ import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message"
-import { isLoaded } from "expo-font"
+import { isLoaded } from "expo-font";
+import useLocaLization from "../hooks/useLocalization"
+import { preachersTranslations } from "../screens/Preachers/translations"
+
+const preacherTranslate = useLocaLization(preachersTranslations)
 
 interface IPreacherState {
     isLoading?: boolean;
@@ -147,7 +151,7 @@ const addPreacher = (dispatch: Function) => {
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
             showMessage({
-                message: `Poprawnie dodano głosiciela: ${name} `,
+                message: `${preacherTranslate.t("successfulAddedMessage")}: ${name} `,
                 type: 'success',
             })
         } catch(err) {
@@ -169,7 +173,7 @@ const editPreacher = (dispatch: Function) => {
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
             showMessage({
-                message: `Poprawnie edytowano głosiciela: ${name} `,
+                message: `${preacherTranslate.t("successfulEditedMessage")}: ${name} `,
                 type: 'success',
             })
         } catch(err) {
@@ -212,7 +216,7 @@ const deletePreacher = (dispatch: Function) => {
             navigate('PreachersList');
             dispatch({ type: 'turn_off_loading' })
             showMessage({
-                message: `Poprawnie usunięto głosiciela`,
+                message: preacherTranslate.t("successfulDeletedMessage"),
                 type: 'success',
             })
         } catch(err) {

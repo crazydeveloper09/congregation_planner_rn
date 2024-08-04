@@ -18,6 +18,8 @@ export const authTranslations = {
     codePlaceholder: "Wpisz kod dostępu",
     twoFactorButtonText: "Zweryfikuj konto",
     automaticLoginMessage: "Automatycznie zalogowano do aplikacji",
+    noUserFound: "Nie znaleziono takiego użytkownika",
+    logOutMeesage: "Wylogowano z Congregation Planner"
   },
   en: {
     greeting: "Welcome to Congregation Planner",

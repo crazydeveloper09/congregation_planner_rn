@@ -5,6 +5,8 @@ import { Context as AuthContext } from '../contexts/AuthContext';
 import packageJson from '../../package.json';
 import { Button } from "@rneui/themed";
 import { NavigationProp } from "@react-navigation/native";
+import useLocaLization from "../hooks/useLocalization";
+import { mainTranslations } from "../../localization";
 
 interface SettingsScreenProps {
     navigation: NavigationProp<any>
@@ -12,24 +14,25 @@ interface SettingsScreenProps {
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const auth = useContext(AuthContext)
+    const mainTranslate = useLocaLization(mainTranslations)
 
     return (
         <View style={styles.container}>
             
 
-            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-                <Text style={{ color: '#1F8AAD', fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>Polityka prywatności i klauzula RODO</Text>
+            <TouchableOpacity onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
+                <Text style={{ color: '#1F8AAD', fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>{mainTranslate.t("policyLabel")}</Text>
             </TouchableOpacity>
             
             <Button 
-                title='Wyloguj się' 
+                title={mainTranslate.t("logOutLabel")}
                 titleStyle={{ color: '#1F8AAD', fontFamily: 'MontserratRegular' }} 
                 buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0.0)' }} 
                 onPress={() => auth.signOut()}
             />
         
-            <Text style={styles.versionText}>© Stworzone z ❤️ przez Maciej Kuta</Text>
-            <Text style={styles.versionText}>Wersja {packageJson.version}</Text>
+            <Text style={styles.versionText}>{mainTranslate.t("copyrightLabel")}</Text>
+            <Text style={styles.versionText}>{mainTranslate.t("versionLabel")} {packageJson.version}</Text>
         </View>
     )
 }

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { ListItem } from "@rneui/themed";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { groupBy } from "../../../helpers/arrays";
 import MeetingAssignment from "./MeetingAssignment";
 import { IMeeting, IMeetingAssignment } from "../../../contexts/interfaces";
@@ -12,9 +11,11 @@ import { addMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
-import NotFound from "../../../commonComponents/NotFound";
-import { Avatar, Divider } from "@rneui/base";
-import Accordion from "../../../commonComponents/Accordion";
+import { Divider } from "@rneui/base";
+import useLocaLization from "../../../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../Assignments/translations";
+import { meetingsTranslations } from "../translations";
+import { mainTranslations } from "../../../../localization";
 
 interface MeetingProps {
     meeting: IMeeting,
@@ -27,8 +28,11 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const meetingTranslate = useLocaLization(meetingsTranslations);
+    const mainTranslate = useLocaLization(mainTranslations);
 
-    if(state.preacher && filter === "Moje przydziały") {
+    if(state.preacher && filter === mainTranslate.t("myAssignments")) {
         return (
           <>
             {state.preacher?._id === meeting.lead?._id && (
@@ -42,12 +46,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 minute: '2-digit',
                                 hour12: false
                             })} -
-                        Prowadzący
+                        {meetingTranslate.t("leadLabel")}
                     </Text>
                     <IconLink 
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), `Prowadzący`, 'Sala Królestwa')}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("leadLabel"), meetingTranslate.t("kingdomHall"))}
                         iconName="calendar-month-outline"
-                        description="Dodaj do kalendarza"
+                        description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
                     />
                 </View>
@@ -64,12 +68,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 minute: '2-digit',
                                 hour12: false
                             })} -
-                        Modlitwa początkowa
+                        {meetingTranslate.t("beginPrayerLabel")}
                     </Text>
                     <IconLink 
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), `Modlitwa początkowa`, 'Sala Królestwa')}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("beginPrayerLabel"), meetingTranslate.t("kingdomHall"))}
                         iconName="calendar-month-outline"
-                        description="Dodaj do kalendarza"
+                        description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
                     />
                 </View>
@@ -85,12 +89,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 minute: '2-digit',
                                 hour12: false
                             })} -
-                        Modlitwa końcowa
+                        {meetingTranslate.t("endPrayerLabel")}
                     </Text>
                     <IconLink
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), `Modlitwa końcowa`, 'Sala Królestwa')}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("endPrayerLabel"), meetingTranslate.t("kingdomHall"))}
                         iconName="calendar-month-outline"
-                        description="Dodaj do kalendarza"
+                        description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
                     />
                 </View>
@@ -131,17 +135,17 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         />}
                         <IconDescriptionValue 
                             iconName="music"
-                            description="Pieśń"
+                            description={meetingTranslate.t("songLabel")}
                             value={meeting.beginSong !== 0 ? meeting?.beginSong?.toString(): ""}
                         />
                         <IconDescriptionValue 
                             iconName="account-tie"
-                            description="Prowadzący"
+                            description={meetingTranslate.t("leadLabel")}
                             value={meeting?.lead?.name}
                         />
                         <IconDescriptionValue 
                             iconName="hands-pray"
-                            description="Modlitwa"
+                            description={meetingTranslate.t("prayerLabel")}
                             value={meeting?.beginPrayer?.name}
                         />
                         
@@ -149,7 +153,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                             <IconLink 
                                 onPress={() => navigation.navigate("Meetings Assignment New", { meeting })}
                                 iconName="plus"
-                                description="Dodaj zadanie"
+                                description={meetingAssignmentsTranslate.t("addText")}
                             />
                         )}
                         
@@ -162,12 +166,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         />
                         <IconDescriptionValue 
                             iconName="music"
-                            description="Pieśń końcowa"
+                            description={meetingTranslate.t("endSongLabel")}
                             value={meeting.endSong !== 0 ? meeting?.endSong?.toString(): ""}
                         />
                         <IconDescriptionValue 
                             iconName="hands-pray"
-                            description="Modlitwa końcowa"
+                            description={meetingTranslate.t("endPrayerLabel")}
                             value={meeting?.endPrayer?.name || meeting?.otherEndPrayer}
                         />
                         
@@ -175,12 +179,12 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                             <IconLink 
                                 onPress={() => navigation.navigate("Meetings Edit", { meeting })}
                                 iconName="pencil"
-                                description="Edytuj zebranie"
+                                description={meetingTranslate.t("editText")}
                             />
                             <IconLink 
                                 onPress={() => navigation.navigate("Meetings Delete Confirm", { meeting })}
                                 iconName="trash-can"
-                                description="Usuń zebranie"
+                                description={meetingTranslate.t("deleteText")}
                             />
                         </IconContainer>}
               

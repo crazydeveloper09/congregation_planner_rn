@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { View, StyleSheet } from "react-native";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
-import { Input } from "@rneui/base";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../../commonComponents/Button";
-import { Switch } from "@rneui/base";
 import MyInput from "../../../commonComponents/MyInput";
 import ChooseDate from "../../../commonComponents/ChooseDate";
+import useLocaLization from "../../../hooks/useLocalization";
+import { cartScheduleTranslations } from "../translations";
 
 interface CartDayNewScreenProps {
     route: {
@@ -23,7 +21,8 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     const [place, setPlace] = useState<string>('')
     const [startHour, setStartHour] = useState<string>('');
     const [finalHour, setFinalHour] = useState<string>('')
-    const { state, addCartDay } = useContext(CartsScheduleContext)
+    const { state, addCartDay } = useContext(CartsScheduleContext);
+    const cartScheduleTranslate = useLocaLization(cartScheduleTranslations);
 
     useEffect(() => {
         setDate(new Date(route.params.date))
@@ -42,29 +41,29 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
             <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label="Miejsce"
-                placeholder="Wpisz lokalizację wózka"
+                label={cartScheduleTranslate.t("placeLabel")}
+                placeholder={cartScheduleTranslate.t("placePlaceholder")}
             />
 
             <MyInput 
                 value={startHour}
                 onChangeText={setStartHour}
-                label="Godzina początkowa wózka"
                 keyboardType="numeric"
-                placeholder="Wpisz godzinę początkową wózka"
+                label={cartScheduleTranslate.t("beginHourLabel")}
+                placeholder={cartScheduleTranslate.t("beginHourPlaceholder")}
             />
 
             <MyInput 
                 value={finalHour}
                 onChangeText={setFinalHour}
-                label="Godzina końcowa wózka"
                 keyboardType="numeric"
-                placeholder="Wpisz godzinę końcową wózka"
+                label={cartScheduleTranslate.t("endHourLabel")}
+                placeholder={cartScheduleTranslate.t("endHourPlaceholder")}
     
             />
            
             <ButtonC 
-                title="Dodaj dzień wózka"
+                title={cartScheduleTranslate.t("addText")}
                 isLoading={state.isLoading}
                 onPress={() => addCartDay(place, startHour, date, finalHour)}
             />

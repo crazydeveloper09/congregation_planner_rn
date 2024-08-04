@@ -5,6 +5,10 @@ import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message"
 import { IAudioVideo, IOrdinal } from "./interfaces"
+import useLocaLization from "../hooks/useLocalization"
+import { audioVideoTranslations } from "../screens/AudioVideo/translations"
+
+const audioVideoTranslate = useLocaLization(audioVideoTranslations)
 
 interface IAudioVideoState {
     isLoading?: boolean,
@@ -81,7 +85,7 @@ const addAudioVideo = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie dodano dane o audio-video na zebranie`,
+          message: audioVideoTranslate.t("successfullyAddedMessage"),
           type: "success",
         });
       } catch (err) {
@@ -115,7 +119,7 @@ const addAudioVideo = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie edytowano dane o audio-video na zebranie`,
+          message: audioVideoTranslate.t("successfullyEditedMessage"),
           type: "success",
         });
       } catch (err) {
@@ -141,7 +145,7 @@ const addAudioVideo = (dispatch: Function) => {
         dispatch({ type: "turn_off_loading" });
         navigate("Audio Index");
         showMessage({
-          message: `Poprawnie usunięto dane o audio-video na zebranie`,
+          message: audioVideoTranslate.t("successfullyDeletedMessage"),
           type: "success",
         });
       } catch (err) {

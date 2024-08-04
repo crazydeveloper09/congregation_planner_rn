@@ -17,6 +17,8 @@ import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
 import { months } from "../../../defaultData";
 import { defaultStyles } from "../defaultStyles";
+import useLocaLization from "../../hooks/useLocalization";
+import { ministryMeetingsTranslations } from "./translations";
 
 interface MinistryMeetingEditScreenProps {
     navigation: NavigationProp<any>;
@@ -30,6 +32,7 @@ interface MinistryMeetingEditScreenProps {
 const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ navigation, route }) => {
     const { state, editMinistryMeeting } = useContext(MinistryMeetingContext)
     const [date, setDate] = useState<Date>(new Date(route.params.meeting.date))
+    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const [time, setTime] = useState<Date>(new Date())
     const [timeOpen, setTimeOpen] = useState<boolean>(false);
@@ -37,8 +40,8 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [defaultPlaceValue, setDefaultPlaceValue] = useState<string>('')
     const [defaultPlaceOpen, setDefaultPlaceOpen] = useState<boolean>(false);
     const [defaultPlaceItems, setDefaultPlaceItems] = useState([
-        { label: 'Wpisz sam miejsce', value: '' },
-        { label: 'Sala Królestwa', value: 'Sala Królestwa' },
+        { label: ministryMeetingTranslate.t("placeDefaultValue"), value: '' },
+        { label: ministryMeetingTranslate.t("kingdomHall"), value: ministryMeetingTranslate.t("kingdomHall") },
         { label: 'Zoom', value: 'Zoom' },
     ]);
     const [leadValue, setLeadValue] = useState("");
@@ -62,7 +65,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - prowadzi już ${alreadyAssigned} zbiórek`, value: preacher._id } as never
+                return { label: ministryMeetingTranslate.t("leadCounter", { name: preacher.name, currentMonth, alreadyAssigned }), value: preacher._id } as never
             })
             setLeadItems(selectItems)
         })
@@ -84,14 +87,14 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     return (
         <View style={styles.container}>
             <ChooseDate 
-                label="Data"
+                label={ministryMeetingTranslate.t("dateLabel")}
                 date={date}
                 dateOpen={dateOpen}
                 setDate={setDate}
                 setDateOpen={setDateOpen}
                 mode="datetime"
             />
-            <Label text="Domyślne miejsce" />
+            <Label text={ministryMeetingTranslate.t("defaultPlaceLabel")} />
                 <DropDownPicker 
                     value={defaultPlaceValue}
                     setValue={setDefaultPlaceValue}
@@ -101,16 +104,16 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Domyślne miejsce"
-                    placeholder="Wybierz domyślne miejsce zbiórki"
+                    modalTitle={ministryMeetingTranslate.t("defaultPlaceLabel")}
+                    placeholder={ministryMeetingTranslate.t("defaultPlacePlaceholder")}
                 />
             {defaultPlaceValue === '' && <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label="Miejsce"
-                placeholder="Wpisz miejsce zbiórki"
+                label={ministryMeetingTranslate.t("placeLabel")}
+                placeholder={ministryMeetingTranslate.t("placePlaceholder")}
             />}
-            <Label text="Prowadzący" />
+            <Label text={ministryMeetingTranslate.t("leadLabel")} />
             <DropDownPicker 
                 value={leadValue}
                 setValue={setLeadValue}
@@ -120,10 +123,10 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Prowadzący zbiórkę"
-                placeholder="Wybierz prowadzącego"
+                modalTitle={ministryMeetingTranslate.t("leadLabel")}
+                placeholder={ministryMeetingTranslate.t("leadPlaceholder")}
             />
-            <Label text="Czy jest ustalony temat zbiórki?" />
+            <Label text={ministryMeetingTranslate.t("isTopicSwitchText")} />
             <Switch  
                 value={isTopic}
                 onValueChange={(value) => setIsTopic(value)}
@@ -134,13 +137,13 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 <MyInput 
                     value={topic}
                     onChangeText={setTopic}
-                    label="Temat"
-                    placeholder="Wpisz temat zbiórki"
+                    label={ministryMeetingTranslate.t("topicLabel")}
+                    placeholder={ministryMeetingTranslate.t("topicPlaceholder")}
                 />
 
             </>}
             <ButtonC 
-                title="Edytuj zbiórkę"
+                title={ministryMeetingTranslate.t("editText")}
                 isLoading={state.isLoading}
                 onPress={() => editMinistryMeeting(route.params.meeting._id, place, leadValue, date, time, topic)}
             />

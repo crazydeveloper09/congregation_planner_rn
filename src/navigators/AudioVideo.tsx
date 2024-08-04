@@ -4,14 +4,19 @@ import AudioVideoIndexScreen from "../screens/AudioVideo/Index";
 import AudioVideoNewScreen from "../screens/AudioVideo/New";
 import AudioVideoEditScreen from "../screens/AudioVideo/Edit";
 import AudioVideoDeleteConfirmScreen from "../screens/AudioVideo/DeleteConfirm";
-import OrdinalNewScreen from "../screens/AudioVideo/Ordinals/New";
-import OrdinalEditScreen from "../screens/AudioVideo/Ordinals/Edit";
-import OrdinalDeleteConfirmScreen from "../screens/AudioVideo/Ordinals/DeleteConfirm";
+import AttendantNewScreen from "../screens/AudioVideo/Attendants/New";
+import AttendantEditScreen from "../screens/AudioVideo/Attendants/Edit";
+import AttendantDeleteConfirmScreen from "../screens/AudioVideo/Attendants/DeleteConfirm";
 import { StyleSheet } from "react-native";
+import useLocaLization from "../hooks/useLocalization";
+import { audioVideoTranslations } from "../screens/AudioVideo/translations";
+import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations";
 
 const Stack = createStackNavigator();
 
 const AudioVideoNavigator: React.FC = () => {
+    const audioVideoTranslate = useLocaLization(audioVideoTranslations);
+    const attendantTranslate = useLocaLization(attendantTranslations)
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
             <Stack.Screen 
@@ -25,42 +30,42 @@ const AudioVideoNavigator: React.FC = () => {
                 name="Audio New" 
                 component={AudioVideoNewScreen} 
                 options={{
-                    headerTitle: "Dodaj dane o audio-video"
+                    headerTitle: audioVideoTranslate.t("addHeaderText")
                 }}
             />
             <Stack.Screen 
                 name="Audio Edit" 
                 component={AudioVideoEditScreen} 
                 options={{
-                    headerTitle: "Edytuj dane o audio-video"
+                    headerTitle: audioVideoTranslate.t("editHeaderText")
                 }}
             />
             <Stack.Screen 
                 name="Audio Delete Confirm" 
                 component={AudioVideoDeleteConfirmScreen} 
                 options={{
-                    headerTitle: "Potwierdzenie usunięcia danych o audio-video"
+                    headerTitle: audioVideoTranslate.t("deleteConfirmHeaderText")
                 }}
             />
              <Stack.Screen 
-                name="Ordinal New" 
-                component={OrdinalNewScreen} 
+                name="Attendant New" 
+                component={AttendantNewScreen} 
                 options={{
-                    headerTitle: "Dodaj dane o porządkowych"
+                    headerTitle: attendantTranslate.t("addHeaderText")
                 }}
             />
             <Stack.Screen 
-                name="Ordinal Edit" 
-                component={OrdinalEditScreen} 
+                name="Attendant Edit" 
+                component={AttendantEditScreen} 
                 options={{
-                    headerTitle: "Edytuj dane o porządkowych"
+                    headerTitle: attendantTranslate.t("editHeaderText")
                 }}
             />
             <Stack.Screen 
-                name="Ordinal Delete Confirm" 
-                component={OrdinalDeleteConfirmScreen} 
+                name="Attendant Delete Confirm" 
+                component={AttendantDeleteConfirmScreen} 
                 options={{
-                    headerTitle: "Potwierdzenie usunięcia danych o porządkowych"
+                    headerTitle: attendantTranslate.t("deleteConfirmHeaderText")
                 }}
             />
         </Stack.Navigator>

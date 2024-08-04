@@ -4,15 +4,18 @@ import { Context as PreachersContext } from "../contexts/PreachersContext";
 import MainNavigator from "./Main";
 import AuthNavigator from "./Auth";
 import * as LocalAuthentication from 'expo-local-authentication';
+import useLocaLization from "../hooks/useLocalization";
+import { mainTranslations } from "../../localization";
 
 const SwitchNavigator = () => {
     const { state, tryLocalSignIn, signOut } = useContext(AuthContext);
     const preachersContext = useContext(PreachersContext)
+    const mainTranslate = useLocaLization(mainTranslations)
 
     const checkIdentity = () => {
         LocalAuthentication
             .authenticateAsync({
-                promptMessage: 'Potwierdź swoją tożsamość, by dokonano automatycznego logowania'
+                promptMessage: mainTranslate.t("confirmIdentity")
             })
             .then((result) => {
                 tryLocalSignIn()

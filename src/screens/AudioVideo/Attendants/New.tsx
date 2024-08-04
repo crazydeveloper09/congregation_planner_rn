@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
-import { Context as OrdinalContext } from "../../../contexts/OrdinalsContext";
+import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import territories from "../../../api/territories";
 import { IMeeting, IPreacher } from "../../../contexts/interfaces";
@@ -14,8 +14,12 @@ import Label from "../../../commonComponents/Label";
 import AudioVideo from "../components/AudioVideo";
 import { defaultStyles } from "../../defaultStyles";
 import { months } from "../../../../defaultData";
+import useLocaLization from "../../../hooks/useLocalization";
+import { mainTranslations } from "../../../../localization";
+import { meetingAssignmentTranslations } from "../../Meetings/Assignments/translations";
+import { attendantTranslations } from "./translations";
 
-interface OrdinalNewScreenProps {
+interface AttendantNewScreenProps {
     route: {
         params: {
             meeting: IMeeting,
@@ -23,7 +27,7 @@ interface OrdinalNewScreenProps {
     }
 }
 
-const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
+const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
     const [hallway1Value, setHallway1Value] = useState("");
     const [hallway1Open, setHallway1Open] = useState(false);
     const [hallway1Items, setHallway1Items] = useState([]);
@@ -38,7 +42,10 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
     const [parkingValue, setParkingValue] = useState<string>('')
     const [parkingOpen, setParkingOpen] = useState<boolean>(false);
     const [parkingItems, setParkingItems] = useState([]);
-    const { state, addOrdinal } = useContext(OrdinalContext);
+    const mainTranslate = useLocaLization(mainTranslations);
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const attendantTranslate = useLocaLization(attendantTranslations)
+    const { state, addAttendant } = useContext(AttendantContext);
     const meetingContext = useContext(MeetingContext)
 
 
@@ -56,7 +63,7 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.ordinal?.hallway1?.name === preacher.name || meeting.ordinal?.hallway2?.name === preacher.name || meeting.ordinal?.auditorium?.name === preacher.name || meeting.ordinal?.parking?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - był porządkowym już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: attendantTranslate.t("counter", { name: preacher.name, currentMonth, alreadyAssigned }), value: preacher._id } as never
             })
             setHallway1Items(selectItems)
             setAuditoriumItems(selectItems)
@@ -72,13 +79,13 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
-            <Meeting meeting={route.params.meeting} filter="Wszystkie" />
+            <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
             <Text style={[styles.meeting, { marginTop: 15 }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
             
-            <Label text="Porządkowy (1)" />
+            <Label text={attendantTranslate.t("hallwayLabel")} />
             <DropDownPicker 
                 value={hallway1Value}
                 setValue={setHallway1Value}
@@ -88,10 +95,10 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Porządkowy (1)"
-                placeholder="Wybierz porządkowego (1)"
+                modalTitle={attendantTranslate.t("hallwayLabel")}
+                placeholder={attendantTranslate.t("hallwayPlaceholder")}
             />
-            <Label text="Czy jest potrzebny porządkowy 2?" />
+            <Label text={attendantTranslate.t("isHallway2SwitchText")} />
             <Switch  
                 value={isHallway2}
                 onValueChange={(value) => setIsHallway2(value)}
@@ -100,7 +107,7 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
             />
 
             { isHallway2 && <>
-                <Label text="Porządkowy 2" />
+                <Label text={attendantTranslate.t("hallway2Label")} />
                 <DropDownPicker 
                     value={hallway2Value}
                     setValue={setHallway2Value}
@@ -110,11 +117,11 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Porządkowy 2"
-                    placeholder="Wybierz porządkowego 2"
+                    modalTitle={attendantTranslate.t("hallway2Label")}
+                    placeholder={attendantTranslate.t("hallway2Placeholder")}
                 />
             </>}
-            <Label text="Porządkowy audytorium" />
+            <Label text={attendantTranslate.t("auditoriumLabel")} />
             <DropDownPicker 
                 value={auditoriumValue}
                 setValue={setAuditoriumValue}
@@ -124,11 +131,11 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Porządkowy audytorium"
-                placeholder="Wybierz porządkowego audytorium"
+                modalTitle={attendantTranslate.t("auditoriumLabel")}
+                placeholder={attendantTranslate.t("auditoriumPlaceholder")}
             />
 
-            <Label text="Czy jest potrzebny porządkowy na parkingu?" />
+            <Label text={attendantTranslate.t("isParkingSwitchText")} />
             <Switch  
                 value={isParking}
                 onValueChange={(value) => setIsParking(value)}
@@ -148,15 +155,15 @@ const OrdinalNewScreen: React.FC<OrdinalNewScreenProps> = ({ route }) => {
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Porządkowy parking"
-                    placeholder="Wybierz porządkowego na parkingu"
+                    modalTitle={attendantTranslate.t("parkingLabel")}
+                    placeholder={attendantTranslate.t("parkingPlaceholder")}
                 />
 
             </>}
             <ButtonC 
-                title="Dodaj dane porządkowi"
+                title={attendantTranslate.t("addHeaderText")}
                 isLoading={state.isLoading}
-                onPress={() => addOrdinal(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                onPress={() => addAttendant(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
             />
         </View>
     )
@@ -178,4 +185,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default OrdinalNewScreen;
+export default AttendantNewScreen;

@@ -5,38 +5,41 @@ import CartDayNewScreen from "../screens/CartsSchedule/Day/New";
 import { StyleSheet } from "react-native";
 import CartDayEditScreen from "../screens/CartsSchedule/Day/Edit";
 import CartDayDeleteConfirmScreen from "../screens/CartsSchedule/Day/DeleteConfirm";
+import useLocaLization from "../hooks/useLocalization";
+import { cartScheduleTranslations } from "../screens/CartsSchedule/translations";
 
 const Stack = createStackNavigator();
 
 const CartsScheduleNavigator: React.FC = () => {
+    const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
     return (
         <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
             <Stack.Screen 
                 name="Carts Schedule Index" 
                 component={CartsScheduleIndexScreen} 
                 options={{
-                    headerTitle: "Wózek"
+                    headerTitle: cartScheduleTranslate.t("sectionText")
                 }}
             />
             <Stack.Screen 
                 name="Carts Day New" 
                 component={CartDayNewScreen} 
                 options={{
-                    headerTitle: "Dodaj dzień wózka"
+                    headerTitle: cartScheduleTranslate.t("addText")
                 }}
             />
             <Stack.Screen 
                 name="Carts Day Edit" 
                 component={CartDayEditScreen} 
                 options={{
-                    headerTitle: "Edytuj dzień wózka"
+                    headerTitle: cartScheduleTranslate.t("editText")
                 }}
             />
             <Stack.Screen 
                 name="Carts Day Delete Confirm" 
                 component={CartDayDeleteConfirmScreen} 
                 options={{
-                    headerTitle: "Potwierdź usunięcie dzień wózka"
+                    headerTitle: cartScheduleTranslate.t("deleteConfirmHeaderText")
                 }}
             />
         </Stack.Navigator>

@@ -18,6 +18,9 @@ import PreacherAssignment from "./components/PreacherAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconLink from "../../commonComponents/IconLink";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
+import useLocaLization from "../../hooks/useLocalization";
+import { meetingsTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -26,12 +29,14 @@ interface MeetingsIndexScreenProps {
 const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   navigation,
 }) => {
-  const filters = ["Wszystkie", "Moje przydziały"]
-  const [currentFilter, setCurrentFilter] = useState<string>("Wszystkie")
+  const meetingTranslate = useLocaLization(meetingsTranslations);
+  const mainTranslate = useLocaLization(mainTranslations);
+  const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")]
+  const [currentFilter, setCurrentFilter] = useState<string>(mainTranslate.t("all"))
   const [type, setType] = useState<string>(
     new Date().getDay() === 0 || new Date().getDay() === 6
-      ? "Zebranie w weekend"
-      : "Zebranie w tygodniu"
+      ? meetingTranslate.t("weekend")
+      : meetingTranslate.t("midweek")
   );
   const [currentMonth, setCurrentMonth] = useState<string>(
     `${months[new Date().getMonth()] + " " + new Date().getFullYear()}`
@@ -49,7 +54,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
       }, []);
 
   useEffect(() => {
-    currentFilter === "Wszystkie" ? loadMeetings() : loadPreacherMeetingAssignments();
+    currentFilter === mainTranslate.t("all") ? loadMeetings() : loadPreacherMeetingAssignments();
     if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin")) {
       navigation.setOptions({
         headerRight: () => <HeaderRight>
@@ -67,7 +72,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     }
   
     const unsubscribe = navigation.addListener("focus", () => {
-      currentFilter === "Wszystkie" ? loadMeetings() : loadPreacherMeetingAssignments();
+      currentFilter === mainTranslate.t("all") ? loadMeetings() : loadPreacherMeetingAssignments();
     });
 
     return unsubscribe;
@@ -80,19 +85,19 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === "Wszystkie" && state.meetings?.length !== 0 && <>
+      {currentFilter === mainTranslate.t("all") && state.meetings?.length !== 0 && <>
         <TopMenu state={type} data={state?.meetings && Object.keys(groupBy(state?.meetings, "type"))!} updateState={setType} />
         <TopMenu state={currentMonth} data={state?.meetings && Object.keys(groupBy(state?.meetings, "month"))!} updateState={setCurrentMonth} />
       </>}
       
 
       {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_have_assignment") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
-      { currentFilter === "Wszystkie" ? <View style={styles.container}>
-        {state.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze zebrań" /> : <>
+      { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
         {groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
             (meeting) => meeting.month === currentMonth
           ).length === 0 ? (
-            <NotFound title="Niestety nie znaleziono zebrań" />
+            <NotFound title={meetingTranslate.t("notFoundText")} />
           ) : (
             <>
               <FlatList
@@ -105,22 +110,22 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
               />
               { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
                 iconName="download"
-                value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+                value={mainTranslate.t("pdfInfo")}
               />}
               
             </>
           )}
         </>}
       </View> : <View style={styles.container}>
-        <Text style={styles.meeting}>Prowadzący lub modlitwa</Text>
-        {state.meetings?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+        <Text style={styles.meeting}>{meetingTranslate.t("leadOrPrayer")}</Text>
+        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
             keyExtractor={(meeting) => meeting?._id}
             data={state.meetings}
             renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
             scrollEnabled={false}
           />}
-          <Text style={styles.meeting}>Zadania lub lektorowanie</Text>
-            {state.assignments?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+          <Text style={styles.meeting}>{meetingTranslate.t("taskOrReading")}</Text>
+            {state.assignments?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(assignment) => assignment?._id}
               data={state.assignments}
               renderItem={({ item }) => <PreacherAssignment type={item.type} assignment={item} preacher={preachersContext.state.preacher!} />}

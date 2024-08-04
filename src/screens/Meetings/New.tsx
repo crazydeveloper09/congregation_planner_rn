@@ -18,8 +18,13 @@ import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
 import { months } from "../../../defaultData";
 import { defaultStyles } from "../defaultStyles";
+import useLocaLization from "../../hooks/useLocalization";
+import { meetingsTranslations } from "./translations";
+import { meetingAssignmentTranslations } from "./Assignments/translations";
 
 const MeetingNewScreen: React.FC = () => {
+    const meetingTranslate = useLocaLization(meetingsTranslations);
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const [date, setDate] = useState<Date>(new Date())
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const [beginPrayerValue, setBeginPrayerValue] = useState<string>('')
@@ -31,8 +36,8 @@ const MeetingNewScreen: React.FC = () => {
     const [typeValue, setTypeValue] = useState<string>('')
     const [typeOpen, setTypeOpen] = useState<boolean>(false);
     const [typeItems, setTypeItems] = useState([
-        {label: 'Zebranie w weekend', value: 'Zebranie w weekend'},
-        {label: 'Zebranie w tygodniu', value: 'Zebranie w tygodniu'}
+        {label: meetingTranslate.t("weekend"), value: meetingTranslate.t("weekend")},
+        {label: meetingTranslate.t("midWeek"), value: meetingTranslate.t("midWeek")}
     ]);
     const [beginSong, setBeginSong] = useState<string>('')
     const [midSong, setMidSong] = useState<string>('')
@@ -43,13 +48,11 @@ const MeetingNewScreen: React.FC = () => {
     const [endPrayerValue, setEndPrayerValue] = useState<string>('')
     const [endPrayerOpen, setEndPrayerOpen] = useState<boolean>(false);
     const [endPrayerItems, setEndPrayerItems] = useState([
-        { label: 'Wybierz głosiciela z innego zboru', value: ''}
+        {label: meetingAssignmentsTranslate.t("otherCongPreacherChoose"), value: ''}
     ]);
     const [isOtherEndPrayer, setIsOtherEndPrayer] = useState<boolean>(false);
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
     const { state, addMeeting } = useContext(MeetingContext)
-    const preachersContext = useContext(PreachersContext)
-    const ministryGroupContext = useContext(MinistryGroupContext)
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -61,20 +64,20 @@ const MeetingNewScreen: React.FC = () => {
         .then((response) => {
             const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
-            const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`);
+            const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
             const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.beginPrayer?.name === preacher.name || meeting.endPrayer?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - modli się już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: meetingTranslate.t("prayerCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             const selectLeadItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_meetings")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - prowadzi już ${alreadyAssigned} zebrań`, value: preacher._id } as never
+                return { label: meetingTranslate.t("leadCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             setLeadItems(selectLeadItems)
             setBeginPrayerItems(selectPrayerItems)
-            setEndPrayerItems([{ label: 'Wybierz głosiciela z innego zboru', value: '' }, ...selectPrayerItems])
+            setEndPrayerItems([{ label: meetingAssignmentsTranslate.t("otherCongPreacherChoose"), value: ''}, ...selectPrayerItems])
         })
         .catch((err) => console.log(err))
     }
@@ -104,14 +107,14 @@ const MeetingNewScreen: React.FC = () => {
     return (
         <ScrollView style={styles.container}>
             <ChooseDate 
-                label="Data"
+                label={meetingTranslate.t("dateLabel")}
                 date={date}
                 dateOpen={dateOpen}
                 setDate={setDate}
                 setDateOpen={setDateOpen}
                 mode="datetime"
             />
-            <Label text="Typ" />
+            <Label text={meetingTranslate.t("typeLabel")} />
             <DropDownPicker 
                 value={typeValue}
                 setValue={setTypeValue}
@@ -121,10 +124,10 @@ const MeetingNewScreen: React.FC = () => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Wybierz typ zebrania"
-                placeholder="Wybierz typ zebrania"
+                modalTitle={meetingTranslate.t("typeLabel")}
+                placeholder={meetingTranslate.t("typePlaceholder")}
             />
-            <Label text="Grupa służby, która sprząta" />
+            <Label text={meetingTranslate.t("cleaningGroupLabel")} />
             <DropDownPicker 
                 value={cleaningGroupValue}
                 setValue={setCleaningGroupValue}
@@ -134,18 +137,17 @@ const MeetingNewScreen: React.FC = () => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Wybierz grupę służby, która sprząta"
-                placeholder="Wybierz grupę służby, która sprząta"
+                modalTitle={meetingTranslate.t("cleaningGroupLabel")}
+                placeholder={meetingTranslate.t("cleaningGroupPlaceholder")}
             />
         
             <MyInput 
                 value={beginSong}
                 onChangeText={setBeginSong}
-                label="Pieśń początkowa"
-                placeholder="Wpisz numer pieśni początkowej"
+                label={meetingTranslate.t("beginSongLabel")}
+                placeholder={meetingTranslate.t("beginSongPlaceholder")}
             />
-
-            <Label text="Prowadzący" />
+            <Label text={meetingTranslate.t("leadLabel")} />
             <DropDownPicker 
                 value={leadValue}
                 setValue={setLeadValue}
@@ -155,10 +157,10 @@ const MeetingNewScreen: React.FC = () => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Wybierz prowadzącego"
-                placeholder="Wybierz prowadzącego"
+                modalTitle={meetingTranslate.t("leadLabel")}
+                placeholder={meetingTranslate.t("leadPlaceholder")}
             />
-            <Label text="Modlitwa początkowa" />
+            <Label text={meetingTranslate.t("beginPrayerLabel")} />
             <DropDownPicker 
                 value={beginPrayerValue}
                 setValue={setBeginPrayerValue}
@@ -168,22 +170,22 @@ const MeetingNewScreen: React.FC = () => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Wybierz głosiciela do modlitwy początkowej"
-                placeholder="Wybierz głosiciela do modlitwy początkowej"
+                modalTitle={meetingTranslate.t("beginPrayerLabel")}
+                placeholder={meetingTranslate.t("beginPrayerPlaceholder")}
             />
             <MyInput 
                 value={midSong}
                 onChangeText={setMidSong}
-                label="Pieśń środkowa"
-                placeholder="Wpisz numer pieśni środkowej"
+                label={meetingTranslate.t("midSongLabel")}
+                placeholder={meetingTranslate.t("midSongPlaceholder")}
             />
             <MyInput 
                 value={endSong}
                 onChangeText={setEndSong}
-                label="Pieśń końcowa"
-                placeholder="Wpisz numer pieśni końcowej"
+                label={meetingTranslate.t("endSongLabel")}
+                placeholder={meetingTranslate.t("endSongPlaceholder")}
             />
-            <Label text="Modlitwa końcowa" />
+            <Label text={meetingTranslate.t("endPrayerLabel")} />
             <DropDownPicker 
                 value={endPrayerValue}
                 setValue={setEndPrayerValue}
@@ -193,28 +195,28 @@ const MeetingNewScreen: React.FC = () => {
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Wybierz głosiciela do modlitwy końcowej"
-                placeholder="Wybierz głosiciela do modlitwy końcowej"
+                modalTitle={meetingTranslate.t("endPrayerLabel")}
+                placeholder={meetingTranslate.t("endPrayerPlaceholder")}
             />
-            <Label text="Czy modlitwę końcową powie głosiciel z innego zboru?" />
+            <Label text={meetingTranslate.t("isOtherEndPrayerSwitch")} />
             <Switch  
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
                 color={'#1F8AAD'}
             />
-            {isOtherEndPrayer && <>
+            {otherEndPrayer && <>
                 <MyInput 
                     value={otherEndPrayer}
                     onChangeText={setOtherEndPrayer}
-                    label="Modlitwa końcowa - głosiciel z innego zboru"
-                    placeholder="Wpisz imię i nazwisko głosiciela z innego zboru"
+                    label={meetingTranslate.t("otherEndPrayerLabel")}
+                    placeholder={meetingTranslate.t("otherEndPrayerPlaceholder")}
                 />
 
             </>}
             <View style={{ marginBottom: 40 }}>
                 <ButtonC 
-                    title="Dodaj zebranie"
+                    title={meetingTranslate.t("addText")}
                     isLoading={state.isLoading}
                     onPress={() => addMeeting(typeValue, cleaningGroupValue, leadValue, date, beginPrayerValue, beginSong, midSong, endSong, endPrayerValue, otherEndPrayer)}
                 />
