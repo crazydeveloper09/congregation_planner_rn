@@ -10,6 +10,9 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
 import { chooseFontColorAndIcon } from "../Assignments/helpers/types";
+import useLocaLization from "../../../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../Assignments/translations";
+import { meetingsTranslations } from "../translations";
 
 interface MeetingAssignmentProps {
   type: string;
@@ -30,13 +33,15 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
   const navigation = useNavigation();
   const {state} = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
+  const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+  const meetingTranslate = useLocaLization(meetingsTranslations);
 
   return (
     <View style={styles.container}>
-      {(type === "Studium Strażnicy") && (
+      {(type === meetingAssignmentsTranslate.t("watchtowerStudy")) && (
         <IconDescriptionValue 
           iconName="music"
-          description="Pieśń"
+          description={meetingTranslate.t("songLabel")}
           value={midSong.toString()}
         />
     
@@ -60,7 +65,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
             {assignment.item.reader && (
               <IconDescriptionValue 
                 iconName="account-tie-voice"
-                description="Lektor"
+                description={meetingAssignmentsTranslate.t("readerLabel")}
                 value={assignment.item.reader.name}
               />
           
@@ -69,13 +74,13 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
                     <IconLink 
                         onPress={() => navigation.navigate("Meetings Assignment Edit", { meeting, assignment: assignment.item })}
                         iconName="pencil"
-                        description="Edytuj zadanie"
+                        description={meetingAssignmentsTranslate.t("editText")}
                         color={fontColor}
                     />
                     <IconLink 
                         onPress={() => navigation.navigate("Meetings Assignment Delete Confirm", { meeting, assignment: assignment.item })}
                         iconName="trash-can"
-                        description="Usuń zadanie"
+                        description={meetingAssignmentsTranslate.t("deleteText")}
                         color={fontColor}
                     />
                 </IconContainer>}
@@ -85,10 +90,10 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         scrollEnabled={false}
       />
       
-      {(type === "Ulepszajmy swoją służbę") && (
+      {(type === meetingAssignmentsTranslate.t("applyYourselfToMinistry")) && (
         <IconDescriptionValue 
           iconName="music"
-          description="Pieśń"
+          description={meetingTranslate.t("songLabel")}
           value={midSong.toString()}
         />
     

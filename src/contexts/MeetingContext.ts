@@ -5,6 +5,13 @@ import territories from "../api/territories";
 import { AxiosError } from "axios";
 import { navigate } from "../RootNavigation";
 import { showMessage } from "react-native-flash-message";
+import useLocaLization from "../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../screens/Meetings/Assignments/translations";
+import { meetingsTranslations } from "../screens/Meetings/translations";
+import * as Localization from 'expo-localization';
+
+const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+const meetingTranslate = useLocaLization(meetingsTranslations);
 
 interface IMeetingState {
   isLoading?: boolean;
@@ -109,9 +116,9 @@ const addMeeting = (dispatch: Function) => {
     try {
       dispatch({ type: "turn_on_loading" });
       const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
-        `/meetings?congregationID=${congregationID}`,
+        `/meetings?locale=${locale}`,
         {
           type,
           cleaningGroup,
@@ -133,7 +140,7 @@ const addMeeting = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie dodano zebranie: ${name}`,
+        message: `${meetingTranslate.t("successAddMessage")}: ${date.toLocaleString()}`,
         type: "success",
       });
     } catch (err) {
@@ -185,7 +192,7 @@ const editMeeting = (dispatch: Function) => {
       navigate("Meetings Index");
       dispatch({ type: "turn_off_loading" });
       showMessage({
-        message: `Poprawnie edytowano zebranie: ${type} ${date.toLocaleDateString()}`,
+        message: `${meetingTranslate.t("successAddMessage")}: ${type} ${date.toLocaleDateString()}`,
         type: "success",
       });
     } catch (err) {
@@ -208,7 +215,7 @@ const deleteMeeting = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie usunięto zebranie`,
+        message: meetingTranslate.t("successDeleteMessage"),
         type: "success",
       });
     } catch (err) {
@@ -243,7 +250,7 @@ const addAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie dodano zadanie na zebraniu: ${topic || defaultTopic}`,
+        message: `${meetingAssignmentsTranslate.t("successAddMessage")}: ${topic || defaultTopic}`,
         type: "success",
       });
     } catch (err) {
@@ -279,7 +286,7 @@ const editAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie edytowano zadanie na zebraniu: ${topic || defaultTopic}`,
+        message: `${meetingAssignmentsTranslate.t("successEditMessage")}: ${topic || defaultTopic}`,
         type: "success",
       });
     } catch (err) {
@@ -305,7 +312,7 @@ const deleteAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_off_loading" });
       navigate("Meetings Index");
       showMessage({
-        message: `Poprawnie usunięto zadanie na zebraniu`,
+        message: meetingAssignmentsTranslate.t("successDeleteMessage"),
         type: "success",
       });
     } catch (err) {

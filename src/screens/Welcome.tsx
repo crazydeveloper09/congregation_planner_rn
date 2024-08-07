@@ -1,37 +1,44 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import logo_transparent from '../images/logo_transparent.png';
 import { Link, NavigationProp } from "@react-navigation/native";
 import { Button } from "react-native-paper";
+import useLocaLization from "../hooks/useLocalization";
+import { authTranslations } from "./Congregation/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
+import ButtonC from "../commonComponents/Button";
+import { hexToRGB } from "../helpers/colors";
 
 interface WelcomeScreenProps {
     navigation: NavigationProp<any>
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
+    const settingsContext = useContext(SettingsContext);
+    const i18n = useLocaLization(authTranslations);
+    const buttonColor = hexToRGB(settingsContext.state.mainColor, 0.4);
+    console.log(hexToRGB(settingsContext.state.mainColor, 0.4))
     return (
-        <View style={styles.container}>
+        <ScrollView style={[styles.container, { backgroundColor: settingsContext.state.mainColor }]} contentContainerStyle={{  justifyContent: 'center', alignItems: 'center', }}>
             <Image source={logo_transparent} width={200} height={200} />
-            <Text style={styles.title}>Witaj w Congregation Planner</Text>
-            <Button mode="contained" buttonColor="#25A5D0" style={styles.button} labelStyle={{ fontSize: 18 }} onPress={() => navigation.navigate("Log in", { type: "admin" })}>
-                    <Text>Logowanie administratora</Text>
+            <Text style={styles.title}>{i18n.t('greeting')}</Text>
+    
+            <Button mode="contained" buttonColor={"#ffffff35"} style={styles.button} labelStyle={{ fontSize: 18 }} onPress={() => navigation.navigate("Log in", { type: "admin" })}>
+                <Text>{i18n.t('adminLoginButton')}</Text>
             </Button>
             
-            <Button mode="contained" buttonColor="white" textColor="#1F8AAD" labelStyle={{ fontSize: 18 }} style={styles.button} onPress={() => navigation.navigate("Log in", { type: "preacher" })}>
-                <Text>Logowanie głosiciela</Text>
+            <Button mode="contained" buttonColor="white" textColor={settingsContext.state.mainColor} labelStyle={{ fontSize: 18 }} style={styles.button} onPress={() => navigation.navigate("Log in", { type: "preacher" })}>
+                <Text>{i18n.t('preacherLoginButton')}</Text>
             </Button>
             
             
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1F8AAD',
-        justifyContent: 'center',
-        alignItems: 'center',
         padding: 35,
         
     },

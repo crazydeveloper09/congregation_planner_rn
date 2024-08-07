@@ -6,6 +6,10 @@ import { mainNavNavigate, navigate } from "../RootNavigation";
 import { IActivity, ICongregation } from "./interfaces";
 import { showMessage } from "react-native-flash-message";
 import { AffixAdornment } from "react-native-paper/lib/typescript/components/TextInput/Adornment/TextInputAffix";
+import useLocaLization from "../hooks/useLocalization";
+import { authTranslations } from "../screens/Congregation/translations";
+
+const authTranslate = useLocaLization(authTranslations);
 
 export interface IAuth {
   token: string;
@@ -45,7 +49,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'signin': 
         return { ...state, errMessage: '', successMessage: action.payload.message, token: action.payload.token, isLoading: false, preacherID: action.payload?.preacherID, whoIsLoggedIn: action.payload?.whoIsLoggedIn}
     case 'signout': 
-        return {...state, token: '', userID: '', successMessage: 'Wylogowano z Congregation Planner'}
+        return {...state, token: '', userID: ''}
     case 'add_cong_info': 
       return {...state, isLoading: false, congregation: action.payload, errMessage: '', successMessage: state.successMessage}
     case 'add_cong_activities': 
@@ -87,6 +91,10 @@ const signOut = (dispatch: Function) => {
         await AsyncStorage.removeItem('preacherID')
         await AsyncStorage.removeItem('congregationID')
         dispatch({ type: 'signout' })
+        showMessage({
+          message: authTranslate.t("logOutMessage"),
+          type: "success"
+        })
     };
 };
 
@@ -95,7 +103,7 @@ const logInPreacher = (dispatch: Function) => {
     try {
       dispatch({ type: 'turn_on_loading' })
       const response = await tmApi.post("/preachers/login", {link});
-      if(response.data === 'Nie znaleziono takiego użytkownika'){
+      if(response.data === authTranslate.t("noUserFound")){
         dispatch({ type: 'add_error', payload: response.data })
       } else {
         await AsyncStorage.setItem('token', response.data.token)
@@ -133,7 +141,7 @@ const tryLocalSignIn = (dispatch: Function) => {
     const whoIsLoggedIn = await AsyncStorage.getItem('whoIsLoggedIn')
     dispatch({ type: 'signin', payload: { token: token, successMessage: 'Automatycznie zalogowano do aplikacji', preacherID, whoIsLoggedIn } })
     showMessage({
-      message: 'Automatycznie zalogowano do aplikacji',
+      message: authTranslate.t("automaticLoginMessage"),
       type: 'success'
     })
   }

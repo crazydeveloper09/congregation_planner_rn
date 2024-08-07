@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { IMeeting, IOrdinal } from "../../../contexts/interfaces";
+import { IMeeting, IAttendant } from "../../../contexts/interfaces";
 import { ListItem } from "@rneui/themed";
 import NotFound from "../../../commonComponents/NotFound";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
@@ -10,17 +10,20 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
 import { Divider } from "@rneui/base";
+import useLocaLization from "../../../hooks/useLocalization";
+import { attendantTranslations } from "../Attendants/translations";
 
-interface OrdinalProps {
+interface AttendantProps {
     meeting: IMeeting,
-    ordinal: IOrdinal
+    attendant: IAttendant
 }
 
-const Ordinal: React.FC<OrdinalProps> = ({ ordinal, meeting }) => {
+const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const attendantTranslate = useLocaLization(attendantTranslations)
     return (
         <>
              <ListItem.Accordion
@@ -41,39 +44,39 @@ const Ordinal: React.FC<OrdinalProps> = ({ ordinal, meeting }) => {
                 setExpanded(!expanded);
             }}
         >
-            {ordinal ?  <>
+            {attendant ?  <>
                     <IconDescriptionValue 
                         iconName="account-supervisor"
-                        description="Porządkowy"
-                        value={ordinal.hallway1.name}
+                        description={attendantTranslate.t("hallwayLabel")}
+                        value={attendant.hallway1.name}
                     />
 
-                    {ordinal.hallway2 && <IconDescriptionValue 
+                    {attendant.hallway2 && <IconDescriptionValue 
                         iconName="account-supervisor-outline"
-                        description="Porządkowy 2"
-                        value={ordinal.hallway2.name}
+                        description={attendantTranslate.t("hallway2Label")}
+                        value={attendant.hallway2.name}
                     />}
                     <IconDescriptionValue 
                         iconName="account-eye"
-                        description="Porządkowy audytorium"
-                        value={ordinal.auditorium.name}
+                        description={attendantTranslate.t("auditoriumLabel")}
+                        value={attendant.auditorium.name}
                     />
             
-                    {ordinal.parking && <IconDescriptionValue 
+                    {attendant.parking && <IconDescriptionValue 
                         iconName="parking"
-                        description="Parking"
-                        value={ordinal.parking.name}
+                        description={attendantTranslate.t("parkingLabel")}
+                        value={attendant.parking.name}
                     />}
                     {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 
-                            onPress={() => navigation.navigate("Ordinal Edit", { meeting, ordinal })}
+                            onPress={() => navigation.navigate("Attendant Edit", { meeting, attendant })}
                             iconName="pencil"
-                            description="Edytuj dane"
+                            description={attendantTranslate.t("editText")}
                         />
                         <IconLink 
-                            onPress={() => navigation.navigate("Ordinal Delete Confirm", { meeting, ordinal })}
+                            onPress={() => navigation.navigate("Attendant Delete Confirm", { meeting, attendant })}
                             iconName="trash-can"
-                            description="Usuń dane"
+                            description={attendantTranslate.t("deleteText")}
                         />
                     </IconContainer>}
 
@@ -81,12 +84,13 @@ const Ordinal: React.FC<OrdinalProps> = ({ ordinal, meeting }) => {
               
             </> : <>
                
-                    <NotFound title="Nie dano rekordów o porządkowych dla tego zebrania" />
+                    <NotFound title={attendantTranslate.t("noEntryText")} />
                     {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && (
                         <IconLink 
-                            onPress={() => navigation.navigate("Ordinal New", { meeting })}
+                            onPress={() => navigation.navigate("Attendant New", { meeting })}
                             iconName="plus"
-                            description="Dodaj dane"
+                            isCentered
+                            description={attendantTranslate.t("addText")}
                         />
                     )}
                 
@@ -108,4 +112,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Ordinal;
+export default Attendant;

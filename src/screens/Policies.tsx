@@ -5,11 +5,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const PoliciesScreen: React.FC = () => {
+    const settingsContext = useContext(SettingsContext);
     return (
         <ScrollView style={styles.container}>
-            <Text style={[styles.sectionHeader, { color: '#1F8AAD' }]}>Polityka Prywatności</Text>
+            <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Polityka Prywatności</Text>
             <MarkedList counterRenderer={numeric}>
                 <View style={{ flexShrink: 1 }}>
                     <Text style={styles.listHeader}>Informacje ogólne</Text>
@@ -147,7 +149,7 @@ const PoliciesScreen: React.FC = () => {
                 
                 
             </MarkedList>
-            <Text style={[styles.sectionHeader, { color: '#1F8AAD' }]}>Klauzula RODO</Text>
+            <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Klauzula RODO</Text>
             <Text style={styles.listHeader}>Kto jest administratorem danych?</Text>
             <Text style={[styles.listElement, { marginVertical: 15 }]}>
             Administratorem Danych Osobowych (dalej Administrator) jest osoba fizyczna "Maciej Kuta" zamieszkała w Głogowie, świadcząca usługi drogą elektroniczną za pośrednictwem Serwisu

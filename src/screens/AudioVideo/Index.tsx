@@ -5,7 +5,7 @@ import { months } from "../../../defaultData";
 import { groupBy } from "../../helpers/arrays";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
 import AudioVideo from "./components/AudioVideo";
-import Ordinal from "./components/Ordinal";
+import Attendant from "./components/Attendant";
 import { NavigationProp } from "@react-navigation/native";
 import Loading from "../../commonComponents/Loading";
 import NotFound from "../../commonComponents/NotFound";
@@ -14,20 +14,28 @@ import { Context as AuthContext } from "../../contexts/AuthContext";
 import { Context as AudioVideoContext } from "../../contexts/AudioVideoContext";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import AudioVideoAssignment from "./components/AudioVideoAssignment";
-import OrdinalAssignment from "./components/OrdinalAssignment";
+import AttendantAssignment from "./components/AttendantAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import HeaderRight from "../../commonComponents/HeaderRight";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useLocaLization from "../../hooks/useLocalization";
+import { mainTranslations } from "../../../localization";
+import { attendantTranslations } from "./Attendants/translations";
+import { meetingsTranslations } from "../Meetings/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
 }
 
 const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigation }) => {
-  const filters = ["Wszystkie", "Moje przydziały"]
-  const [currentFilter, setCurrentFilter] = useState<string>("Wszystkie")
-  const types = ["Audio-video", "Porządkowi"];
+  const meetingsTranslate = useLocaLization(meetingsTranslations);
+  const mainTranslate = useLocaLization(mainTranslations);
+  const attendantTranslate = useLocaLization(attendantTranslations)
+  const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")]
+  const [currentFilter, setCurrentFilter] = useState<string>(mainTranslate.t('all'))
+  const types = ["Audio-video", attendantTranslate.t("sectionText")];
   const [type, setType] = useState<string>("Audio-video");
   const [currentMonth, setCurrentMonth] = useState<string>(
     `${months[new Date().getMonth()] + " " + new Date().getFullYear()}`
@@ -36,6 +44,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   const authContext = useContext(AuthContext)
   const audioVideoContext = useContext(AudioVideoContext)
   const preachersContext = useContext(PreachersContext);
+  const settingsContext = useContext(SettingsContext)
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -47,7 +56,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
       }, []);
 
   useEffect(() => {
-    currentFilter === "Wszystkie" ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
+    currentFilter === mainTranslate.t("all") ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
     navigation.setOptions({
       headerRight: () => (
         <HeaderRight>
@@ -61,7 +70,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
     });
   
     const unsubscribe = navigation.addListener("focus", () => {
-      currentFilter === "Wszystkie" ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
+      currentFilter === mainTranslate.t("all") ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
     });
 
     return unsubscribe;
@@ -73,42 +82,44 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   }
 
   const meetingsGroup = groupBy<IMeeting>(state.meetings!, "month");
+  const isMonth = Object.keys(groupBy<IMeeting>(state.meetings!, "month")).includes(currentMonth);
   
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === "Wszystkie" && <>
+      {currentFilter === mainTranslate.t("all") && <>
         <TopMenu state={type} data={types} updateState={setType} />
         <TopMenu state={currentMonth} data={meetingsGroup && Object.keys(meetingsGroup)} updateState={setCurrentMonth} />
       </>}
      
       {authContext.state.whoIsLoggedIn !== "admin" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
 
-        {currentFilter === "Wszystkie" ? <View style={styles.container}>
-          {state?.meetings?.length === 0 ? <NotFound title="Niestety nie dodano jeszcze żadnych zebrań" /> : <>
+        {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+        {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
+          {state?.meetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntrytext")} /> : <>
           <FlatList
             keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}
-            renderItem={({ item }) => type === "Audio-video" ? <AudioVideo meeting={item} audioVideo={item.audioVideo} /> : <Ordinal meeting={item} ordinal={item.ordinal} />}
+            renderItem={({ item }) => type === "Audio-video" ? <AudioVideo meeting={item} audioVideo={item.audioVideo} /> : <Attendant meeting={item} attendant={item.ordinal} />}
             scrollEnabled={false}
           />
           { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
                 iconName="download"
-                value='Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku'
+                value={mainTranslate.t("pdfInfo")}
               />}
           </>}
         </View>: <View style={styles.container}>
-          <Text style={styles.meeting}>Audio-video</Text>
-          {audioVideoContext.state.audioVideos?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>Audio-video</Text>
+          {audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(audioVideo) => audioVideo._id}
-              data={audioVideoContext.state.audioVideos}
+              data={audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date")}
               renderItem={({ item }) => <AudioVideoAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
-          <Text style={styles.meeting}>Porządkowy</Text>
-          {audioVideoContext.state.ordinals?.length === 0 ? <NotFound title="Nie przydzielono Ci zadań w tej dziedzinie" /> : <FlatList
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
+          {audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
             keyExtractor={(ordinal) => ordinal._id}
-              data={audioVideoContext.state.ordinals}
-              renderItem={({ item }) => <OrdinalAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
+              data={audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date")}
+              renderItem={({ item }) => <AttendantAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
                
@@ -130,7 +141,6 @@ const styles = StyleSheet.create({
   },
 meeting: {
   fontSize: 19,
-  color: '#1F8AAD',
   fontFamily: 'PoppinsSemiBold',
   marginTop: 10
 },

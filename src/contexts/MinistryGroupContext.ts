@@ -4,7 +4,11 @@ import { IMinistryGroup, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
-import { showMessage } from "react-native-flash-message"
+import { showMessage } from "react-native-flash-message";
+import useLocaLization from "../hooks/useLocalization"
+import { ministryGroupsTranslations } from "../screens/MinistryGroups/translations"
+
+const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
 interface IMinistryGroupState {
     isLoading?: boolean,
@@ -67,7 +71,7 @@ const addMinistryGroup = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('PreachersList')
             showMessage({
-                message: `Poprawnie dodano grupę służby: ${name}`,
+                message: `${ministryGroupTranslate.t("successfulAddedMessage")}: ${name}`,
                 type: 'success',
             })
         } catch (err) {
@@ -92,7 +96,7 @@ const editMinistryGroup = (dispatch: Function) => {
             navigate('PreachersList')
             dispatch({ type: 'turn_off_loading' })
             showMessage({
-                message: `Poprawnie edytowano grupę służby: ${name}`,
+                message: `${ministryGroupTranslate.t("successfulEditedMessage")}: ${name}`,
                 type: 'success',
             })
         } catch (err) {
@@ -117,7 +121,7 @@ const deleteMinistryGroup = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('PreachersList')
             showMessage({
-                message: `Poprawnie usunięto grupę służby`,
+                message: ministryGroupTranslate.t("successfulDeletedMessage"),
                 type: 'success',
             })
         } catch (err) {

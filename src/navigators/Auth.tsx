@@ -5,25 +5,31 @@ import CongregationsTwoFactorScreen from "../screens/Congregation/TwoFactor";
 import { navigationRef } from "../RootNavigation";
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
+import useLocaLization from "../hooks/useLocalization";
+import { authTranslations } from "../screens/Congregation/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { useContext } from "react";
 
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => {
+    const i18n = useLocaLization(authTranslations);
+    const settingsContext = useContext(SettingsContext);
     return (
         
-            <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
+            <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
                 <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
                 <Stack.Screen 
                     name="Log in" 
                     component={CongregationsLoginScreen} 
                     options={{ 
-                        headerTitle: 'Logowanie', 
+                        headerTitle: i18n.t('loginHeaderText'), 
                     }}
                 />  
                 <Stack.Screen 
                     name="TwoFactor" 
                     component={CongregationsTwoFactorScreen} 
-                    options={{ headerTitle: 'Dwustopniowa weryfikacja' }}
+                    options={{ headerTitle: i18n.t('twoFactorHeaderText') }}
                 />
             </Stack.Navigator>
       

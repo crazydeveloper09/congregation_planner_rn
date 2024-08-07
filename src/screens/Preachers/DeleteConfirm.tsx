@@ -5,6 +5,9 @@ import { NavigationProp } from "@react-navigation/native";
 import Loading from "../../commonComponents/Loading";
 import { FontAwesome } from "@expo/vector-icons";
 import ButtonC from "../../commonComponents/Button";
+import useLocaLization from "../../hooks/useLocalization";
+import { preachersTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface PreacherDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -17,7 +20,9 @@ interface PreacherDeleteConfirmScreenProps {
 
 const PreacherDeleteConfirmScreen: React.FC<PreacherDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const [preacherID, setPreacherID] = useState(route.params.id)
-    const {state, loadPreacherInfo, deletePreacher} = useContext(PreachersContext)
+    const {state, loadPreacherInfo, deletePreacher} = useContext(PreachersContext);
+    const preacherTranslate = useLocaLization(preachersTranslations);
+    const mainTranslate = useLocaLization(mainTranslations)
 
     useEffect(() => {
         loadPreacherInfo(preacherID)
@@ -34,13 +39,13 @@ const PreacherDeleteConfirmScreen: React.FC<PreacherDeleteConfirmScreenProps> = 
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Czy na pewno chcesz usunąć głosiciela {state.preacher?.name}?</Text>
+            <Text style={styles.text}>{preacherTranslate.t("deleteConfirmText", {name: state.preacher?.name})}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deletePreacher(preacherID)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t("yes")} onPress={() => deletePreacher(preacherID)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                <ButtonC title="Nie" onPress={() => navigation.navigate('PreachersList')} />
+                <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('PreachersList')} />
                 </View>
             
             </View>

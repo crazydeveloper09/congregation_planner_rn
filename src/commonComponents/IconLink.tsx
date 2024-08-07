@@ -1,7 +1,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface IconLinkProps {
   onPress: Function;
@@ -18,13 +19,14 @@ const IconLink: React.FC<IconLinkProps> = ({
   color,
   isCentered,
 }) => {
+  const settingsContext = useContext(SettingsContext);
   return (
     <TouchableOpacity onPress={() => onPress()}>
       <Text
         style={[
           styles.link,
           {
-            color: color || "#1f8aad",
+            color: color || settingsContext.state.mainColor,
             textAlign: isCentered ? "center" : "left",
           },
         ]}

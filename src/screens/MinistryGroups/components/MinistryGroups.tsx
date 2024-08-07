@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Context as MinistryGroupContext } from "../../../contexts/MinistryGroupContext";
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../commonComponents/Loading";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface MinistryGroupsProps {
   congregationID: string;
@@ -19,7 +19,7 @@ interface MinistryGroupsProps {
 const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
   const { state, loadMinistryGroups, deleteMinistryGroup } = useContext(MinistryGroupContext);
   const navigation = useNavigation()
-
+  const settingsContext = useContext(SettingsContext);
 
   useEffect(() => {
     loadMinistryGroups(congregationID);
@@ -35,16 +35,16 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
         data={state.ministryGroups}
         renderItem={(ministryGroup) => (
           <View>
-            <Text style={styles.title}>{ministryGroup.item.name}</Text>
+            <Text style={[styles.title, { backgroundColor: settingsContext.state.mainColor }]}>{ministryGroup.item.name}</Text>
             <FlatList
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
                 preacher.item?.name === ministryGroup.item.overseer?.name ? (
-                  <Text style={[styles.preacher, { fontWeight: "bold" }]}>
+                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: "#CBEBF6" }]}>
                     {preacher.item?.name}
                   </Text>
                 ) : (
-                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: '#d6d6d6' }]}>{preacher.item?.name}</Text>
+                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: `${settingsContext.state.mainColor}20` }]}>{preacher.item?.name}</Text>
                 )
               }
             />
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   title: {
-    padding: 10,
-    backgroundColor: "#1f8aad",
+    padding: 13,
+    fontSize: 16,
     color: "white",
     width: 200,
     textAlign: "center",
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   preacher: {
     width: 200,
-    padding: 5,
+    padding: 8,
     textAlign: "center",
   },
   iconContainer: {

@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
-import { Input } from "@rneui/base";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../../commonComponents/Button";
-import { Switch } from "@rneui/base";
 import MyInput from "../../../commonComponents/MyInput";
 import ChooseDate from "../../../commonComponents/ChooseDate";
+import useLocaLization from "../../../hooks/useLocalization";
+import { cartScheduleTranslations } from "../translations";
+import { Switch } from "react-native-paper";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import Label from "../../../commonComponents/Label";
 
 interface CartDayNewScreenProps {
     route: {
@@ -20,17 +21,22 @@ interface CartDayNewScreenProps {
 const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     const [date, setDate] = useState<Date>(new Date())
     const [dateOpen, setDateOpen] = useState<boolean>(false)
+    const [isNotFullHour, setIsNotFullHour] = useState<boolean>(false)
+    const [startMinute, setStartMinute] = useState<string>('00')
+    const [finishMinute, setFinishMinute] = useState<string>('00')
     const [place, setPlace] = useState<string>('')
     const [startHour, setStartHour] = useState<string>('');
     const [finalHour, setFinalHour] = useState<string>('')
-    const { state, addCartDay } = useContext(CartsScheduleContext)
+    const { state, addCartDay } = useContext(CartsScheduleContext);
+    const cartScheduleTranslate = useLocaLization(cartScheduleTranslations);
+    const settingsContext = useContext(SettingsContext)
 
     useEffect(() => {
         setDate(new Date(route.params.date))
     }, [])
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <ChooseDate 
                 label="Data"
                 date={date}
@@ -42,39 +48,65 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
             <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label="Miejsce"
-                placeholder="Wpisz lokalizację wózka"
+                label={cartScheduleTranslate.t("placeLabel")}
+                placeholder={cartScheduleTranslate.t("placePlaceholder")}
             />
 
             <MyInput 
                 value={startHour}
                 onChangeText={setStartHour}
-                label="Godzina początkowa wózka"
                 keyboardType="numeric"
-                placeholder="Wpisz godzinę początkową wózka"
+                label={cartScheduleTranslate.t("beginHourLabel")}
+                placeholder={cartScheduleTranslate.t("beginHourPlaceholder")}
             />
 
             <MyInput 
                 value={finalHour}
                 onChangeText={setFinalHour}
-                label="Godzina końcowa wózka"
                 keyboardType="numeric"
-                placeholder="Wpisz godzinę końcową wózka"
+                label={cartScheduleTranslate.t("endHourLabel")}
+                placeholder={cartScheduleTranslate.t("endHourPlaceholder")}
     
             />
-           
-            <ButtonC 
-                title="Dodaj dzień wózka"
-                isLoading={state.isLoading}
-                onPress={() => addCartDay(place, startHour, date, finalHour)}
+            <Label text={cartScheduleTranslate.t("isNotFullHourSwitchLabel")} />
+            <Switch  
+                value={isNotFullHour}
+                onValueChange={(value) => {
+                    setIsNotFullHour(value)
+                }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                color={settingsContext.state.mainColor}
             />
-        </View>
+            {isNotFullHour && <>
+                <MyInput 
+                    value={startMinute}
+                    onChangeText={setStartMinute}
+                    keyboardType="numeric"
+                    label={cartScheduleTranslate.t("startMinuteLabel")}
+                    placeholder={cartScheduleTranslate.t("startMinutePlaceholder")}
+                />
+                <MyInput 
+                    value={finishMinute}
+                    onChangeText={setFinishMinute}
+                    keyboardType="numeric"
+                    label={cartScheduleTranslate.t("finishMinuteLabel")}
+                    placeholder={cartScheduleTranslate.t("finishMinutePlaceholder")}
+                />
+            </>}
+            <View style={{ marginBottom: 40 }}>
+                <ButtonC 
+                    title={cartScheduleTranslate.t("addText")}
+                    isLoading={state.isLoading}
+                    onPress={() => addCartDay(place, startHour, date, finalHour, startMinute, finishMinute)}
+                />
+            </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15
+        padding: 15,
     },
 })
 

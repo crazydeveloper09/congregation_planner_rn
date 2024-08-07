@@ -1,10 +1,13 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { Text, StyleSheet } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IMeetingAssignment, IPreacher } from "../../../contexts/interfaces";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { addMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconLink from "../../../commonComponents/IconLink";
+import { chooseFontColorAndIcon } from "../Assignments/helpers/types";
+import useLocaLization from "../../../hooks/useLocalization";
+import { meetingAssignmentTranslations } from "../Assignments/translations";
+import { meetingsTranslations } from "../translations";
+import { mainTranslations } from "../../../../localization";
 
 interface PreacherAssignmentProps {
   type: string;
@@ -17,71 +20,18 @@ const PreacherAssignment: React.FC<PreacherAssignmentProps> = ({
   assignment,
   preacher,
 }) => {
-  let fontColor: string;
-  let icon: ReactElement;
-  switch (type) {
-    case "Studium Strażnicy": {
-      fontColor = "#588D3F";
-      icon = (
-        <MaterialCommunityIcons
-          name="book-open-blank-variant"
-          size={21}
-          color={fontColor}
-        />
-      );
-      break;
-    }
-    case "Wykład biblijny": {
-      fontColor = "#292929";
-      icon = (
-        <MaterialCommunityIcons
-          name="book-education"
-          size={21}
-          color={fontColor}
-        />
-      );
-      break;
-    }
-    case "Skarby ze Słowa Bożego": {
-      fontColor = "#2A6B77";
-      icon = (
-        <MaterialCommunityIcons
-          name="diamond-stone"
-          size={21}
-          color={fontColor}
-        />
-      );
-      break;
-    }
-    case "Ulepszajmy swoją służbę": {
-      fontColor = "#9B6D17";
-      icon = (
-        <MaterialCommunityIcons
-          name="briefcase-upload"
-          size={21}
-          color={fontColor}
-        />
-      );
-      break;
-    }
-    case "Chrześcijański tryb życia": {
-      fontColor = "#942926";
-      icon = (
-        <MaterialCommunityIcons name="sheep" size={21} color={fontColor} />
-      );
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+
+  const {icon, fontColor} = chooseFontColorAndIcon(type);
+  const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+  const meetingTranslate = useLocaLization(meetingsTranslations);
+  const mainTranslate = useLocaLization(mainTranslations);
   return (
     <>
       <Text style={[{ color: fontColor }, styles.title]}>
         <Text>{new Date(assignment.meeting.date).toLocaleDateString()} - </Text>
-        <Text>{assignment.topic}</Text>
+        <Text>{assignment.topic || assignment.defaultTopic}</Text>
         {preacher && preacher._id === assignment.reader?._id && (
-          <Text> - Lektor</Text>
+          <Text> - {meetingAssignmentsTranslate.t("readerLabel")}</Text>
         )}
       </Text>
       <IconLink
@@ -90,14 +40,14 @@ const PreacherAssignment: React.FC<PreacherAssignmentProps> = ({
             new Date(assignment.meeting?.date),
             `${assignment.topic}${
               preacher && preacher._id === assignment.reader?._id
-                ? "- Lektor"
+                ? `- ${meetingAssignmentsTranslate.t('readerLabel')}`
                 : ""
             }`,
-            "Sala Królestwa"
+            meetingTranslate.t("kingdomHall")
           )
         }
         iconName="calendar-month-outline"
-        description="Dodaj do kalendarza"
+        description={mainTranslate.t("addToCalendar")}
         isCentered={true}
       />
     </>

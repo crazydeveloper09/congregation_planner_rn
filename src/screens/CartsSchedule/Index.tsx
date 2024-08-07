@@ -13,7 +13,8 @@ import CartsScheduleHours from "./components/CartScheduleHours";
 import { Context as CartsScheduleContext } from "../../contexts/CartsScheduleContext";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../contexts/AuthContext";
-import { months } from "../../../defaultData";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { months, weekdays } from "../../../defaultData";
 import NotFound from "../../commonComponents/NotFound";
 import Loading from "../../commonComponents/Loading";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -22,6 +23,9 @@ import { addCartAssignmentToCalendar } from "./helpers/calendar";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconLink from "../../commonComponents/IconLink";
 import HeaderRight from "../../commonComponents/HeaderRight";
+import useLocaLization from "../../hooks/useLocalization";
+import { cartScheduleTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface CartsScheduleIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -36,8 +40,10 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   navigation,
   route,
 }) => {
-  const filters = ["Wszystkie", "Moje przydziały"];
-  const [currentFilter, setCurrentFilter] = useState<string>("Wszystkie");
+  const cartScheduleTranslate = useLocaLization(cartScheduleTranslations);
+  const mainTranslate = useLocaLization(mainTranslations);
+  const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")];
+  const [currentFilter, setCurrentFilter] = useState<string>(mainTranslate.t("all"));
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(
     route.params?.date ? new Date(route.params.date) : new Date()
   );
@@ -48,6 +54,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     : "";
   const preachersContext = useContext(PreachersContext);
   const authContext = useContext(AuthContext);
+  const settingsContext = useContext(SettingsContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -63,14 +70,14 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   };
 
   useEffect(() => {
-    currentFilter === "Wszystkie"
+    currentFilter === mainTranslate.t("all")
       ? loadCartDayInfo(startDate)
       : loadPreacherHours();
     preachersContext.loadAllPreachers();
 
 
     const unsubscribe = navigation.addListener("focus", () => {
-      currentFilter === "Wszystkie"
+      currentFilter === mainTranslate.t("all")
         ? loadCartDayInfo(startDate)
         : loadPreacherHours();
     });
@@ -132,7 +139,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
 
   return (
     <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === "Wszystkie" && <View style={styles.titleContainer}>
+      {currentFilter === mainTranslate.t("all") && <View style={[styles.titleContainer, { backgroundColor: settingsContext.state.mainColor}]}>
             <>
               <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
               {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
@@ -143,25 +150,25 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
        <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />
       )}
       <View style={styles.container}>
-        {currentFilter === "Wszystkie" ? (
+        {currentFilter === mainTranslate.t("all") ? (
           <>
             <CalendarPicker
               startFromMonday={true}
-              selectedDayColor="#97D7ED"
-              todayBackgroundColor="#CBEBF6"
+              selectedDayColor={`${settingsContext.state.mainColor}60`}
+              todayBackgroundColor={`${settingsContext.state.mainColor}30`}
               months={months}
-              weekdays={["Pon", "Wt", "Śro", "Czw", "Pt", "Sob", "Nd"]}
-              previousTitle="Poprzedni"
-              nextTitle="Następny"
+              weekdays={weekdays}
+              selectMonthTitle={months[selectedStartDate.getMonth()] + ' ' + selectedStartDate.getFullYear()}
+              previousTitle={cartScheduleTranslate.t("previous")}
+              nextTitle={cartScheduleTranslate.t("next")}
               selectedStartDate={selectedStartDate}
               onDateChange={onDateChange}
             />
             <View style={styles.resultContainer}>
-          
               {Boolean(state.cartDay) ? (
                 ""
               ) : (
-                <NotFound title="Nie dodano wózka dla tego dnia" />
+                <NotFound title={cartScheduleTranslate.t("noEntry")} />
               )}
               {state.cartDay && (
                 <FlatList
@@ -192,7 +199,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
                   <IconLink 
                         onPress={() => addCartAssignmentToCalendar(item.cartDay.date, item.timeDescription, item.cartDay.place)}
                         iconName="calendar-month-outline"
-                        description="Dodaj do kalendarza"
+                        description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
                     />
                 
@@ -200,7 +207,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
                 scrollEnabled={false}
               />
             ) : (
-              <NotFound title="Nie zapisano Cię na żadną godzinę" />
+              <NotFound title={cartScheduleTranslate.t("noAssignments")} />
             )}
           </>
         )}
@@ -228,7 +235,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15, 
     paddingVertical: 7, 
-    backgroundColor: '#1f8aad',
   },
   myDate: {
     fontSize: 18,

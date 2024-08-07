@@ -1,25 +1,29 @@
 import { NavigationProp } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { IMeeting, IOrdinal } from "../../../contexts/interfaces";
-import Ordinal from "../components/Ordinal";
+import { IMeeting, IAttendant } from "../../../contexts/interfaces";
 import ButtonC from "../../../commonComponents/Button";
-import { Context as OrdinalContext } from "../../../contexts/OrdinalsContext";
+import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { ListItem } from "@rneui/base";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
+import useLocaLization from "../../../hooks/useLocalization";
+import { attendantTranslations } from "./translations";
+import { mainTranslations } from "../../../../localization";
 
-interface OrdinalDeleteConfirmScreenProps { 
+interface AttendantDeleteConfirmScreenProps { 
     navigation: NavigationProp<any>
     route: {
         params: {
             meeting: IMeeting,
-            ordinal: IOrdinal
+            attendant: IAttendant
         }
     }
 }
 
-const OrdinalDeleteConfirmScreen: React.FC<OrdinalDeleteConfirmScreenProps> = ({ navigation, route }) => {
-    const { state, deleteOrdinal } = useContext(OrdinalContext)
+const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> = ({ navigation, route }) => {
+    const { state, deleteAttendant } = useContext(AttendantContext)
+    const attendantTranslate = useLocaLization(attendantTranslations)
+    const mainTranslate = useLocaLization(mainTranslations)
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
@@ -28,38 +32,38 @@ const OrdinalDeleteConfirmScreen: React.FC<OrdinalDeleteConfirmScreenProps> = ({
                     <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     <IconDescriptionValue 
                         iconName="account-supervisor"
-                        description="Porządkowy"
-                        value={route.params.ordinal.hallway1.name}
+                        description={attendantTranslate.t("hallwayLabel")}
+                        value={route.params.attendant.hallway1.name}
                     />
 
-                    {route.params.ordinal.hallway2 && <IconDescriptionValue 
+                    {route.params.attendant.hallway2 && <IconDescriptionValue 
                         iconName="account-supervisor-outline"
-                        description="Porządkowy 2"
-                        value={route.params.ordinal.hallway2.name}
+                        description={attendantTranslate.t("hallway2Label")}
+                        value={route.params.attendant.hallway2.name}
                     />}
                     <IconDescriptionValue 
                         iconName="account-eye"
-                        description="Porządkowy audytorium"
-                        value={route.params.ordinal.auditorium.name}
+                        description={attendantTranslate.t("auditoriumLabel")}
+                        value={route.params.attendant.auditorium.name}
                     />
             
-                    {route.params.ordinal.parking && <IconDescriptionValue 
+                    {route.params.attendant.parking && <IconDescriptionValue 
                         iconName="parking"
-                        description="Parking"
-                        value={route.params.ordinal.parking.name}
+                        description={attendantTranslate.t("parkingLabel")}
+                        value={route.params.attendant.parking.name}
                     />}
                 </View>
                 
             
             </ListItem>
 
-            <Text style={styles.text}>Czy na pewno chcesz usunąć te dane o porządkowych?</Text>
+            <Text style={styles.text}>{attendantTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteOrdinal(route.params.meeting._id, route.params.ordinal._id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteAttendant(route.params.meeting._id, route.params.attendant._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Nie" onPress={() => navigation.navigate('Audio Index')} />
+                    <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('Audio Index')} />
                 </View>
             
             </View>
@@ -85,4 +89,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default OrdinalDeleteConfirmScreen;
+export default AttendantDeleteConfirmScreen;

@@ -5,6 +5,8 @@ import { Input } from "react-native-elements";
 import ButtonC from "../../../commonComponents/Button";
 import { ICartDay } from "../../../contexts/interfaces";
 import MyInput from "../../../commonComponents/MyInput";
+import useLocaLization from "../../../hooks/useLocalization";
+import { cartScheduleTranslations } from "../translations";
 
 interface CartDayEditScreenProps {
     route: {
@@ -17,6 +19,7 @@ interface CartDayEditScreenProps {
 const CartDayEditScreen: React.FC<CartDayEditScreenProps> = ({ route }) => {
     const [place, setPlace] = useState<string>('')
     const { state, editCartDay } = useContext(CartsScheduleContext)
+    const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
 
     useEffect(() => {
         setPlace(route.params.cartDay.place)
@@ -27,12 +30,12 @@ const CartDayEditScreen: React.FC<CartDayEditScreenProps> = ({ route }) => {
             <MyInput 
                 value={place}
                 onChangeText={setPlace}
-                label="Miejsce"
-                placeholder="Wpisz lokalizację wózka"
+                label={cartScheduleTranslate.t("placeLabel")}
+                placeholder={cartScheduleTranslate.t("placePlaceholder")}
             />
            
             <ButtonC 
-                title="Edytuj dzień wózka"
+                title={cartScheduleTranslate.t("editText")}
                 isLoading={state.isLoading}
                 onPress={() => editCartDay(route.params.cartDay._id, place)}
             />

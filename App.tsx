@@ -4,21 +4,21 @@ import { Provider as MeetingProvider } from './src/contexts/MeetingContext';
 import { Provider as MinistryMeetingProvider } from './src/contexts/MinistryMeetingContext';
 import { Provider as CartsScheduleProvider } from './src/contexts/CartsScheduleContext';
 import { Provider as AudioVideoProvider } from './src/contexts/AudioVideoContext';
-import { Provider as OrdinalsProvider } from './src/contexts/OrdinalsContext';
+import { Provider as OrdinalsProvider } from './src/contexts/AttendantsContext';
 import { Provider as PreachersProvider } from './src/contexts/PreachersContext';
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
+import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
 import { StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/Switch';
 import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
-import { useEffect, useState } from 'react';
-
+import { useContext, useEffect, useState } from 'react';
 StatusBar.setBarStyle('light-content')
 
 function App() {
-
+  
   const [fontsLoaded] = useFonts({
     'FontAwesome': require('./assets/fonts/FontAwesome.ttf'),
     'InterThin': require('./assets/fonts/inter/Inter-Thin.ttf'),
@@ -55,9 +55,11 @@ function App() {
               <OrdinalsProvider>
                 <PreachersProvider>
                   <MinistryGroupProvider>
-                    <NavigationContainer ref={navigationRef}>
-                      <SwitchNavigator />
-                    </NavigationContainer>
+                    <SettingsProvider>
+                      <NavigationContainer ref={navigationRef}>
+                        <SwitchNavigator />
+                      </NavigationContainer>
+                    </SettingsProvider>
                   </MinistryGroupProvider>
                 </PreachersProvider>
               </OrdinalsProvider>

@@ -8,51 +8,57 @@ import { StatusBar, StyleSheet } from "react-native";
 import PreacherDeleteConfirmScreen from "../screens/Preachers/DeleteConfirm";
 import MinistryGroupNewScreen from "../screens/MinistryGroups/New";
 import MinistryGroupEditScreen from "../screens/MinistryGroups/Edit";
+import useLocaLization from "../hooks/useLocalization";
+import { ministryGroupsTranslations } from "../screens/MinistryGroups/translations";
+import { preachersTranslations } from "../screens/Preachers/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const PreachersNavigator = () => {
-
+    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
+    const preacherTranslate = useLocaLization(preachersTranslations)
+    const settingsContext = useContext(SettingsContext);
     
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
             <Stack.Screen 
                 name="PreachersList" 
                 component={PreachersIndexScreen} 
-                options={{ headerTitle: 'Głosiciele' }}
+                options={{ headerTitle: preacherTranslate.t("sectionText") }}
             />  
             <Stack.Screen 
                 name="AddPreacher" 
                 component={PreachersNewScreen} 
-                options={{ headerTitle: 'Dodaj głosiciela' }}
+                options={{ headerTitle: preacherTranslate.t("addButtonText") }}
             /> 
             <Stack.Screen 
                 name="EditPreacher" 
                 component={PreachersEditScreen} 
-                options={{ headerTitle: 'Edytuj głosiciela' }}
+                options={{ headerTitle: preacherTranslate.t("editButtonText") }}
             />
             <Stack.Screen 
                 name="SearchPreacher" 
                 component={PreachersSearchScreen} 
-                options={{ headerTitle: 'Szukaj głosiciela' }}
+                options={{ headerTitle: preacherTranslate.t("searchPreacherHeader") }}
             /> 
   
             <Stack.Screen 
                 name="DeleteConfirmPreacher" 
                 component={PreacherDeleteConfirmScreen} 
-                options={{ headerTitle: 'Potwierdź usunięcie' }}
+                options={{ headerTitle: preacherTranslate.t("deleteConfirmHeader") }}
             />  
 
             <Stack.Screen 
                 name="AddMinistryGroup" 
                 component={MinistryGroupNewScreen} 
-                options={{ headerTitle: 'Dodaj grupę służby' }}
+                options={{ headerTitle: ministryGroupTranslate.t("addHeader") }}
             /> 
     
             <Stack.Screen 
                 name="EditMinistryGroup" 
                 component={MinistryGroupEditScreen} 
-                options={{ headerTitle: 'Edytuj grupę służby' }}
+                options={{ headerTitle: ministryGroupTranslate.t("editHeader") }}
             />  
             
         </Stack.Navigator>

@@ -4,6 +4,9 @@ import { Input, Text, Button } from '@rneui/themed';
 import ButtonC from '../../commonComponents/Button';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import MyInput from '../../commonComponents/MyInput';
+import useLocaLization from '../../hooks/useLocalization';
+import { authTranslations } from './translations';
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface CongregationsLoginScreenProps {
     route: {
@@ -18,24 +21,26 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
     const [ username, setUsername ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
     const [ link, setLink ] = useState<string>('')
+    const i18n = useLocaLization(authTranslations);
+    const settingsContext = useContext(SettingsContext);
 
     return (
         <View style={styles.container}>
-            <Text h3 style={styles.header}>Zaloguj się do Congregation Planner</Text>
+            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor }]}>{i18n.t('loginHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             {route.params.type === "admin" ? <>
             <MyInput 
-                label="Nazwa zboru"
-                placeholder='Wpisz nazwę zboru'
+                label={i18n.t('usernameLabel')}
+                placeholder={i18n.t('usernamePlaceholder')}
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize='none'
                 autoCorrect={false}
             />
             <MyInput 
-                label="Hasło"
-                placeholder='Wpisz hasło'
+                label={i18n.t('passwordLabel')}
+                placeholder={i18n.t('passwordPlaceholder')}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -44,14 +49,14 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
             />
             
             <ButtonC 
-                title={'Zaloguj się'}
+                title={i18n.t('loginButtonText')}
                 onPress={() => signIn({ username, password })}
                 isLoading={state.isLoading}
             />
             </> : <>
             <MyInput 
-                label="Specjalny link"
-                placeholder='Wklej specjalny link'
+                label={i18n.t('specialLinkLabel')}
+                placeholder={i18n.t('specialLinkPlaceholder')}
                 value={link}
                 onChangeText={setLink}
                 autoCapitalize='none'
@@ -60,7 +65,7 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
     
             
             <ButtonC 
-                title={'Zaloguj się'}
+                title={i18n.t('loginButtonText')}
                 onPress={() => logInPreacher(link)}
                 isLoading={state.isLoading}
             />
@@ -72,7 +77,6 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ece9e9',
         padding: 15,
         flex: 1,
         justifyContent: 'center'
@@ -81,7 +85,6 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'MontserratSemiBold',
-        color: '#1F8AAD'
     },
     button: {
         backgroundColor: '#28a745'

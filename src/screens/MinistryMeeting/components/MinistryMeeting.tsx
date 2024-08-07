@@ -9,6 +9,9 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
 import { Divider } from "@rneui/base";
+import useLocaLization from "../../../hooks/useLocalization";
+import { ministryMeetingsTranslations } from "../translations";
+import { mainTranslations } from "../../../../localization";
 
 interface MinistryMeetingProps {
     meeting: IMinistryMeeting;
@@ -19,6 +22,10 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
     const [expanded, setExpanded] = useState<boolean>(false)
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    
+    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
+    const mainTranslate = useLocaLization(mainTranslations)
+
     return (
         <View>
             <ListItem.Accordion
@@ -51,37 +58,37 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
            
                     <IconDescriptionValue 
                         iconName={meeting?.defaultPlace === "Zoom" ? "video-box" : "home"}
-                        description="Miejsce"
+                        description={ministryMeetingTranslate.t("placeLabel")}
                         value={meeting?.place || meeting?.defaultPlace}
                     />
                     <IconDescriptionValue 
                         iconName="account-tie"
-                        description="Prowadzący"
+                        description={ministryMeetingTranslate.t("leadLabel")}
                         value={meeting?.lead?.name}
                     />
 
                     {meeting?.topic && <IconDescriptionValue 
                         iconName="table-of-contents"
-                        description="Temat"
+                        description={ministryMeetingTranslate.t("topicLabel")}
                         value={meeting?.topic}
                     />}
                     {((state.preacher && state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 
                             onPress={() => navigate("Ministry Meeting Edit", { meeting })}
                             iconName="pencil"
-                            description="Edytuj zbiórkę"
+                            description={ministryMeetingTranslate.t("editText")}
                         />
                         <IconLink 
                             onPress={() => navigate("Ministry Meeting Delete Confirm", { meeting })}
                             iconName="trash-can"
-                            description="Usuń zbiórkę"
+                            description={ministryMeetingTranslate.t("deleteText")}
                         />
                     </IconContainer>}
                     {state.preacher && state.preacher?._id === meeting?.lead?._id && (
                         <IconLink 
                             onPress={() => addMinistryMeetingAssignmentToCalendar(meeting?.date, meeting?.place, meeting?.topic!)}
                             iconName="calendar-month-outline"
-                            description="Dodaj do kalendarza"
+                            description={mainTranslate.t("addToCalendar")}
                             isCentered={true}
                         />
                     )}

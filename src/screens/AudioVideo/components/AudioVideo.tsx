@@ -10,6 +10,8 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import IconContainer from "../../../commonComponents/IconContainer";
 import IconLink from "../../../commonComponents/IconLink";
 import { Divider } from "@rneui/base";
+import useLocaLization from "../../../hooks/useLocalization";
+import { audioVideoTranslations } from "../translations";
 
 interface AudioVideoProps {
     meeting: IMeeting,
@@ -21,6 +23,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const audioVideoTranslate = useLocaLization(audioVideoTranslations)
     return (
         <View>
             <ListItem.Accordion
@@ -45,36 +48,36 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
     
                     <IconDescriptionValue 
                         iconName="laptop"
-                        description="Operator wideo"
+                        description={audioVideoTranslate.t("videoOperatorLabel")}
                         value={audioVideo.videoOperator.name}
                     />
                     
                     {audioVideo.audioOperator && <IconDescriptionValue 
                         iconName="audio-video"
-                        description="Operator audio"
+                        description={audioVideoTranslate.t("audioOperatorLabel")}
                         value={audioVideo.audioOperator.name}
                     />}
                     <IconDescriptionValue 
                         iconName="microphone"
-                        description="Mikrofon 1"
+                        description={audioVideoTranslate.t("mic1Label")}
                         value={audioVideo.microphone1Operator.name}
                     />
         
                     {audioVideo.microphone2Operator && <IconDescriptionValue 
                         iconName="microphone-outline"
-                        description="Mikrofon 2"
+                        description={audioVideoTranslate.t("mic2Label")}
                         value={audioVideo.microphone2Operator.name}
                     />}
                     {((state.preacher && state.preacher.roles?.includes('can_edit_audio_video')) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 
                             onPress={() => navigation.navigate("Audio Edit", { meeting, audioVideo })}
                             iconName="pencil"
-                            description="Edytuj dane"
+                            description={audioVideoTranslate.t("editText")}
                         />
                         <IconLink 
                             onPress={() => navigation.navigate("Audio Delete Confirm", { meeting, audioVideo })}
                             iconName="trash-can"
-                            description="Usuń dane"
+                            description={audioVideoTranslate.t("deleteText")}
                         />
                     </IconContainer>}
           
@@ -82,12 +85,13 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                 
             </> : <>
                
-                    <NotFound title="Nie dodano rekordów audio-video dla tego zebrania" />
+                    <NotFound title={audioVideoTranslate.t("noEntryText")} />
                     {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && (
                         <IconLink 
                             onPress={() => navigation.navigate("Audio New", { meeting })}
                             iconName="plus"
-                            description="Dodaj dane"
+                            isCentered
+                            description={audioVideoTranslate.t("addText")}
                         />
                     )}
             

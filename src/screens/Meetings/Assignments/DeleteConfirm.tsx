@@ -4,11 +4,13 @@ import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { IMeeting, IMeetingAssignment } from "../../../contexts/interfaces";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
-import MeetingAssignment from "../components/MeetingAssignment";
 import ButtonC from "../../../commonComponents/Button";
 import { ListItem } from "react-native-elements";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import { chooseFontColorAndIcon } from "./helpers/types";
+import useLocaLization from "../../../hooks/useLocalization";
+import { mainTranslations } from "../../../../localization";
+import { meetingAssignmentTranslations } from "./translations";
 
 interface MeetingAssignmentDeleteConfirmScreenProps { 
     navigation: NavigationProp<any>
@@ -23,6 +25,8 @@ interface MeetingAssignmentDeleteConfirmScreenProps {
 const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const { state, deleteAssignment } = useContext(MeetingContext)
     const { icon, fontColor } = chooseFontColorAndIcon(route.params.assignment.type);
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const mainTranslate = useLocaLization(mainTranslations);
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
@@ -42,7 +46,7 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
                     {route.params.assignment.reader && (
                     <IconDescriptionValue 
                         iconName="account-tie-voice"
-                        description="Lektor"
+                        description={meetingAssignmentsTranslate.t('readerLabel')}
                         value={route.params.assignment.reader.name}
                     />
                 
@@ -51,13 +55,13 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
                 
             
             </ListItem>
-            <Text style={styles.text}>Czy na pewno chcesz usunąć to zadanie na zebraniu?</Text>
+            <Text style={styles.text}>{meetingAssignmentsTranslate.t('deleteConfirmText')}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteAssignment(route.params.meeting._id, route.params.assignment._id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t('yes')} onPress={() => deleteAssignment(route.params.meeting._id, route.params.assignment._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                <ButtonC title="Nie" onPress={() => navigation.navigate('Meetings Index')} />
+                <ButtonC title={mainTranslate.t('no')} onPress={() => navigation.navigate('Meetings Index')} />
                 </View>
             
             </View>

@@ -11,9 +11,15 @@ import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../Meetings/components/Meeting";
 import Label from "../../commonComponents/Label";
-import Ordinal from "./components/Ordinal";
+import Attendant from "./components/Attendant";
 import { defaultStyles } from "../defaultStyles";
 import { months } from "../../../defaultData";
+import useLocaLization from "../../hooks/useLocalization";
+import { audioVideoTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
+import { meetingAssignmentTranslations } from "../Meetings/Assignments/translations";
+import { attendantTranslations } from "./Attendants/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface AudioVideoEditScreenProps {
     route: {
@@ -39,8 +45,13 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     const [microphone2Value, setMicrophone2Value] = useState<string>('')
     const [microphone2Open, setMicrophone2Open] = useState<boolean>(false);
     const [microphone2Items, setMicrophone2Items] = useState([]);
+    const audioVideoTranslate = useLocaLization(audioVideoTranslations);
+    const mainTranslate = useLocaLization(mainTranslations);
+    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
+    const attendantTranslate = useLocaLization(attendantTranslations)
     const { state, editAudioVideo } = useContext(AudioVideoContext);
-    const meetingContext = useContext(MeetingContext)
+    const meetingContext = useContext(MeetingContext);
+    const settingsContext = useContext(SettingsContext);
 
 
     const loadPreachers = async () => {
@@ -57,17 +68,17 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
             const selectVideoItems = response.data.filter((preacher) => preacher.roles.includes("can_be_video")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.videoOperator?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - był na wideo już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: audioVideoTranslate.t("videoOperatorCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             const selectAudioItems = response.data.filter((preacher) => preacher.roles.includes("can_be_audio")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.audioOperator?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - był na audio już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: audioVideoTranslate.t("audioOperatorCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             const selectMicItems = response.data.filter((preacher) => preacher.roles.includes("can_take_mic")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.microphone1Operator?.name === preacher.name || meeting.audioVideo?.microphone2Operator?.name === preacher.name).length
 
-                return { label: `${preacher.name} - ${currentMonth} - nosił mikrofony już ${alreadyAssigned} razy`, value: preacher._id } as never
+                return { label: audioVideoTranslate.t("micsCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
             setVideoOperatorItems(selectVideoItems)
             setMicrophone1Items(selectMicItems)
@@ -87,13 +98,13 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.meeting}>Zobacz kto ma już zadanie na zebraniu</Text>
-            <Meeting meeting={route.params.meeting} filter="Wszystkie" />
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
-            <Text style={[styles.meeting, { marginTop: 15 }]}>Porządkowi</Text>
-            <Ordinal meeting={route.params.meeting} ordinal={route.params.meeting.ordinal} />
+            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
+            <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
 
-            <Label text="Operator wideo" />
+            <Label text={audioVideoTranslate.t("videoOperatorLabel")} />
             <DropDownPicker 
                 value={videoOperatorValue}
                 setValue={setVideoOperatorValue}
@@ -103,19 +114,19 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Operator wideo"
-                placeholder="Wybierz operatora wideo"
+                modalTitle={audioVideoTranslate.t("videoOperatorLabel")}
+                placeholder={audioVideoTranslate.t("videoOperatorPlaceholder")}
             />
-            <Label text="Czy jest potrzebny operator audio?" />
+            <Label text={audioVideoTranslate.t("isAudioOperatorSwitchText")} />
             <Switch  
                 value={isAudioOperator}
                 onValueChange={(value) => setIsAudioOperator(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
 
             { isAudioOperator && <>
-                <Label text="Operator audio" />
+                <Label text={audioVideoTranslate.t("audioOperatorLabel")} />
                 <DropDownPicker 
                     value={audioOperatorValue}
                     setValue={setAudioOperatorValue}
@@ -125,11 +136,11 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Operator audio"
-                    placeholder="Wybierz operatora audio"
+                    modalTitle={audioVideoTranslate.t("audioOperatorLabel")}
+                    placeholder={audioVideoTranslate.t("audioOperatorPlaceholder")}
                 />
             </>}
-            <Label text="Mikrofon 1 (lewy)" />
+            <Label text={audioVideoTranslate.t("mic1Label")} />
             <DropDownPicker 
                 value={microphone1Value}
                 setValue={setMicrophone1Value}
@@ -139,16 +150,16 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
-                modalTitle="Mikrofon 1"
-                placeholder="Wybierz głosiciela do mikrofonu 1"
+                modalTitle={audioVideoTranslate.t("mic1Label")}
+                placeholder={audioVideoTranslate.t("mic1Placeholder")}
             />
 
-            <Label text="Czy jest potrzebny mikrofon 2 (prawy)?" />
+            <Label text={audioVideoTranslate.t("isMic2SwitchText")} />
             <Switch  
                 value={isMicrophone2}
                 onValueChange={(value) => setIsMicrophone2(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {isMicrophone2 && <>
                 <DropDownPicker 
@@ -163,13 +174,13 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     listMode="MODAL"
-                    modalTitle="Mikrofon 2"
-                    placeholder="Wybierz głosiciela do mikrofonu 2"
+                    modalTitle={audioVideoTranslate.t("mic2Label")}
+                    placeholder={audioVideoTranslate.t("mic2Placeholder")}
                 />
 
             </>}
             <ButtonC 
-                title="Edytuj dane audio-video"
+                title={audioVideoTranslate.t("editHeaderText")}
                 isLoading={state.isLoading}
                 onPress={() => editAudioVideo(route.params.meeting._id, route.params.audioVideo._id, audioOperatorValue, videoOperatorValue, microphone1Value, microphone2Value)}
             />
@@ -183,7 +194,6 @@ const styles = StyleSheet.create({
     },
     meeting: {
         fontSize: 21,
-        color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
     },
     switch: {

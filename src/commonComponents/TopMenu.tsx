@@ -1,6 +1,7 @@
 import { Divider } from "@rneui/base";
-import React from "react";
+import React, { useContext } from "react";
 import { FlatList, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface TopMenuProps {
   state: string;
@@ -9,6 +10,7 @@ interface TopMenuProps {
 }
 
 const TopMenu: React.FC<TopMenuProps> = ({ state, data, updateState }) => {
+  const settingsContext = useContext(SettingsContext);
   return (
     <FlatList
       data={data}
@@ -16,7 +18,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ state, data, updateState }) => {
         <>
           <TouchableOpacity onPress={() => updateState(item)} style={{ marginRight: 10 }}>
             {state === item ? (
-              <Text style={styles.activeItem}>{item}</Text>
+              <Text style={[styles.activeItem, { color: settingsContext.state.mainColor}]}>{item}</Text>
             ) : (
               <Text style={styles.item}>{item}</Text>
             )}
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     activeItem: { 
-        color: '#1F8AAD', 
         fontFamily: 'MontserratSemiBold', 
         fontSize: 18
     }

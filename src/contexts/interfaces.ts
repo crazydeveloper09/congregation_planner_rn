@@ -104,7 +104,7 @@ export interface IMeeting {
     endSong: number,
     endPrayer: IPreacher,
     audioVideo: IAudioVideo,
-    ordinal: IOrdinal,
+    ordinal: IAttendant,
     cleaningGroup: IMinistryGroup
 }
 
@@ -117,7 +117,7 @@ export interface IAudioVideo {
     meeting: IMeeting;
 }
 
-export interface IOrdinal {
+export interface IAttendant {
     _id: string;
     hallway1: IPreacher;
     hallway2?: IPreacher;

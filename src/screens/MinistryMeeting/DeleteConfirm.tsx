@@ -2,11 +2,13 @@ import { NavigationProp } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
-import MinistryMeeting from "./components/MinistryMeeting";
 import ButtonC from "../../commonComponents/Button";
 import { IMinistryMeeting } from "../../contexts/interfaces";
 import { ListItem } from "@rneui/base";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
+import useLocaLization from "../../hooks/useLocalization";
+import { ministryMeetingsTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 interface MinistryMeetingDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -19,6 +21,8 @@ interface MinistryMeetingDeleteConfirmScreenProps {
 
 const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const {state, deleteMinistryMeeting} = useContext(MinistryMeetingContext);
+    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
+    const mainTranslate = useLocaLization(mainTranslations)
 
     return (
         <View style={styles.container}>
@@ -28,31 +32,31 @@ const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmS
                     <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     <IconDescriptionValue 
                         iconName={route.params.meeting?.defaultPlace === "Zoom" ? "video-box" : "home"}
-                        description="Miejsce"
+                        description={ministryMeetingTranslate.t("placeLabel")}
                         value={route.params.meeting?.place || route.params.meeting?.defaultPlace}
                     />
                     <IconDescriptionValue 
                         iconName="account-tie"
-                        description="Prowadzący"
+                        description={ministryMeetingTranslate.t("leadLabel")}
                         value={route.params.meeting?.lead?.name}
                     />
 
                     {route.params.meeting?.topic && <IconDescriptionValue 
                         iconName="table-of-contents"
-                        description="Temat"
+                        description={ministryMeetingTranslate.t("topicLabel")}
                         value={route.params.meeting?.topic}
                     />}
                 </View>
                 
             
             </ListItem>
-            <Text style={styles.text}>Czy na pewno chcesz usunąć tą zbiórkę?</Text>
+            <Text style={styles.text}>{ministryMeetingTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
-                    <ButtonC title="Tak" onPress={() => deleteMinistryMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
+                    <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteMinistryMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                <ButtonC title="Nie" onPress={() => navigation.navigate('Ministry Meeting Index')} />
+                <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('Ministry Meeting Index')} />
                 </View>
             
             </View>
