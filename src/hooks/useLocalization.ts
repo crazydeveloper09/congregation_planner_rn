@@ -1,4 +1,4 @@
-import * as Localization from 'expo-localization'
+import * as Localization from 'expo-localization';
 import { useState } from 'react';
 import { Dict, I18n } from 'i18n-js';
 
