@@ -43,7 +43,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           break;
         }
         case "Ulepszajmy swoją służbę":
-        case "Apply Yourself to The Field Ministry": {
+        case "Apply Yourself To The Field Ministry": {
           fontColor = "#9B6D17";
           icon = (
             <MaterialCommunityIcons
