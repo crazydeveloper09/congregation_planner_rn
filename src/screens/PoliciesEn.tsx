@@ -5,11 +5,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const PoliciesEnScreen: React.FC = () => {
+    const settingsContext = useContext(SettingsContext);
     return (
         <ScrollView style={styles.container}>
-            <Text style={[styles.sectionHeader, { color: '#1F8AAD' }]}>Privacy policy</Text>
+            <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Privacy policy</Text>
             <MarkedList counterRenderer={numeric}>
                 <View style={{ flexShrink: 1 }}>
                     <Text style={styles.listHeader}>General Information</Text>
@@ -147,7 +149,7 @@ const PoliciesEnScreen: React.FC = () => {
                 
                 
             </MarkedList>
-            <Text style={[styles.sectionHeader, { color: '#1F8AAD' }]}>GPDR clause</Text>
+            <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>GPDR clause</Text>
             <Text style={styles.listHeader}>Who is the data administrator?</Text>
             <Text style={[styles.listElement, { marginVertical: 15 }]}>
             The Personal Data Administrator (hereinafter referred to as the Administrator) is the natural person "Maciej Kuta" residing in Głogów, providing services electronically through the Service.

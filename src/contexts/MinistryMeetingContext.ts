@@ -7,7 +7,8 @@ import { mainNavNavigate, navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message"
 import { isLoading } from "expo-font"
 import useLocaLization from "../hooks/useLocalization"
-import { ministryMeetingsTranslations } from "../screens/MinistryMeeting/translations"
+import { ministryMeetingsTranslations } from "../screens/MinistryMeeting/translations";
+import * as Localization from 'expo-localization';
 
 const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations);
 
@@ -87,8 +88,8 @@ const addMinistryMeeting = (dispatch: Function) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
-            const congregationID = await AsyncStorage.getItem("congregationID");
-            const response = await territories.post(`/ministryMeetings?congregationID=${congregationID}`, {place, lead, date, hour, topic, defaultPlace}, {
+            const locale = Localization.getLocales()[0].languageCode!;
+            const response = await territories.post(`/ministryMeetings?locale=${locale}`, {place, lead, date, hour, topic, defaultPlace}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }

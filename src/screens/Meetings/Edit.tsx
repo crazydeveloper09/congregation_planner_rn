@@ -15,6 +15,7 @@ import { months } from "../../../defaultData";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface MeetingEditScreenProps {
     route: {
@@ -54,7 +55,8 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     ]);
     const [isOtherEndPrayer, setIsOtherEndPrayer] = useState<boolean>(false);
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
-    const { state, editMeeting } = useContext(MeetingContext)
+    const { state, editMeeting } = useContext(MeetingContext);
+    const settingsContext = useContext(SettingsContext);
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -219,7 +221,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {otherEndPrayer && <>
                 <MyInput 

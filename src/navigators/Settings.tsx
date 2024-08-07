@@ -6,13 +6,18 @@ import PoliciesScreen from "../screens/Policies";
 import useLocaLization from "../hooks/useLocalization";
 import { mainTranslations } from "../../localization";
 import PoliciesEnScreen from "../screens/PoliciesEn";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const SettingsNavigator = () => {
-  const mainTranslate = useLocaLization(mainTranslations)
+  const mainTranslate = useLocaLization(mainTranslations);
+  const settingsContext = useContext(SettingsContext);
+  useEffect(() => {
+
+  }, [settingsContext.state.mainColor])
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
             <Stack.Screen 
                 name="Settings" 
                 component={SettingsScreen} 

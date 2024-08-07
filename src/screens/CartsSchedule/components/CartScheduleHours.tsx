@@ -14,6 +14,7 @@ import MyInput from "../../../commonComponents/MyInput";
 import { defaultStyles } from "../../defaultStyles";
 import useLocaLization from "../../../hooks/useLocalization";
 import { cartScheduleTranslations } from "../translations";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface CartsScheduleHoursProps {
   hour: ICartHour;
@@ -42,6 +43,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
   const { assignPreachersToHours } = useContext(CartsScheduleContext);
   const {state} = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
+  const settingsContext = useContext(SettingsContext);
 
   useEffect(() => {
 
@@ -85,7 +87,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 value={isOtherPreacher1}
                 onValueChange={(value) => setIsOtherPreacher1(value)}
                 style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={"#1F8AAD"}
+                color={settingsContext.state.mainColor}
             />
 
             {isOtherPreacher1 && <>
@@ -117,7 +119,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 value={isOtherPreacher2}
                 onValueChange={(value) => setIsOtherPreacher2(value)}
                 style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={"#1F8AAD"}
+                color={settingsContext.state.mainColor}
             />
             {isOtherPreacher2 && <>
                 <MyInput 

@@ -19,7 +19,7 @@ export const authTranslations = {
     twoFactorButtonText: "Zweryfikuj konto",
     automaticLoginMessage: "Automatycznie zalogowano do aplikacji",
     noUserFound: "Nie znaleziono takiego użytkownika",
-    logOutMeesage: "Wylogowano z Congregation Planner"
+    logOutMessage: "Wylogowano z Congregation Planner"
   },
   en: {
     greeting: "Welcome to Congregation Planner",
@@ -40,5 +40,7 @@ export const authTranslations = {
     codePlaceholder: "Type in access code",
     twoFactorButtonText: "Verify account",
     automaticLoginMessage: "You have been successfully logged in",
+    noUserFound: "We couldn't find that user",
+    logOutMessage: "Successfully logout from Congregation Planner"
   },
 };

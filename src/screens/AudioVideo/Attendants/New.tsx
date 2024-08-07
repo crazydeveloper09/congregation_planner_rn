@@ -18,6 +18,7 @@ import useLocaLization from "../../../hooks/useLocalization";
 import { mainTranslations } from "../../../../localization";
 import { meetingAssignmentTranslations } from "../../Meetings/Assignments/translations";
 import { attendantTranslations } from "./translations";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface AttendantNewScreenProps {
     route: {
@@ -47,6 +48,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
     const attendantTranslate = useLocaLization(attendantTranslations)
     const { state, addAttendant } = useContext(AttendantContext);
     const meetingContext = useContext(MeetingContext)
+    const settingsContext = useContext(SettingsContext);
 
 
     const loadPreachers = async () => {
@@ -79,10 +81,10 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
-            <Text style={[styles.meeting, { marginTop: 15 }]}>Audio-video</Text>
+            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
             
             <Label text={attendantTranslate.t("hallwayLabel")} />
@@ -103,7 +105,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 value={isHallway2}
                 onValueChange={(value) => setIsHallway2(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
 
             { isHallway2 && <>
@@ -140,7 +142,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 value={isParking}
                 onValueChange={(value) => setIsParking(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {isParking && <>
                 <DropDownPicker 
@@ -175,7 +177,6 @@ const styles = StyleSheet.create({
     },
     meeting: {
         fontSize: 21,
-        color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
     },
     switch: {

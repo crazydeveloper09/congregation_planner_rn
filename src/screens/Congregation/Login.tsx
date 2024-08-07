@@ -6,6 +6,7 @@ import { Context as AuthContext } from '../../contexts/AuthContext';
 import MyInput from '../../commonComponents/MyInput';
 import useLocaLization from '../../hooks/useLocalization';
 import { authTranslations } from './translations';
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface CongregationsLoginScreenProps {
     route: {
@@ -21,10 +22,11 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
     const [ password, setPassword ] = useState<string>('');
     const [ link, setLink ] = useState<string>('')
     const i18n = useLocaLization(authTranslations);
+    const settingsContext = useContext(SettingsContext);
 
     return (
         <View style={styles.container}>
-            <Text h3 style={styles.header}>{i18n.t('loginHeading')}</Text>
+            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor }]}>{i18n.t('loginHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             {route.params.type === "admin" ? <>
@@ -75,7 +77,6 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ece9e9',
         padding: 15,
         flex: 1,
         justifyContent: 'center'
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'MontserratSemiBold',
-        color: '#1F8AAD'
     },
     button: {
         backgroundColor: '#28a745'

@@ -13,6 +13,7 @@ import CartsScheduleHours from "./components/CartScheduleHours";
 import { Context as CartsScheduleContext } from "../../contexts/CartsScheduleContext";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../contexts/AuthContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { months, weekdays } from "../../../defaultData";
 import NotFound from "../../commonComponents/NotFound";
 import Loading from "../../commonComponents/Loading";
@@ -53,6 +54,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     : "";
   const preachersContext = useContext(PreachersContext);
   const authContext = useContext(AuthContext);
+  const settingsContext = useContext(SettingsContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -137,7 +139,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
 
   return (
     <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === mainTranslate.t("all") && <View style={styles.titleContainer}>
+      {currentFilter === mainTranslate.t("all") && <View style={[styles.titleContainer, { backgroundColor: settingsContext.state.mainColor}]}>
             <>
               <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
               {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
@@ -152,8 +154,8 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
           <>
             <CalendarPicker
               startFromMonday={true}
-              selectedDayColor="#97D7ED"
-              todayBackgroundColor="#CBEBF6"
+              selectedDayColor={`${settingsContext.state.mainColor}60`}
+              todayBackgroundColor={`${settingsContext.state.mainColor}30`}
               months={months}
               weekdays={weekdays}
               selectMonthTitle={months[selectedStartDate.getMonth()] + ' ' + selectedStartDate.getFullYear()}
@@ -163,7 +165,6 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               onDateChange={onDateChange}
             />
             <View style={styles.resultContainer}>
-            <Text>{months[selectedStartDate.getMonth()]  + ' ' + selectedStartDate.getFullYear()}</Text>
               {Boolean(state.cartDay) ? (
                 ""
               ) : (
@@ -234,7 +235,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15, 
     paddingVertical: 7, 
-    backgroundColor: '#1f8aad',
   },
   myDate: {
     fontSize: 18,

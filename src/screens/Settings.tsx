@@ -7,6 +7,7 @@ import { Button } from "@rneui/themed";
 import { NavigationProp } from "@react-navigation/native";
 import useLocaLization from "../hooks/useLocalization";
 import { mainTranslations } from "../../localization";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface SettingsScreenProps {
     navigation: NavigationProp<any>
@@ -15,18 +16,34 @@ interface SettingsScreenProps {
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const auth = useContext(AuthContext)
     const mainTranslate = useLocaLization(mainTranslations)
+    const {state, changeMainColor, loadColor} = useContext(SettingsContext)
+
+    useEffect(() => {
+        loadColor()
+    }, [])
+
+    const availableColors = ['#1F8AAD', '#847577', '#AD1F64', '#AD1F1F', '#1FAD4F','#A58940','#629B48','#7A6E9B','#662389','#8A2177','#225354','#6D4420','#19482A','#19315C']
 
     return (
         <View style={styles.container}>
-            
+            <Text style={styles.title}>{mainTranslate.t("chooseColor")}</Text>
+            <FlatList 
+                data={availableColors}
+                renderItem={({ item }) => <TouchableOpacity onPress={() => changeMainColor(item)} style={[styles.color, { backgroundColor: item }, state?.mainColor === item && { borderWidth: 3, borderColor: 'black' }]}>
+
+                </TouchableOpacity>}
+                numColumns={2}
+                contentContainerStyle={{ gap: 15, marginTop: 15, paddingBottom: 25 }}
+                
+            />
 
             <TouchableOpacity onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
-                <Text style={{ color: '#1F8AAD', fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>{mainTranslate.t("policyLabel")}</Text>
+                <Text style={{ color: state.mainColor, fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>{mainTranslate.t("policyLabel")}</Text>
             </TouchableOpacity>
             
             <Button 
                 title={mainTranslate.t("logOutLabel")}
-                titleStyle={{ color: '#1F8AAD', fontFamily: 'MontserratRegular' }} 
+                titleStyle={{ color: state.mainColor, fontFamily: 'MontserratRegular' }} 
                 buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0.0)' }} 
                 onPress={() => auth.signOut()}
             />
@@ -39,7 +56,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#ece9e9",
         padding: 15,
         flex: 1,
         justifyContent: 'center'

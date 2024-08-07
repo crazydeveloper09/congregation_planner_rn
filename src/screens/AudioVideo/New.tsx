@@ -20,6 +20,7 @@ import { audioVideoTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { meetingAssignmentTranslations } from "../Meetings/Assignments/translations";
 import { attendantTranslations } from "./Attendants/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface AudioVideoNewScreenProps {
     route: {
@@ -49,7 +50,8 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const attendantTranslate = useLocaLization(attendantTranslations)
     const { state, addAudioVideo } = useContext(AudioVideoContext);
-    const meetingContext = useContext(MeetingContext)
+    const meetingContext = useContext(MeetingContext);
+    const settingsContext = useContext(SettingsContext);
 
 
     const loadPreachers = async () => {
@@ -92,10 +94,10 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
-            <Text style={[styles.meeting, { marginTop: 15 }]}>{attendantTranslate.t("sectionText")}</Text>
+            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
             <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
 
             <Label text={audioVideoTranslate.t("videoOperatorLabel")} />
@@ -116,7 +118,7 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
                 value={isAudioOperator}
                 onValueChange={(value) => setIsAudioOperator(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
 
             { isAudioOperator && <>
@@ -153,7 +155,7 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
                 value={isMicrophone2}
                 onValueChange={(value) => setIsMicrophone2(value)}
                 style={styles.switch}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {isMicrophone2 && <>
                 <DropDownPicker 
@@ -188,7 +190,6 @@ const styles = StyleSheet.create({
     },
     meeting: {
         fontSize: 21,
-        color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
     },
     switch: {

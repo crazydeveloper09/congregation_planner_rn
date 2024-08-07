@@ -19,6 +19,7 @@ import { meetingAssignmentTranslations } from "./translations";
 import { mainTranslations } from "../../../../localization";
 import { attendantTranslations } from "../../AudioVideo/Attendants/translations";
 import { meetingsTranslations } from "../translations";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface MeetingAssignmentEditScreenProps {
     route: {
@@ -72,6 +73,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     const [isOtherParticipant, setIsOtherParticipant] = useState<boolean>(false);
     const [otherParticipant, setOtherParticipant] = useState<string>('')
     const { state, editAssignment } = useContext(MeetingContext);
+    const settingsContext = useContext(SettingsContext);
 
 
     const loadPreachers = async () => {
@@ -125,11 +127,11 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.meeting}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
-            <Text style={styles.meeting}>Audio-video</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, marginTop: 15 }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
-            <Text style={styles.meeting}>{attendantTranslate.t("sectionText")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, marginTop: 15 }]}>{attendantTranslate.t("sectionText")}</Text>
             <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
 
             <Label text={meetingAssignmentsTranslate.t("typeLabel")} />
@@ -190,7 +192,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                     value === false && setReaderValue('')
                 }}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
 
             { isReader && <>
@@ -216,7 +218,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                     value === true && setOtherParticipant('')
                 }}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {isOtherParticipant && <>
                 <MyInput 
@@ -245,7 +247,6 @@ const styles = StyleSheet.create({
     },
     meeting: {
         fontSize: 21,
-        color: '#1F8AAD',
         fontFamily: 'PoppinsSemiBold'
     },
 })

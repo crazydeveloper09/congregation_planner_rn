@@ -21,6 +21,7 @@ import { defaultStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 const MeetingNewScreen: React.FC = () => {
     const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -52,7 +53,8 @@ const MeetingNewScreen: React.FC = () => {
     ]);
     const [isOtherEndPrayer, setIsOtherEndPrayer] = useState<boolean>(false);
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
-    const { state, addMeeting } = useContext(MeetingContext)
+    const { state, addMeeting } = useContext(MeetingContext);
+    const settingsContext = useContext(SettingsContext)
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -203,7 +205,7 @@ const MeetingNewScreen: React.FC = () => {
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {otherEndPrayer && <>
                 <MyInput 

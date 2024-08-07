@@ -23,6 +23,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { mainTranslations } from "../../../localization";
 import { attendantTranslations } from "./Attendants/translations";
 import { meetingsTranslations } from "../Meetings/translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -43,6 +44,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   const authContext = useContext(AuthContext)
   const audioVideoContext = useContext(AudioVideoContext)
   const preachersContext = useContext(PreachersContext);
+  const settingsContext = useContext(SettingsContext)
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -80,6 +82,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   }
 
   const meetingsGroup = groupBy<IMeeting>(state.meetings!, "month");
+  const isMonth = Object.keys(groupBy<IMeeting>(state.meetings!, "month")).includes(currentMonth);
   
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -91,6 +94,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
       {authContext.state.whoIsLoggedIn !== "admin" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
 
         {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+        {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
           {state?.meetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntrytext")} /> : <>
           <FlatList
             keyExtractor={(meeting) => meeting._id}
@@ -104,14 +108,14 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
               />}
           </>}
         </View>: <View style={styles.container}>
-          <Text style={styles.meeting}>Audio-video</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>Audio-video</Text>
           {audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(audioVideo) => audioVideo._id}
               data={audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date")}
               renderItem={({ item }) => <AudioVideoAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
-          <Text style={styles.meeting}>{attendantTranslate.t("sectionText")}</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
           {audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
             keyExtractor={(ordinal) => ordinal._id}
               data={audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date")}
@@ -137,7 +141,6 @@ const styles = StyleSheet.create({
   },
 meeting: {
   fontSize: 19,
-  color: '#1F8AAD',
   fontFamily: 'PoppinsSemiBold',
   marginTop: 10
 },

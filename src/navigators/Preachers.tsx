@@ -11,15 +11,17 @@ import MinistryGroupEditScreen from "../screens/MinistryGroups/Edit";
 import useLocaLization from "../hooks/useLocalization";
 import { ministryGroupsTranslations } from "../screens/MinistryGroups/translations";
 import { preachersTranslations } from "../screens/Preachers/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator()
 
 const PreachersNavigator = () => {
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
     const preacherTranslate = useLocaLization(preachersTranslations)
+    const settingsContext = useContext(SettingsContext);
     
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white'}}>
             <Stack.Screen 
                 name="PreachersList" 
                 component={PreachersIndexScreen} 

@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { useContext } from "react";
 import MeetingsIndexScreen from "../screens/Meetings/Index";
 import MeetingNewScreen from "../screens/Meetings/New";
 import MeetingEditScreen from "../screens/Meetings/Edit";
@@ -11,14 +11,16 @@ import { StyleSheet } from "react-native";
 import useLocaLization from "../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "../screens/Meetings/Assignments/translations";
 import { meetingsTranslations } from "../screens/Meetings/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator();
 
 const MeetingsNavigator: React.FC = () => {
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const meetingTranslate = useLocaLization(meetingsTranslations);
+    const settingsContext = useContext(SettingsContext);
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
             <Stack.Screen 
                 name="Meetings Index" 
                 component={MeetingsIndexScreen} 

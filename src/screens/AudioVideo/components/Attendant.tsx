@@ -89,6 +89,7 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
                         <IconLink 
                             onPress={() => navigation.navigate("Attendant New", { meeting })}
                             iconName="plus"
+                            isCentered
                             description={attendantTranslate.t("addText")}
                         />
                     )}

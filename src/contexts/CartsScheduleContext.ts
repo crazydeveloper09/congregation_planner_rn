@@ -87,12 +87,12 @@ const loadPreacherHours = (dispatch: Function) => {
 }
 
 const addCartDay = (dispatch: Function) => {
-    return async (place: string, startHour: string, date: Date, finalHour: string) => {
+    return async (place: string, startHour: string, date: Date, finalHour: string, startMinute: string, finishMinute: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
             const congregationID = await AsyncStorage.getItem("congregationID");
-            const response = await territories.post(`/cartsSchedule/cartDay?congregationID=${congregationID}`, {place, startHour: +startHour, date, finalHour: +finalHour}, {
+            const response = await territories.post(`/cartsSchedule/cartDay?congregationID=${congregationID}`, {place, startHour: +startHour, date, finalHour: +finalHour, startMinute, finishMinute}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }

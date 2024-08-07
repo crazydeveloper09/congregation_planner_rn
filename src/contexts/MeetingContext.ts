@@ -8,6 +8,7 @@ import { showMessage } from "react-native-flash-message";
 import useLocaLization from "../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "../screens/Meetings/Assignments/translations";
 import { meetingsTranslations } from "../screens/Meetings/translations";
+import * as Localization from 'expo-localization';
 
 const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
 const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -115,9 +116,9 @@ const addMeeting = (dispatch: Function) => {
     try {
       dispatch({ type: "turn_on_loading" });
       const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
-        `/meetings?congregationID=${congregationID}`,
+        `/meetings?locale=${locale}`,
         {
           type,
           cleaningGroup,

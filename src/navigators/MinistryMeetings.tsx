@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { useContext } from "react";
 import MinistryMeetingIndexScreen from "../screens/MinistryMeeting/Index";
 import MinistryMeetingEditScreen from "../screens/MinistryMeeting/Edit";
 import MinistryMeetingNewScreen from "../screens/MinistryMeeting/New";
@@ -7,13 +7,15 @@ import MinistryMeetingDeleteConfirmScreen from "../screens/MinistryMeeting/Delet
 import { StyleSheet } from "react-native";
 import useLocaLization from "../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "../screens/MinistryMeeting/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator();
 
 const MinistryMeetingNavigator: React.FC = () => {
-    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
+    const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations);
+    const settingsContext = useContext(SettingsContext);
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTintColor: "white", headerTitleStyle: headerStyles.title }}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTintColor: "white", headerTitleStyle: headerStyles.title }}>
             <Stack.Screen 
                 name="Ministry Meeting Index" 
                 component={MinistryMeetingIndexScreen} 
@@ -39,7 +41,7 @@ const MinistryMeetingNavigator: React.FC = () => {
                 name="Ministry Meeting Delete Confirm" 
                 component={MinistryMeetingDeleteConfirmScreen} 
                 options={{
-                    headerTitle: ministryMeetingTranslate.t("editText"),
+                    headerTitle: ministryMeetingTranslate.t("deleteConfirmHeader"),
                 }}
                 
             />

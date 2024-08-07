@@ -10,6 +10,7 @@ import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../commonComponents/Loading";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface MinistryGroupsProps {
   congregationID: string;
@@ -18,7 +19,7 @@ interface MinistryGroupsProps {
 const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
   const { state, loadMinistryGroups, deleteMinistryGroup } = useContext(MinistryGroupContext);
   const navigation = useNavigation()
-
+  const settingsContext = useContext(SettingsContext);
 
   useEffect(() => {
     loadMinistryGroups(congregationID);
@@ -34,7 +35,7 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
         data={state.ministryGroups}
         renderItem={(ministryGroup) => (
           <View>
-            <Text style={styles.title}>{ministryGroup.item.name}</Text>
+            <Text style={[styles.title, { backgroundColor: settingsContext.state.mainColor }]}>{ministryGroup.item.name}</Text>
             <FlatList
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
@@ -43,7 +44,7 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
                     {preacher.item?.name}
                   </Text>
                 ) : (
-                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: '#d6d6d6' }]}>{preacher.item?.name}</Text>
+                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: `${settingsContext.state.mainColor}20` }]}>{preacher.item?.name}</Text>
                 )
               }
             />
@@ -69,7 +70,6 @@ const styles = StyleSheet.create({
   },
   title: {
     padding: 13,
-    backgroundColor: "#1f8aad",
     fontSize: 16,
     color: "white",
     width: 200,

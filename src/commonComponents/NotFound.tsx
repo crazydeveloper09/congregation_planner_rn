@@ -1,11 +1,11 @@
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const NotFound: React.FC<{ title: string }> = ({ title }) => {
+const NotFound: React.FC<{ title: string, icon?: string }> = ({ title, icon }) => {
     return (
         <View style={styles.noParamContainer}>
-            <Entypo name="emoji-sad" size={45} />
+            <MaterialCommunityIcons name={icon || "emoticon-sad-outline"} size={55} />
             <Text style={styles.noParamText}>{title}</Text>
         </View>
     )

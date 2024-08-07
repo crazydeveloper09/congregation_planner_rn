@@ -90,6 +90,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                         <IconLink 
                             onPress={() => navigation.navigate("Audio New", { meeting })}
                             iconName="plus"
+                            isCentered
                             description={audioVideoTranslate.t("addText")}
                         />
                     )}

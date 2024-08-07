@@ -76,7 +76,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
 }
 
 const styles = StyleSheet.create({
-    container: { padding: 15, backgroundColor: '#ece9e9' },
+    container: { padding: 15 },
     headerRight: {
         flexDirection: 'row',
         gap: 15,

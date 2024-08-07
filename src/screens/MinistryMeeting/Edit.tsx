@@ -19,6 +19,7 @@ import { months } from "../../../defaultData";
 import { defaultStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface MinistryMeetingEditScreenProps {
     navigation: NavigationProp<any>;
@@ -50,6 +51,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [isTopic, setIsTopic] = useState<boolean>(false);
     const [topic, setTopic] = useState<string>('')
     const preachersContext = useContext(PreachersContext)
+    const settingsContext = useContext(SettingsContext);
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -131,7 +133,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 value={isTopic}
                 onValueChange={(value) => setIsTopic(value)}
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 15 }}
-                color={'#1F8AAD'}
+                color={settingsContext.state.mainColor}
             />
             {isTopic && <>
                 <MyInput 

@@ -8,7 +8,8 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
     let icon: ReactElement;
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations)
     switch (type) {
-        case meetingAssignmentsTranslate.t("watchtowerStudy"): {
+        case "Studium Strażnicy":
+        case "Watchtower Study": {
           fontColor = "#588D3F";
           icon = <MaterialCommunityIcons
               name="book-open-blank-variant"
@@ -17,7 +18,8 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
             />;
           break;
         }
-        case meetingAssignmentsTranslate.t("bibleTalk"): {
+        case "Wykład biblijny":
+        case "Bible Talk": {
           fontColor = "#292929";
           icon = (
             <MaterialCommunityIcons
@@ -28,7 +30,8 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case meetingAssignmentsTranslate.t("treasuresFromGodsWord"): {
+        case "Skarby ze Słowa Bożego":
+        case "Treasures From God's Word": {
           fontColor = "#2A6B77";
           icon = (
             <MaterialCommunityIcons
@@ -39,7 +42,8 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case meetingAssignmentsTranslate.t("applyYourselfToMinistry"): {
+        case "Ulepszajmy swoją służbę":
+        case "Apply Yourself to The Field Ministry": {
           fontColor = "#9B6D17";
           icon = (
             <MaterialCommunityIcons
@@ -50,7 +54,8 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           );
           break;
         }
-        case meetingAssignmentsTranslate.t("livingAsChristians"): {
+        case "Chrześcijański tryb życia":
+        case "Living As Christians": {
           fontColor = "#942926";
           icon = <MaterialCommunityIcons name="sheep" size={21} color={"white"} />;
           break;

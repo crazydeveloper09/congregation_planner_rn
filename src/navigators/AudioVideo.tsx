@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { useContext } from "react";
 import AudioVideoIndexScreen from "../screens/AudioVideo/Index";
 import AudioVideoNewScreen from "../screens/AudioVideo/New";
 import AudioVideoEditScreen from "../screens/AudioVideo/Edit";
@@ -11,14 +11,16 @@ import { StyleSheet } from "react-native";
 import useLocaLization from "../hooks/useLocalization";
 import { audioVideoTranslations } from "../screens/AudioVideo/translations";
 import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const Stack = createStackNavigator();
 
 const AudioVideoNavigator: React.FC = () => {
     const audioVideoTranslate = useLocaLization(audioVideoTranslations);
-    const attendantTranslate = useLocaLization(attendantTranslations)
+    const attendantTranslate = useLocaLization(attendantTranslations);
+    const settingsContext = useContext(SettingsContext);
     return (
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#1F8AAD' }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
+        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>
             <Stack.Screen 
                 name="Audio Index" 
                 component={AudioVideoIndexScreen} 

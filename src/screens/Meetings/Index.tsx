@@ -21,6 +21,7 @@ import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -44,6 +45,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   const { state, loadMeetings, loadPreacherMeetingAssignments } = useContext(MeetingContext);
   const preachersContext = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
+  const settingsContext = useContext(SettingsContext);
   const [refreshing, setRefreshing] = React.useState(false);
 
       const onRefresh = React.useCallback(() => {
@@ -83,6 +85,9 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     return <Loading />;
   }
 
+  const isType = Object.keys(groupBy<IMeeting>(state.meetings!, "type")).includes(type);
+  const isMonth = Object.keys(groupBy<IMeeting>(state.meetings!, "month")).includes(currentMonth);
+
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === mainTranslate.t("all") && state.meetings?.length !== 0 && <>
@@ -93,11 +98,13 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
 
       {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_have_assignment") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
       { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+        {!isType && <NotFound title={meetingTranslate.t("typePlaceholder")} icon="format-list-bulleted" />}
+        {!isMonth && isType && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
         {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
         {groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
             (meeting) => meeting.month === currentMonth
           ).length === 0 ? (
-            <NotFound title={meetingTranslate.t("notFoundText")} />
+            isMonth && <NotFound title={meetingTranslate.t("notFoundText")} />
           ) : (
             <>
               <FlatList
@@ -117,14 +124,14 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
           )}
         </>}
       </View> : <View style={styles.container}>
-        <Text style={styles.meeting}>{meetingTranslate.t("leadOrPrayer")}</Text>
+        <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
         {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
             keyExtractor={(meeting) => meeting?._id}
             data={state.meetings}
             renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
             scrollEnabled={false}
           />}
-          <Text style={styles.meeting}>{meetingTranslate.t("taskOrReading")}</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("taskOrReading")}</Text>
             {state.assignments?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(assignment) => assignment?._id}
               data={state.assignments}
@@ -143,7 +150,6 @@ const styles = StyleSheet.create({
   },
   meeting: {
     fontSize: 19,
-    color: '#1F8AAD',
     fontFamily: 'PoppinsSemiBold',
     marginTop: 10
   },

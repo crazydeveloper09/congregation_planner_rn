@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { TouchableOpacity, View, Text, StyleSheet, Share, Alert } from "react-native";
 import { IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -8,6 +8,7 @@ import { FlatList } from "react-native-gesture-handler";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
 import { preachersTranslations } from "../translations";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface PreacherProps {
     preacher: IPreacher;
@@ -15,7 +16,8 @@ interface PreacherProps {
 
 const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
     const navigation = useNavigation();
-    const preacherTranslate = useLocaLization(preachersTranslations)
+    const preacherTranslate = useLocaLization(preachersTranslations);
+    const settingsContext = useContext(SettingsContext)
 
     const onShare = async (preacher: IPreacher) => {
 
@@ -44,15 +46,15 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { borderColor: settingsContext.state.mainColor }]}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{preacher.name}</Text>
                 <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('EditPreacher', {preacher} as unknown as never)}>
-                        <MaterialCommunityIcons name='pencil' color={'#1f8aad'} size={22} />
+                        <MaterialCommunityIcons name='pencil' color={settingsContext.state.mainColor} size={22} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('DeleteConfirmPreacher', {id: preacher._id} as unknown as never)}>
-                        <MaterialCommunityIcons name='trash-can' color={'#1f8aad'} size={22} />
+                        <MaterialCommunityIcons name='trash-can' color={settingsContext.state.mainColor} size={22} />
                     </TouchableOpacity>
                 </View>
                 
@@ -84,7 +86,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 15,
         marginTop: 15,
-        borderColor: '#1f8aad',
         borderWidth: 1,
         borderRadius: 10,
         width: isTablet ? '49%' : 'auto',

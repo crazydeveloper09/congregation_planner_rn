@@ -96,7 +96,6 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ece9e9',
         padding: 15,
         flex: 1,
         justifyContent: 'center'

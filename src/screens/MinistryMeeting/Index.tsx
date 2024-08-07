@@ -79,6 +79,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
             </> }
             
             <View style={styles.container}>
+            {ministryMeetingsGroup && !Object.keys(ministryMeetingsGroup).includes(currentMonth) && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
                 { state.ministryMeetings?.length === 0 ? <NotFound title={ministryMeetingTranslate.t("noEntryText")} /> : <FlatList
                     keyExtractor={(ministryMeeting) => ministryMeeting._id} 
                     data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
