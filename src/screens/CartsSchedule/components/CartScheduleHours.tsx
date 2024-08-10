@@ -74,6 +74,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 setOpen={setPreacher1Open}
                 items={preacher1Items}
                 listMode="MODAL"
+                searchable
                 containerStyle={{
                   marginVertical: 10
                 }}
@@ -108,6 +109,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
+                searchable
                 containerStyle={{
                   marginVertical: 10
                 }}

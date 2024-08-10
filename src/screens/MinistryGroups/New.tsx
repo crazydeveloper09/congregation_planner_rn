@@ -83,6 +83,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 setOpen={setPreachersOpen}
                 setValue={setPreachersValue}
                 searchable={true}
+                listMode="MODAL"
                 placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
@@ -99,6 +100,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     searchable={true}
+                    listMode="MODAL"
                     containerStyle={{
                         marginBottom: 20
                     }}

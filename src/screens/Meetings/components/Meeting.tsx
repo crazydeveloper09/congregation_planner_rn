@@ -45,8 +45,8 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: false
-                            })} -
-                        {meetingTranslate.t("leadLabel")}
+                            })} - {""}
+                         {meetingTranslate.t("leadLabel")}
                     </Text>
                     <IconLink 
                         onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("leadLabel"), meetingTranslate.t("kingdomHall"))}
@@ -67,7 +67,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: false
-                            })} -
+                            })} - {""}
                         {meetingTranslate.t("beginPrayerLabel")}
                     </Text>
                     <IconLink 
@@ -88,7 +88,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 hour12: false
-                            })} -
+                            })} - {""}
                         {meetingTranslate.t("endPrayerLabel")}
                     </Text>
                     <IconLink

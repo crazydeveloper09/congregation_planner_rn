@@ -4,7 +4,7 @@ import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message"
-import { IAudioVideo, IOrdinal } from "./interfaces"
+import { IAudioVideo, IAttendant } from "./interfaces"
 import useLocaLization from "../hooks/useLocalization"
 import { audioVideoTranslations } from "../screens/AudioVideo/translations"
 
@@ -13,7 +13,7 @@ const audioVideoTranslate = useLocaLization(audioVideoTranslations)
 interface IAudioVideoState {
     isLoading?: boolean,
     audioVideos?: IAudioVideo[],
-    ordinals?: IOrdinal[],
+    ordinals?: IAttendant[],
     errMessage?: string
 }
 

@@ -223,7 +223,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
                 color={settingsContext.state.mainColor}
             />
-            {otherEndPrayer && <>
+            {isOtherEndPrayer && <>
                 <MyInput 
                     value={otherEndPrayer}
                     onChangeText={setOtherEndPrayer}

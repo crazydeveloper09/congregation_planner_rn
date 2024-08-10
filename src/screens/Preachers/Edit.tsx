@@ -84,6 +84,8 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
                 items={rolesItems}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
+                listMode="MODAL"
+                modalTitle={preacherTranslate.t("rolesLabel")}
                 containerStyle={{
                     marginVertical: 8
                 }}

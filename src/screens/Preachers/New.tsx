@@ -60,6 +60,8 @@ const PreachersNewScreen: React.FC = () => {
                 items={rolesItems}
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
+                listMode="MODAL"
+                modalTitle={preacherTranslate.t("rolesLabel")}
                 containerStyle={{
                     marginVertical: 8
                 }}

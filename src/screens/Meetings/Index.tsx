@@ -98,9 +98,10 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
 
       {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_have_assignment") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
       { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+      
+        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
         {!isType && <NotFound title={meetingTranslate.t("typePlaceholder")} icon="format-list-bulleted" />}
         {!isMonth && isType && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
-        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
         {groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
             (meeting) => meeting.month === currentMonth
           ).length === 0 ? (

@@ -100,7 +100,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyRead += meeting.assignments?.filter((assignment) => assignment.reader?.name === preacher.name).length
                 })
-                return { label: meetingAssignmentsTranslate.t('readerCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
+                return { label: meetingAssignmentsTranslate.t('readingCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
             setParticipantItems([...participantItems, ...selectParticipantItems])
             setReaderItems(readerItems)
@@ -168,6 +168,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
                 listMode="MODAL"
+                searchable
                 modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
                 placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
             />

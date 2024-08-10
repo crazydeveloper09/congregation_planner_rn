@@ -40,11 +40,11 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
                 preacher.item?.name === ministryGroup.item.overseer?.name ? (
-                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: "#CBEBF6" }]}>
+                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: `${settingsContext.state.mainColor}30` }]}>
                     {preacher.item?.name}
                   </Text>
                 ) : (
-                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: `${settingsContext.state.mainColor}20` }]}>{preacher.item?.name}</Text>
+                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: '#d6d6d6' }]}>{preacher.item?.name}</Text>
                 )
               }
             />

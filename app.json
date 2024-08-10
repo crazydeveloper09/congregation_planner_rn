@@ -38,7 +38,7 @@
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 12
+      "versionCode": 13
     },
     "web": {
       "favicon": "./assets/favicon.png"

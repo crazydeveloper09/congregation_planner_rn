@@ -93,6 +93,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                 setValue={setPreachersValue}
                 searchable={true}
                 placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
+                listMode="MODAL"
                 labelStyle={defaultStyles.dropdown}
                 placeholderStyle={defaultStyles.dropdown}
             />
@@ -108,6 +109,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
                     labelStyle={defaultStyles.dropdown}
                     placeholderStyle={defaultStyles.dropdown}
                     searchable={true}
+                    listMode="MODAL"
                     containerStyle={{
                         marginBottom: 20
                     }}

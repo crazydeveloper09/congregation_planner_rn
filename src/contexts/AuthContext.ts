@@ -8,6 +8,7 @@ import { showMessage } from "react-native-flash-message";
 import { AffixAdornment } from "react-native-paper/lib/typescript/components/TextInput/Adornment/TextInputAffix";
 import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "../screens/Congregation/translations";
+import * as Localization from 'expo-localization';
 
 const authTranslate = useLocaLization(authTranslations);
 
@@ -71,7 +72,8 @@ const signIn = (dispatch: Function) => {
   return async (body: ISignIn) => {
     try {
       dispatch({ type: 'turn_on_loading' })
-      const response = await tmApi.post("/login?app=Congregation Planner", body);
+      const locale = Localization.getLocales()[0].languageCode!;
+      const response = await tmApi.post(`/login?app=Congregation Planner&locale=${locale}`, body);
       if(response.data === 'Zła nazwa użytkownika lub hasło'){
         dispatch({ type: 'add_error', payload: response.data })
       } else {
@@ -123,7 +125,8 @@ const verifyUser = (dispatch: Function) => {
     return async(body: ITwoFactor) => {
         try {
           dispatch({ type: 'turn_on_loading' })
-            const response = await tmApi.post(`/congregations/${body?.userID}/two-factor?app=Congregation Planner`, body);
+          const locale = Localization.getLocales()[0].languageCode!;
+            const response = await tmApi.post(`/congregations/${body?.userID}/two-factor?app=Congregation Planner&locale=${locale}`, body);
             await AsyncStorage.setItem('token', response.data.token);
             await AsyncStorage.setItem('whoIsLoggedIn', 'admin')
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'admin' } });
