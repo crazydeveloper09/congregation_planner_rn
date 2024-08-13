@@ -26,7 +26,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.videoOperator?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("videoOperatorLabel")}
           </Text>
           <IconLink
@@ -46,7 +46,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.audioOperator?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("audioOperatorLabel")}
           </Text>
           <IconLink
@@ -66,7 +66,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.microphone1Operator?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("mic1Label")}
           </Text>
           <IconLink
@@ -86,7 +86,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.microphone2Operator?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("mic2Label")}
           </Text>
           <IconLink

@@ -37,7 +37,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   const [type, setType] = useState<string>(
     new Date().getDay() === 0 || new Date().getDay() === 6
       ? meetingTranslate.t("weekend")
-      : meetingTranslate.t("midweek")
+      : meetingTranslate.t("midWeek")
   );
   const [currentMonth, setCurrentMonth] = useState<string>(
     `${months[new Date().getMonth()] + " " + new Date().getFullYear()}`

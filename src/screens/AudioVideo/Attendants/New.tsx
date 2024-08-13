@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
-import { View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native";
 import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import territories from "../../../api/territories";
@@ -80,7 +80,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
     }, [])
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
@@ -162,12 +162,14 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 />
 
             </>}
-            <ButtonC 
-                title={attendantTranslate.t("addHeaderText")}
-                isLoading={state.isLoading}
-                onPress={() => addAttendant(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
-            />
-        </View>
+            <View style={{ marginBottom: 40 }}>
+                <ButtonC 
+                    title={attendantTranslate.t("addHeaderText")}
+                    isLoading={state.isLoading}
+                    onPress={() => addAttendant(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                />
+            </View>
+        </ScrollView>
     )
 }
 

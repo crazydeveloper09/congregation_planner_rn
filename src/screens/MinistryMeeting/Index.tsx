@@ -89,12 +89,13 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
                     scrollEnabled={false}
                     
                 />
-                </> }
-
                 { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
                     iconName="download"
                     value={mainTranslate.t("pdfInfo")}
                 />}
+                </> }
+
+                
             </View>
             
             

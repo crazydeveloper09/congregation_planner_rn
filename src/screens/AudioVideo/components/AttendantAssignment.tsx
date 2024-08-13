@@ -26,7 +26,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       {preacher && preacher._id === assignment.hallway1?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("hallwayLabel")}
           </Text>
           <IconLink
@@ -46,7 +46,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       {preacher && preacher._id === assignment.hallway2?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("hallway2Label")}
           </Text>
           <IconLink
@@ -66,7 +66,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       {preacher && preacher._id === assignment.auditorium?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("auditoriumLabel")}
           </Text>
           <IconLink
@@ -86,7 +86,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       {preacher && preacher._id === assignment.parking?._id && (
         <View>
           <Text style={styles.title}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} -
+            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("parkingLabel")}
           </Text>
           <IconLink

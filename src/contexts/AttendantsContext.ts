@@ -28,7 +28,7 @@ const AttendantReducer = (state: IAttendantState, action: { type: string, payloa
         case 'turn_off_loading':
             return { ...state, isLoading: false, errMessage: '' }
         case 'add_error': 
-            return { ...state, errMessage: action.payload }
+            return { ...state, isloading: false, errMessage: action.payload }
         default:
             return state;
     }

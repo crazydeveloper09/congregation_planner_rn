@@ -179,11 +179,13 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                 />
 
             </>}
-            <ButtonC 
-                title={audioVideoTranslate.t("editHeaderText")}
-                isLoading={state.isLoading}
-                onPress={() => editAudioVideo(route.params.meeting._id, route.params.audioVideo._id, audioOperatorValue, videoOperatorValue, microphone1Value, microphone2Value)}
-            />
+            <View style={{ marginBottom: 40 }}>
+                <ButtonC 
+                    title={audioVideoTranslate.t("editHeaderText")}
+                    isLoading={state.isLoading}
+                    onPress={() => editAudioVideo(route.params.meeting._id, route.params.audioVideo._id, audioOperatorValue, videoOperatorValue, microphone1Value, microphone2Value)}
+                />
+            </View>
         </ScrollView>
     )
 }

@@ -167,11 +167,13 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
                 />
 
             </>}
-            <ButtonC 
-                title={attendantTranslate.t("editHeaderText")}
-                isLoading={state.isLoading}
-                onPress={() => editAttendant(route.params.meeting._id, route.params.attendant._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
-            />
+            <View style={{ marginBottom: 40 }}>
+                <ButtonC 
+                    title={attendantTranslate.t("editHeaderText")}
+                    isLoading={state.isLoading}
+                    onPress={() => editAttendant(route.params.meeting._id, route.params.attendant._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                />
+            </View>
         </ScrollView>
     )
 }
