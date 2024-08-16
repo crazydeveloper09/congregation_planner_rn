@@ -142,9 +142,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
             />
       </> : <>
         
-        <Text style={styles.preacher}>{hour?.preacher1?.name || hour.otherPreacher1 || cartScheduleTranslate.t("freeSpot")}</Text>
+        <Text style={[styles.preacher, !(hour?.preacher1?.name || hour.otherPreacher1) && { color: settingsContext.state.mainColor }]}>{hour?.preacher1?.name || hour.otherPreacher1 || cartScheduleTranslate.t("freeSpot")}</Text>
     
-        <Text style={styles.preacher}>{hour?.preacher2?.name || hour.otherPreacher2 || cartScheduleTranslate.t("freeSpot")}</Text>
+        <Text style={[styles.preacher, !(hour?.preacher2?.name || hour.otherPreacher2) && { color: settingsContext.state.mainColor }]}>{hour?.preacher2?.name || hour.otherPreacher2 || cartScheduleTranslate.t("freeSpot")}</Text>
       </>}
       
     </View>
