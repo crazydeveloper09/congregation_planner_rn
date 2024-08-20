@@ -80,8 +80,14 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
         loadPreachers()
         setHallway1Value(route.params.attendant.hallway1._id)
         setAuditoriumValue(route.params.attendant.auditorium._id)
-        setHallway2Value(route.params.attendant.hallway2?._id!)
-        setParkingValue(route.params.attendant.parking?._id!)
+        if(route.params.attendant.hallway2){
+            setIsHallway2(true);
+            setHallway2Value(route.params.attendant.hallway2._id)
+        }
+        if(route.params.attendant.parking){
+            setIsParking(true);
+            setParkingValue(route.params.attendant.parking._id)
+        }
     }, [])
 
     return (

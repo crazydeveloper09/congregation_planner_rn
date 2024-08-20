@@ -36,20 +36,22 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                 contentContainerStyle={{ gap: 15, marginTop: 15, paddingBottom: 25 }}
                 
             />
-
-            <TouchableOpacity onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
-                <Text style={{ color: state.mainColor, fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>{mainTranslate.t("policyLabel")}</Text>
-            </TouchableOpacity>
+            <View style={{ paddingTop: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
+                    <Text style={{ color: state.mainColor, fontFamily: 'MontserratRegular', textAlign: 'center', fontSize: 16 }}>{mainTranslate.t("policyLabel")}</Text>
+                </TouchableOpacity>
+                
+                <Button 
+                    title={mainTranslate.t("logOutLabel")}
+                    titleStyle={{ color: state.mainColor, fontFamily: 'MontserratRegular' }} 
+                    buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0.0)' }} 
+                    onPress={() => auth.signOut()}
+                />
             
-            <Button 
-                title={mainTranslate.t("logOutLabel")}
-                titleStyle={{ color: state.mainColor, fontFamily: 'MontserratRegular' }} 
-                buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0.0)' }} 
-                onPress={() => auth.signOut()}
-            />
-        
-            <Text style={styles.versionText}>{mainTranslate.t("copyrightLabel")}</Text>
-            <Text style={styles.versionText}>{mainTranslate.t("versionLabel")} {packageJson.version}</Text>
+                <Text style={styles.versionText}>{mainTranslate.t("copyrightLabel")}</Text>
+                <Text style={styles.versionText}>{mainTranslate.t("versionLabel")} {packageJson.version}</Text>
+            </View>
+            
         </View>
     )
 }

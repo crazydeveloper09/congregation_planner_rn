@@ -90,10 +90,16 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
 
     useEffect(() => {
         loadPreachers()
-        setAudioOperatorValue(route.params.audioVideo.audioOperator?._id!)
         setVideoOperatorValue(route.params.audioVideo.videoOperator?._id!)
         setMicrophone1Value(route.params.audioVideo.microphone1Operator?._id!)
-        setMicrophone2Value(route.params.audioVideo.microphone2Operator?._id!)
+        if(route.params.audioVideo.audioOperator){
+            setIsAudioOperator(true);
+            setAudioOperatorValue(route.params.audioVideo.audioOperator._id)
+        }
+        if(route.params.audioVideo.microphone2Operator){
+            setIsMicrophone2(true);
+            setMicrophone2Value(route.params.audioVideo.microphone2Operator._id)
+        }
     }, [])
 
     return (
