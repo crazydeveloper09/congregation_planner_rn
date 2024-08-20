@@ -14,17 +14,27 @@ export const addCartAssignmentToCalendar = async (date: string, time: string, lo
     generateStartDate.setHours(Number(startHour.slice(0, startHour.length === 4 ? 1 : 2)))
     const generateEndDate = new Date(`${year}-${month}-${day}`);
     generateEndDate.setHours(Number(endHour.slice(0, endHour.length === 4 ? 1 : 2)))
- 
-    try {
-        await Calendar.createEventAsync(calendars[0].id, { startDate: generateStartDate, endDate: generateEndDate, location, title: "Wózek" })
+
+    const events = await Calendar.getEventsAsync([calendars[0].id], generateStartDate, generateEndDate);
+    
+    if(events.length === 0){
+        try {
+            await Calendar.createEventAsync(calendars[0].id, { startDate: generateStartDate, endDate: generateEndDate, location, title: "Wózek" })
+            showMessage({
+                type: 'success',
+                message: mainTranslate.t("successfullyAddedEventMessage")
+            })
+        } catch(error) {
+            showMessage({
+                type: 'danger',
+                message: String(error)
+            })
+        }
+    } else {
         showMessage({
-            type: 'success',
-            message: mainTranslate.t("successfullyAddedEventMessage")
-        })
-    } catch(error) {
-        showMessage({
-            type: 'danger',
-            message: String(error)
+            type: "danger",
+            message: mainTranslate.t("alreadyAddedEvent")
         })
     }
+
 }

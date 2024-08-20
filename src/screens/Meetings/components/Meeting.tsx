@@ -49,7 +49,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                          {meetingTranslate.t("leadLabel")}
                     </Text>
                     <IconLink 
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("leadLabel"), meetingTranslate.t("kingdomHall"))}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("leadLabel"), meetingTranslate.t("kingdomHallText"))}
                         iconName="calendar-month-outline"
                         description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
@@ -71,7 +71,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         {meetingTranslate.t("beginPrayerLabel")}
                     </Text>
                     <IconLink 
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("beginPrayerLabel"), meetingTranslate.t("kingdomHall"))}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("beginPrayerLabel"), meetingTranslate.t("kingdomHallText"))}
                         iconName="calendar-month-outline"
                         description={mainTranslate.t("addToCalendar")}
                         isCentered={true}
@@ -92,7 +92,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         {meetingTranslate.t("endPrayerLabel")}
                     </Text>
                     <IconLink
-                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("endPrayerLabel"), meetingTranslate.t("kingdomHall"))}
+                        onPress={() => addMeetingAssignmentToCalendar(new Date(meeting?.date), meetingTranslate.t("endPrayerLabel"), meetingTranslate.t("kingdomHallText"))}
                         iconName="calendar-month-outline"
                         description={mainTranslate.t("addToCalendar")}
                         isCentered={true}

@@ -34,7 +34,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
                 attendantTranslate.t("hallwayLabel"),
-                meetingTranslate.t("kingdomHall")
+                meetingTranslate.t("kingdomHallText")
               )
             }
             iconName="calendar-month-outline"
@@ -54,7 +54,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
                 attendantTranslate.t("hallway2Label"),
-                meetingTranslate.t("kingdomHall")
+                meetingTranslate.t("kingdomHallText")
               )
             }
             iconName="calendar-month-outline"
@@ -74,7 +74,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
                 attendantTranslate.t("auditoriumLabel"),
-                meetingTranslate.t("kingdomHall")
+                meetingTranslate.t("kingdomHallText")
               )
             }
             iconName="calendar-month-outline"
@@ -94,7 +94,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
               addAudioVideoAssignmentToCalendar(
                 new Date(assignment.meeting?.date),
                 attendantTranslate.t("parkingLabel"),
-                meetingTranslate.t("kingdomHall")
+                meetingTranslate.t("kingdomHallText")
               )
             }
             iconName="calendar-month-outline"

@@ -12,16 +12,25 @@ export const addMinistryMeetingAssignmentToCalendar = async (date: Date, locatio
     const generateEndDate = new Date(date);
     generateEndDate.setMinutes(generateEndDate.getMinutes() + 15)
 
-    try {
-        await Calendar.createEventAsync(calendars[0].id, { startDate: date, endDate: generateEndDate, location, title: `${ministryMeetingTranslate.t("calendarEventTitle")} ${topic ? topic: ''} ` })
+    const events = await Calendar.getEventsAsync([calendars[0].id], date, generateEndDate);
+    
+    if(events.length === 0){
+        try {
+            await Calendar.createEventAsync(calendars[0].id, { startDate: date, endDate: generateEndDate, location, title: `${ministryMeetingTranslate.t("calendarEventTitle")} ${topic ? topic: ''} ` })
+            showMessage({
+                type: 'success',
+                message: mainTranslate.t("successfullyAddedEventMessage")
+            })
+        } catch(error) {
+            showMessage({
+                type: 'danger',
+                message: String(error)
+            })
+        }
+    } else {
         showMessage({
-            type: 'success',
-            message: mainTranslate.t("successfullyAddedEventMessage")
-        })
-    } catch(error) {
-        showMessage({
-            type: 'danger',
-            message: String(error)
+            type: "danger",
+            message: mainTranslate.t("alreadyAddedEvent")
         })
     }
 }

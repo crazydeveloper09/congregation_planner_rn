@@ -9,17 +9,27 @@ export const addMeetingAssignmentToCalendar = async (date: Date, topic: string, 
     
     const generateEndDate = new Date(date);
     generateEndDate.setHours(generateEndDate.getHours() + 2)
- 
-    try {
-        await Calendar.createEventAsync(calendars[0].id, { startDate: date, endDate: generateEndDate, location, title: topic })
+
+    const events = await Calendar.getEventsAsync([calendars[0].id], date, generateEndDate);
+    
+    if(events.length === 0){
+        try {
+            await Calendar.createEventAsync(calendars[0].id, { startDate: date, endDate: generateEndDate, location, title: topic })
+            showMessage({
+                type: 'success',
+                message: mainTranslate.t("successfullyAddedEventMessage")
+            })
+        } catch(error) {
+            showMessage({
+                type: 'danger',
+                message: String(error)
+            })
+        }
+    } else {
         showMessage({
-            type: 'success',
-            message: mainTranslate.t("successfullyAddedEventMessage")
-        })
-    } catch(error) {
-        showMessage({
-            type: 'danger',
-            message: String(error)
+            type: "danger",
+            message: mainTranslate.t("alreadyAddedEvent")
         })
     }
+
 }

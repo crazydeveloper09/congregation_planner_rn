@@ -38,12 +38,12 @@ const PreacherAssignment: React.FC<PreacherAssignmentProps> = ({
         onPress={() =>
           addMeetingAssignmentToCalendar(
             new Date(assignment.meeting?.date),
-            `${assignment.topic}${
+            `${assignment.topic || assignment.defaultTopic}${
               preacher && preacher._id === assignment.reader?._id
                 ? `- ${meetingAssignmentsTranslate.t('readerLabel')}`
                 : ""
             }`,
-            meetingTranslate.t("kingdomHall")
+            meetingTranslate.t("kingdomHallText")
           )
         }
         iconName="calendar-month-outline"
