@@ -12,6 +12,7 @@ import IconLink from "../../../commonComponents/IconLink";
 import { Divider } from "@rneui/base";
 import useLocaLization from "../../../hooks/useLocalization";
 import { audioVideoTranslations } from "../translations";
+import { mainTranslations } from "../../../../localization";
 
 interface AudioVideoProps {
     meeting: IMeeting,
@@ -19,11 +20,12 @@ interface AudioVideoProps {
 }
 
 const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
-    const [expanded, setExpanded] = useState<boolean>(false);
+    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"));
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
     const audioVideoTranslate = useLocaLization(audioVideoTranslations)
+    const mainTranslate = useLocaLization(mainTranslations);
     return (
         <View>
             <ListItem.Accordion
@@ -35,7 +37,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }

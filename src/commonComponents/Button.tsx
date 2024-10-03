@@ -18,12 +18,13 @@ const ButtonC: React.FC<ButtonProps> = ({
   color,
 }) => {
   const settingsContext = useContext(SettingsContext);
+  // #AD1F1F
   return (
     <Button
-      mode={!color ? "contained" : "outlined"}
-      textColor={color || "white"}
+      mode={"contained"}
+      textColor={"white"}
       buttonColor={
-        color ? "rgba(0, 0, 0, 0.0)" : settingsContext.state.mainColor
+        color || settingsContext.state.mainColor
       }
       labelStyle={{ fontSize: 18 }}
       style={[styles.button, { borderColor: color || "black" }]}

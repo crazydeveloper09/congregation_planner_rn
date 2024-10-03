@@ -12,6 +12,7 @@ import IconContainer from "../../../commonComponents/IconContainer";
 import { Divider } from "@rneui/base";
 import useLocaLization from "../../../hooks/useLocalization";
 import { attendantTranslations } from "../Attendants/translations";
+import { mainTranslations } from "../../../../localization";
 
 interface AttendantProps {
     meeting: IMeeting,
@@ -19,11 +20,12 @@ interface AttendantProps {
 }
 
 const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
-    const [expanded, setExpanded] = useState<boolean>(false);
+    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"));
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
     const attendantTranslate = useLocaLization(attendantTranslations)
+    const mainTranslate = useLocaLization(mainTranslations);
     return (
         <>
              <ListItem.Accordion
@@ -35,7 +37,7 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }

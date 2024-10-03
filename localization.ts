@@ -38,7 +38,8 @@ export const mainTranslations = {
         thursday: "Czw", 
         friday: "Pt", 
         saturday: "Sob", 
-        sunday: "Nd"
+        sunday: "Nd",
+        today: "(dzisiaj)"
     },
     en: {
         greeting: "Welcome to Congregation Planner",
@@ -78,6 +79,7 @@ export const mainTranslations = {
         thursday: "Thu", 
         friday: "Fri", 
         saturday: "Sat", 
-        sunday: "Sun"
+        sunday: "Sun",
+        today: "(today)"
     }
 }

@@ -19,7 +19,7 @@ interface MinistryMeetingProps {
 }
 
 const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) => {
-    const [expanded, setExpanded] = useState<boolean>(false)
+    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"))
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
     
@@ -45,7 +45,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                                 hour: '2-digit', 
                                 minute: '2-digit',
                                 hour12: false // użycie formatu 12-godzinnego z AM/PM
-                            })}
+                            })} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }
                         </ListItem.Title>
                     </ListItem.Content>
                     </>

@@ -148,7 +148,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 placeholder={meetingAssignmentsTranslate.t("typePlaceholder")}
             />
 
-            {route.params.meeting.type === meetingTranslate.t("midWeek") || defaultTopicValue && <>
+            {(route.params.meeting.type === meetingTranslate.t("midWeek") && defaultTopicValue) && <>
                 <Label text={meetingAssignmentsTranslate.t("defaultTopicLabel")} />
                 <DropDownPicker 
                     value={defaultTopicValue}

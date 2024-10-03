@@ -149,7 +149,7 @@ const deleteMinistryMeeting = (dispatch: Function) => {
             dispatch({ type: 'turn_off_loading' })
             navigate('Ministry Meeting Index')
             showMessage({
-                message: ministryMeetingTranslate.t("successfulEditMessage"),
+                message: ministryMeetingTranslate.t("successfulDeleteMessage"),
                 type: 'success',
             })
         } catch (err) {

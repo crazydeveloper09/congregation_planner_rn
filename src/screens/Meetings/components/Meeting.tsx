@@ -23,7 +23,7 @@ interface MeetingProps {
 }
 
 const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
-    const [expanded, setExpanded] = useState<boolean>(false)
+    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"))
     const assignmentsGroup = groupBy<IMeetingAssignment>(meeting?.assignments, 'type');
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
@@ -119,7 +119,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: false
-                    })}</ListItem.Title>
+                    })} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }
