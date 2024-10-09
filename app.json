@@ -17,6 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
         "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
