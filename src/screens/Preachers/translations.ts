@@ -1,7 +1,7 @@
 export const preachersTranslations = {
     pl: {
         sectionText: "Głosiciele",
-        linkShareMessage: "Witaj %{name},\n Twój specjalny link do Congregation Planner: %{link} (link tylko do skopiowania, nie klikaj go!). \n\n Jak uruchomić aplikację? \n\n 1. \n • IOS - wejdź do instrukcji uruchamiania: https://docs.google.com/document/d/1mhc8c38rUHpXxug-amBXT_W3AUuVsBpMEkat-BR3dVI/edit?usp=sharing i postępuj zgodnie z podanymi tam wskazówkami. \n\n • Android: W odpowiedzi na tą wiadomość wyślij mi swojego maila. Po jakimś czasie dostaniesz linka do Sklepu Play. Zainstaluj ją na swoim urządzeniu. \n\n 2. Wejdź do aplikacji. \n\n 3. Kliknij 'Logowanie głosiciela' i wklej specjalny link. \n\n Vouilla. Możesz teraz przeglądać różne plany w Twoim zborze.",
+        linkShareMessage: "Witaj %{name},\n Twój specjalny link do Congregation Planner: %{link} (link tylko do skopiowania, nie klikaj go!). \n\n Jak uruchomić aplikację? \n\n 1. \n • IOS - W odpowiedzi na tą wiadomość podaj Apple ID (mail na który logujesz się na konto Apple). Zainstaluj aplikację TestFlight: https://apps.apple.com/pl/app/testflight/id899247664 . Kliknij przycisk 'View on TestFlight' w zaproszeniu, które dostaniesz na maila. Zainstaluj aplikację.   \n\n • Android: W odpowiedzi na tą wiadomość wyślij mi swojego maila. Po jakimś czasie dostaniesz linka do Sklepu Play. Zainstaluj ją na swoim urządzeniu. \n\n 2. Wejdź do aplikacji. \n\n 3. Kliknij 'Logowanie głosiciela' i wklej specjalny link. \n\n Vouilla. Możesz teraz przeglądać różne plany w Twoim zborze.",
         shareButtonLabel: "Udostępnij link",
         can_see_meetings: "Może wyświetlać plan zebrań",
         can_lead_meetings: "Może przewodniczyć zebraniu",
@@ -40,7 +40,7 @@ export const preachersTranslations = {
     },
     en: {
         sectionText: "Preachers",
-        linkShareMessage: "Hello %{name},\n Your special link to Congregation Planner: %{link} (link just for copying, don\"t click it!). \n\n How to open the app? \n\n 1. \n • IOS - go through instructon of opening: https://docs.google.com/document/d/1mhc8c38rUHpXxug-amBXT_W3AUuVsBpMEkat-BR3dVI/edit?usp=sharing and apply directions given there. \n\n • Android: In an answer to this message please send me your Google play email. After some time you will get a link to Google Play. Install it on your device \n\n 2. Open the app. \n\n 3. Click 'Preachers login' and paste special link. \n\n Vouilla. You can now see different plans in your congregation",
+        linkShareMessage: "Hello %{name},\n Your special link to Congregation Planner: %{link} (link just for copying, don\"t click it!). \n\n How to open the app? \n\n 1. \n • IOS - In an answer to this message please give Apple ID (mail you which you use to log in to Apple account). Install TestFlight app: https://apps.apple.com/us/app/testflight/id899247664 . Click 'View on TestFlight' button in invitation you will receive to mail. Install the app. \n\n • Android: In an answer to this message please send me your Google play email. After some time you will get a link to Google Play. Install it on your device \n\n 2. Open the app. \n\n 3. Click 'Preachers login' and paste special link. \n\n Vouilla. You can now see different plans in your congregation",
         shareButtonLabel: "Share the link",
         can_see_meetings: "Can display meetings plan",
         can_lead_meetings: "Can be meetings chairman",
