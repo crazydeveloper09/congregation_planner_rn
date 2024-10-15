@@ -41,6 +41,7 @@ const addAttendant = (dispatch: Function) => {
       hallway2: string,
       auditorium: string,
       parking: string,
+      meetingDate: Date,
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
@@ -48,7 +49,7 @@ const addAttendant = (dispatch: Function) => {
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.post(
           `/meetings/${meetingID}/attendants?congregationID=${congregationID}`,
-          { hallway1, hallway2, auditorium, parking },
+          { hallway1, hallway2, auditorium, parking, meetingDate },
           {
             headers: {
               Authorization: `bearer ${token}`,

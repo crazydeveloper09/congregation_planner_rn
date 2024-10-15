@@ -76,7 +76,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
 
     useEffect(() => {
         loadPreachers(date)
-        setLeadValue(route.params.meeting?.lead._id!)
+        setLeadValue(route.params.meeting?.lead?._id!)
         setPlace(route.params.meeting.place)
         setDefaultPlaceValue(route.params.meeting?.defaultPlace || '')
         if(route.params.meeting.topic) {
@@ -147,7 +147,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             <ButtonC 
                 title={ministryMeetingTranslate.t("editText")}
                 isLoading={state.isLoading}
-                onPress={() => editMinistryMeeting(route.params.meeting._id, place, leadValue, date, time, topic)}
+                onPress={() => editMinistryMeeting(route.params.meeting._id, place, leadValue, date, time, defaultPlaceValue, topic)}
             />
         </View>
     )

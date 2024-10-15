@@ -4,7 +4,7 @@ import MeetingsNavigator from "./Meetings";
 import MinistryMeetingNavigator from "./MinistryMeetings";
 import CartsScheduleNavigator from "./CartsSchedule";
 import AudioVideoNavigator from "./AudioVideo";
-import { PaperProvider, useTheme } from "react-native-paper";
+import { Button, PaperProvider, useTheme } from "react-native-paper";
 import { Context as PreachersContext } from "../contexts/PreachersContext";
 import { Context as AuthContext } from "../contexts/AuthContext";
 import PreachersNavigator from "./Preachers";
@@ -16,10 +16,22 @@ import { meetingsTranslations } from "../screens/Meetings/translations";
 import { ministryMeetingsTranslations } from "../screens/MinistryMeeting/translations";
 import { preachersTranslations } from "../screens/Preachers/translations";
 import { mainTranslations } from "../../localization";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Platform } from "react-native";
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import territories from "../api/territories";
 
 const Tab = createMaterialBottomTabNavigator();
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  });
 
 const MainNavigator = () => {
   const {state, loadPreacherInfo} = useContext(PreachersContext)
@@ -30,18 +42,45 @@ const MainNavigator = () => {
   const preacherTranslate = useLocaLization(preachersTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
 
-  useEffect(() => {
-    loadPreacherInfo(authContext.state.preacherID)
-  }, [])
-
   const [secondaryContainerColor, setSecondaryContainerColor] = useState<string>('#97D7ED40');
-    const settingsContext = useContext(SettingsContext);
-   
-    useEffect(() => {
-      settingsContext.loadColor()
-      StatusBar.setBackgroundColor(settingsContext.state.mainColor)
-      setSecondaryContainerColor(`${settingsContext.state.mainColor}50`)
-    }, [settingsContext.state.mainColor])
+  const settingsContext = useContext(SettingsContext);
+
+  const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
+
+  useEffect(() => {
+    loadPreacherInfo(authContext.state.preacherID);
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    
+    // Listen for incoming notifications
+    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+      // Handle the received notification
+    });
+
+    // Handle notification when app is in foreground
+    const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log('Notification tapped:', response);
+      // Handle the notification response
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    settingsContext.loadColor();
+    StatusBar.setBackgroundColor(settingsContext.state.mainColor);
+    setSecondaryContainerColor(`${settingsContext.state.mainColor}50`);
+  }, [settingsContext.state.mainColor]);
+
+  useEffect(() => {
+    if (expoPushToken) {
+      // Send the token to your backend
+      sendTokenToBackend(expoPushToken, authContext.state?.preacherID!);
+    }
+  }, [expoPushToken]);
 
   const theme = useTheme();
   theme.colors.secondaryContainer = secondaryContainerColor;
@@ -153,5 +192,48 @@ const MainNavigator = () => {
       
   );
 };
+
+async function registerForPushNotificationsAsync() {
+  let token;
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
+
+async function sendTokenToBackend(token: string, preacherId: string) {
+  try {
+    const response = await territories.post('/register-device', {
+      token,
+      preacherId,
+      platform: Platform.OS,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Error sending token to backend:', error);
+  }
+}
 
 export default MainNavigator;

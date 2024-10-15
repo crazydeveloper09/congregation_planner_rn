@@ -68,6 +68,7 @@ const addAudioVideo = (dispatch: Function) => {
       videoOperator: string,
       microphone1Operator: string,
       microphone2Operator: string,
+      meetingDate: Date,
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
@@ -75,7 +76,7 @@ const addAudioVideo = (dispatch: Function) => {
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.post(
           `/meetings/${meetingID}/audioVideo?congregationID=${congregationID}`,
-          { audioOperator, videoOperator, microphone1Operator, microphone2Operator },
+          { audioOperator, videoOperator, microphone1Operator, microphone2Operator, meetingDate },
           {
             headers: {
               Authorization: `bearer ${token}`,

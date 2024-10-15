@@ -166,7 +166,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 <ButtonC 
                     title={attendantTranslate.t("addHeaderText")}
                     isLoading={state.isLoading}
-                    onPress={() => addAttendant(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                    onPress={() => addAttendant(route.params.meeting._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue, route.params.meeting.date)}
                 />
             </View>
         </ScrollView>

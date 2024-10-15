@@ -179,7 +179,7 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
                 <ButtonC 
                     title={audioVideoTranslate.t("addHeaderText")}
                     isLoading={state.isLoading}
-                    onPress={() => addAudioVideo(route.params.meeting._id, audioOperatorValue, videoOperatorValue, microphone1Value, microphone2Value)}
+                    onPress={() => addAudioVideo(route.params.meeting._id, audioOperatorValue, videoOperatorValue, microphone1Value, microphone2Value, route.params.meeting.date)}
                 />
             </View>
         </ScrollView>

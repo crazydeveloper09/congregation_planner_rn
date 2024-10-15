@@ -233,6 +233,7 @@ const addAssignment = (dispatch: Function) => {
     reader: string,
     otherParticipant: string,
     defaultTopic: string,
+    meetingDate: Date,
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
@@ -240,7 +241,7 @@ const addAssignment = (dispatch: Function) => {
       const congregationID = await AsyncStorage.getItem("congregationID");
       const response = await territories.post(
         `/meetings/${meetingID}/assignments?congregationID=${congregationID}`,
-        { topic, type, participant, reader, otherParticipant, defaultTopic },
+        { topic, type, participant, reader, otherParticipant, defaultTopic, meetingDate },
         {
           headers: {
             Authorization: `bearer ${token}`,

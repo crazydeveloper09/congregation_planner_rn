@@ -221,7 +221,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 <ButtonC 
                     title={meetingAssignmentsTranslate.t("addText")}
                     isLoading={state.isLoading}
-                    onPress={() => addAssignment(route.params.meeting._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue)}
+                    onPress={() => addAssignment(route.params.meeting._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue, route.params.meeting.date)}
                 />
             </View>
             

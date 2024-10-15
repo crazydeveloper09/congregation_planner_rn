@@ -2,7 +2,7 @@
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "2.1.1",
+    "version": "2.5.1",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -39,7 +39,7 @@
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 18
+      "versionCode": 19
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -52,7 +52,13 @@
           "calendarPermission": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png"
+        }
+      ]
     ],
     "extra": {
       "eas": {
