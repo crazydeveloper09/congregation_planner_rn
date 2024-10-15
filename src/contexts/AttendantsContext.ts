@@ -4,8 +4,9 @@ import territories from "../api/territories"
 import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message";
-import useLocaLization from "../hooks/useLocalization"
-import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations"
+import useLocaLization from "../hooks/useLocalization";
+import * as Localization from 'expo-localization';
+import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations";
 
 const attendantTranslate = useLocaLization(attendantTranslations)
 
@@ -46,9 +47,10 @@ const addAttendant = (dispatch: Function) => {
       try {
         dispatch({ type: "turn_on_loading" });
         const token = await AsyncStorage.getItem("token");
+        const locale = Localization.getLocales()[0].languageCode!;
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.post(
-          `/meetings/${meetingID}/attendants?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/attendants?congregationID=${congregationID}&locale=${locale}`,
           { hallway1, hallway2, auditorium, parking, meetingDate },
           {
             headers: {
@@ -80,9 +82,10 @@ const addAttendant = (dispatch: Function) => {
       try {
         dispatch({ type: "turn_on_loading" });
         const token = await AsyncStorage.getItem("token");
+        const locale = Localization.getLocales()[0].languageCode!;
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.put(
-          `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}&locale=${locale}`,
           {attendant: { hallway1, hallway2, auditorium, parking }},
           {
             headers: {

@@ -115,7 +115,8 @@ const editMinistryMeeting = (dispatch: Function) => {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
             const congregationID = await AsyncStorage.getItem("congregationID");
-            const response = await territories.put(`/ministryMeetings/${ministryMeetingID}?congregationID=${congregationID}`, {ministryMeeting: {place, lead, date, hour, topic, defaultPlace}}, {
+            const locale = Localization.getLocales()[0].languageCode!;
+            const response = await territories.put(`/ministryMeetings/${ministryMeetingID}?congregationID=${congregationID}&locale=${locale}`, {ministryMeeting: {place, lead, date, hour, topic, defaultPlace}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }

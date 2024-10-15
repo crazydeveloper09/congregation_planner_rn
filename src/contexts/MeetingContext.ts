@@ -166,9 +166,10 @@ const editMeeting = (dispatch: Function) => {
     try {
       dispatch({ type: "turn_on_loading" });
       const token = await AsyncStorage.getItem("token");
+      const locale = Localization.getLocales()[0].languageCode!;
       const congregationID = await AsyncStorage.getItem("congregationID");
       const response = await territories.put(
-        `/meetings/${meetingID}?congregationID=${congregationID}`,
+        `/meetings/${meetingID}?congregationID=${congregationID}&locale=${locale}`,
         {
           meeting: {
             type,
@@ -239,8 +240,9 @@ const addAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_on_loading" });
       const token = await AsyncStorage.getItem("token");
       const congregationID = await AsyncStorage.getItem("congregationID");
+      const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
-        `/meetings/${meetingID}/assignments?congregationID=${congregationID}`,
+        `/meetings/${meetingID}/assignments?congregationID=${congregationID}&locale=${locale}`,
         { topic, type, participant, reader, otherParticipant, defaultTopic, meetingDate },
         {
           headers: {
@@ -275,8 +277,9 @@ const editAssignment = (dispatch: Function) => {
       dispatch({ type: "turn_on_loading" });
       const token = await AsyncStorage.getItem("token");
       const congregationID = await AsyncStorage.getItem("congregationID");
+      const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.put(
-        `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}`,
+        `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}&locale=${locale}`,
         {assignment: { topic, type, participant, reader, otherParticipant, defaultTopic }},
         {
           headers: {

@@ -5,8 +5,9 @@ import { AxiosError } from "axios"
 import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message"
 import { IAudioVideo, IAttendant } from "./interfaces"
-import useLocaLization from "../hooks/useLocalization"
-import { audioVideoTranslations } from "../screens/AudioVideo/translations"
+import useLocaLization from "../hooks/useLocalization";
+import { audioVideoTranslations } from "../screens/AudioVideo/translations";
+import * as Localization from 'expo-localization';
 
 const audioVideoTranslate = useLocaLization(audioVideoTranslations)
 
@@ -74,8 +75,9 @@ const addAudioVideo = (dispatch: Function) => {
         dispatch({ type: "turn_on_loading" });
         const token = await AsyncStorage.getItem("token");
         const congregationID = await AsyncStorage.getItem("congregationID");
+        const locale = Localization.getLocales()[0].languageCode!;
         const response = await territories.post(
-          `/meetings/${meetingID}/audioVideo?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/audioVideo?congregationID=${congregationID}&locale=${locale}`,
           { audioOperator, videoOperator, microphone1Operator, microphone2Operator, meetingDate },
           {
             headers: {
@@ -107,9 +109,10 @@ const addAudioVideo = (dispatch: Function) => {
       try {
         dispatch({ type: "turn_on_loading" });
         const token = await AsyncStorage.getItem("token");
+        const locale = Localization.getLocales()[0].languageCode!;
         const congregationID = await AsyncStorage.getItem("congregationID");
         const response = await territories.put(
-          `/meetings/${meetingID}/audioVideo/${meetingAudioVideoID}?congregationID=${congregationID}`,
+          `/meetings/${meetingID}/audioVideo/${meetingAudioVideoID}?congregationID=${congregationID}&locale=${locale}`,
           {audioVideo: { audioOperator, videoOperator, microphone1Operator, microphone2Operator }},
           {
             headers: {
