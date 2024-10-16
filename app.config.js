@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
@@ -39,8 +39,8 @@
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 21,
-      "googleServicesFile": "./google-services.json"
+      "versionCode": 22,
+      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {
       "favicon": "./assets/favicon.png"
