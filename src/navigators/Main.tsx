@@ -205,7 +205,11 @@ async function registerForPushNotificationsAsync() {
       alert('Failed to get push token for push notification!');
       return;
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
+    if (Constants.appOwnership === 'expo') {
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      token = (await Notifications.getDevicePushTokenAsync()).data;
+    }
 
 
   if (Platform.OS === 'android') {
