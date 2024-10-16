@@ -33,3 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+congregation-planner-firebase-adminsdk-9agxd-594e8a280e.json
+google-services.json
