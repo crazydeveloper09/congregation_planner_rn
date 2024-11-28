@@ -12,7 +12,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../Meetings/components/Meeting";
 import Label from "../../commonComponents/Label";
 import Attendant from "./components/Attendant";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
 import { months } from "../../../defaultData";
 import useLocaLization from "../../hooks/useLocalization";
 import { audioVideoTranslations } from "./translations";
@@ -52,7 +52,7 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     const { state, editAudioVideo } = useContext(AudioVideoContext);
     const meetingContext = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
-
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -88,6 +88,21 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
         .catch((err) => console.log(err))
     }
 
+    const styles = StyleSheet.create({
+        container: {
+            padding: 15
+        },
+        meeting: {
+            fontSize: 21,
+            fontFamily: 'PoppinsSemiBold'
+        },
+        switch: {
+            alignSelf: 'flex-start',  
+            transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }],
+            marginVertical: 8
+        },
+    })
+
     useEffect(() => {
         loadPreachers()
         setVideoOperatorValue(route.params.audioVideo.videoOperator?._id!)
@@ -104,10 +119,10 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
-            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
+            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{attendantTranslate.t("sectionText")}</Text>
             <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
 
             <Label text={audioVideoTranslate.t("videoOperatorLabel")} />
@@ -117,8 +132,9 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                 open={videoOperatorOpen}
                 setOpen={setVideoOperatorOpen}
                 items={videoOperatorItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={audioVideoTranslate.t("videoOperatorLabel")}
                 placeholder={audioVideoTranslate.t("videoOperatorPlaceholder")}
@@ -139,8 +155,9 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                     open={audioOperatorOpen}
                     setOpen={setAudioOperatorOpen}
                     items={audioOperatorItems}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={audioVideoTranslate.t("audioOperatorLabel")}
                     placeholder={audioVideoTranslate.t("audioOperatorPlaceholder")}
@@ -153,8 +170,9 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                 open={microphone1Open}
                 setOpen={setMicrophone1Open}
                 items={microphone1Items}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={audioVideoTranslate.t("mic1Label")}
                 placeholder={audioVideoTranslate.t("mic1Placeholder")}
@@ -177,8 +195,9 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
                     containerStyle={{
                         marginVertical: 10
                     }}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={audioVideoTranslate.t("mic2Label")}
                     placeholder={audioVideoTranslate.t("mic2Placeholder")}
@@ -195,20 +214,5 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 15
-    },
-    meeting: {
-        fontSize: 21,
-        fontFamily: 'PoppinsSemiBold'
-    },
-    switch: {
-        alignSelf: 'flex-start',  
-        transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
-        marginVertical: 8
-    },
-})
 
 export default AudioVideoEditScreen;

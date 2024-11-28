@@ -10,6 +10,7 @@ import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { audioVideoTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface AudioVideoDeleteConfirmScreenProps { 
     navigation: NavigationProp<any>
@@ -25,12 +26,13 @@ const AudioVideoDeleteConfirmScreen: React.FC<AudioVideoDeleteConfirmScreenProps
     const { state, deleteAudioVideo } = useContext(AudioVideoContext);
     const audioVideoTranslate = useLocaLization(audioVideoTranslations);
     const mainTranslate = useLocaLization(mainTranslations)
+    const settingsContext = useContext(SettingsContext);
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
             
                 <View>
-                    <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     <IconDescriptionValue 
                         iconName="laptop"
                         description={audioVideoTranslate.t("videoOperatorLabel")}
@@ -57,7 +59,7 @@ const AudioVideoDeleteConfirmScreen: React.FC<AudioVideoDeleteConfirmScreenProps
                 
             
             </ListItem>
-            <Text style={styles.text}>{audioVideoTranslate.t("deleteConfirmText")}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{audioVideoTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteAudioVideo(route.params.meeting._id, route.params.audioVideo._id)} isLoading={state.isLoading} color="#AD371F" />

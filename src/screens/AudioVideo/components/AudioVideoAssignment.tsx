@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { IAudioVideo, IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -8,6 +8,7 @@ import useLocaLization from "../../../hooks/useLocalization";
 import { audioVideoTranslations } from "../translations";
 import { mainTranslations } from "../../../../localization";
 import { meetingsTranslations } from "../../Meetings/translations";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface AudioVideoAssignmentProps {
   assignment: IAudioVideo;
@@ -21,11 +22,12 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
   const audioVideoTranslate = useLocaLization(audioVideoTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
+  const settingsContext = useContext(SettingsContext);
   return (
     <View>
       {preacher && preacher._id === assignment.videoOperator?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("videoOperatorLabel")}
           </Text>
@@ -45,7 +47,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.audioOperator?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("audioOperatorLabel")}
           </Text>
@@ -65,7 +67,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.microphone1Operator?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("mic1Label")}
           </Text>
@@ -85,7 +87,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.microphone2Operator?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {audioVideoTranslate.t("mic2Label")}
           </Text>

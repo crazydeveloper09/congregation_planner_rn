@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
-import { MinistryMeeting as IMinistryMeeting} from "./data.mock";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -8,7 +7,6 @@ import MinistryMeeting from "./components/MinistryMeeting";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../contexts/AuthContext";
-
 import Loading from "../../commonComponents/Loading";
 import NotFound from "../../commonComponents/NotFound";
 import { NavigationProp } from "@react-navigation/native";
@@ -19,6 +17,7 @@ import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { IMinistryMeeting } from "../../contexts/interfaces";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>

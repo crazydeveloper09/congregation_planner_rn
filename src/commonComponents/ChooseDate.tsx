@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import Label from "./Label";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface ChooseDateProps {
     date: Date;
@@ -13,11 +14,12 @@ interface ChooseDateProps {
 }
 
 const ChooseDate: React.FC<ChooseDateProps> = (props) => {
+    const settingsContext = useContext(SettingsContext);
     return (
         <View>
             <Label text={props.label} />
             <Pressable onPress={() => props.setDateOpen(true)} style={styles.inputContainer}>
-                <Text>
+                <Text style={{ fontSize: 16 + settingsContext.state.fontIncrement }}>
                     {props.mode === "datetime" ? props.date.toLocaleString() : props.date.toLocaleDateString()} 
                 </Text>
             </Pressable>

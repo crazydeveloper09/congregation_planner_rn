@@ -9,7 +9,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
 import MyInput from "../../commonComponents/MyInput";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import Label from "../../commonComponents/Label";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryGroupsTranslations } from "./translations";
@@ -25,7 +26,6 @@ interface MinistryGroupNewScreenProps {
 const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }) => {
     const ministryGroup = useContext(MinistryGroupContext);
     const preachers = useContext(PreachersContext);
-
     const [name, setName] = useState('')
     const [preachersValue, setPreachersValue] = useState([]);
     const [preachersOpen, setPreachersOpen] = useState(false);
@@ -33,6 +33,8 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
     const [overseerOpen, setOverseerOpen] = useState(false);
     const [overseerValue, setOverseerValue] = useState(null);
     const [overseerItems, setOverseerItems] = useState([]);
+    const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
@@ -85,8 +87,9 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                 searchable={true}
                 listMode="MODAL"
                 placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
             />
 
             {!preachersOpen && <>
@@ -97,8 +100,9 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }
                     items={overseerItems}
                     setOpen={setOverseerOpen}
                     setValue={setOverseerValue}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     searchable={true}
                     listMode="MODAL"
                     containerStyle={{

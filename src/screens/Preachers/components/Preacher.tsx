@@ -9,15 +9,19 @@ import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
 import { preachersTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { Context as AuthContext } from "../../../contexts/AuthContext";
+import Label from "../../../commonComponents/Label";
 
 interface PreacherProps {
     preacher: IPreacher;
+    displayAdditionalInfo?: boolean;
 }
 
-const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
+const Preacher: React.FC<PreacherProps> = ({ preacher, displayAdditionalInfo = true }) => {
     const navigation = useNavigation();
     const preacherTranslate = useLocaLization(preachersTranslations);
-    const settingsContext = useContext(SettingsContext)
+    const settingsContext = useContext(SettingsContext);
+    const authContext = useContext(AuthContext)
 
     const onShare = async (preacher: IPreacher) => {
 
@@ -46,37 +50,45 @@ const Preacher: React.FC<PreacherProps> = ({ preacher }) => {
 
 
     return (
-        <View style={[styles.container, { borderColor: settingsContext.state.mainColor }]}>
+        <View style={[styles.container, { borderColor: settingsContext.state.mainColor }, !displayAdditionalInfo && { flex: 1, alignItems: 'center' }]}>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>{preacher.name}</Text>
-                <View style={styles.iconContainer}>
+                <Text style={[styles.title, { fontSize: 19 + settingsContext.state.fontIncrement }]}>{preacher.name}</Text>
+                {authContext.state.whoIsLoggedIn === "admin" && <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('EditPreacher', {preacher} as unknown as never)}>
-                        <MaterialCommunityIcons name='pencil' color={settingsContext.state.mainColor} size={22} />
+                        <MaterialCommunityIcons name='pencil' color={settingsContext.state.mainColor} size={22 + settingsContext.state.fontIncrement} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('DeleteConfirmPreacher', {id: preacher._id} as unknown as never)}>
-                        <MaterialCommunityIcons name='trash-can' color={settingsContext.state.mainColor} size={22} />
+                        <MaterialCommunityIcons name='trash-can' color={settingsContext.state.mainColor} size={22 + settingsContext.state.fontIncrement} />
                     </TouchableOpacity>
-                </View>
+                </View>}
                 
             </View>
-            <FlatList
-                data={preacher.roles}
-                renderItem={({ item }) => <Text style={{ marginBottom: 10 }}>• {preacherTranslate.t(item)}</Text>}
-                scrollEnabled={false}
-            />
-            <View style={{ flexDirection: 'row', gap: 8 }}>
-                { preacher?.link && (
-                    <IconLink 
-                        onPress={() => onShare(preacher)}
-                        iconName="share-variant"
-                        description={preacherTranslate.t("shareButtonLabel")}
-                        isCentered={true}
+            { authContext.state.whoIsLoggedIn === "admin" && displayAdditionalInfo && <>
+                <FlatList
+                    data={preacher.roles}
+                    renderItem={({ item }) => <Text style={{ marginBottom: 10, fontSize: 15 + settingsContext.state.fontIncrement }}>• {preacherTranslate.t(item)}</Text>}
+                    scrollEnabled={false}
+                />
+                {preacher.privileges?.length > 0 && <>
+                    <Label text={preacherTranslate.t('privilegesLabel')} />
+                    <FlatList
+                        data={preacher.privileges}
+                        renderItem={({ item }) => <Text style={{ marginBottom: 10, fontSize: 15 + settingsContext.state.fontIncrement }}>• {preacherTranslate.t(item)}</Text>}
+                        scrollEnabled={false}
                     />
-                )}
-            
-            </View>
-            
-           
+                </>}
+                <View style={{ flexDirection: 'row', gap: 8 }}>
+                    { preacher?.link && (
+                        <IconLink 
+                            onPress={() => onShare(preacher)}
+                            iconName="share-variant"
+                            description={preacherTranslate.t("shareButtonLabel")}
+                            isCentered={true}
+                        />
+                    )}
+                
+                </View>
+            </> }
         </View>
     )
 }

@@ -5,10 +5,32 @@ import { ScrollView } from "react-native-gesture-handler";
 import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
-import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 const PoliciesEnScreen: React.FC = () => {
     const settingsContext = useContext(SettingsContext);
+
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: "#ece9e9",
+            padding: 15,
+            flex: 1
+        },
+        sectionHeader: {
+            fontSize: 23 + settingsContext.state.fontIncrement,
+            fontFamily: 'PoppinsSemiBold'
+        },
+        listHeader: {
+            fontSize: 19 + settingsContext.state.fontIncrement,
+            fontFamily: 'MontserratSemiBold'
+        },
+        listElement: {
+            fontSize: 16 + settingsContext.state.fontIncrement,
+            fontFamily: 'MontserratRegular',
+            flexShrink: 1
+        }
+    })
+
     return (
         <ScrollView style={styles.container}>
             <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Privacy policy</Text>
@@ -293,26 +315,5 @@ The detailed scope of processed data is available in the Privacy Policy.
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#ece9e9",
-        padding: 15,
-        flex: 1
-    },
-    sectionHeader: {
-        fontSize: 23,
-        fontFamily: 'PoppinsSemiBold'
-    },
-    listHeader: {
-        fontSize: 19,
-        fontFamily: 'MontserratSemiBold'
-    },
-    listElement: {
-        fontSize: 16,
-        fontFamily: 'MontserratRegular',
-        flexShrink: 1
-    }
-})
 
 export default PoliciesEnScreen;

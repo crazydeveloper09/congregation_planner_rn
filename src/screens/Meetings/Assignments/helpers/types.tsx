@@ -1,19 +1,16 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ReactElement } from "react";
-import useLocaLization from "../../../../hooks/useLocalization";
-import { meetingAssignmentTranslations } from "../translations";
 
-export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontColor: string} => {
+export const chooseFontColorAndIcon = (type: string, fontIncrement: number): {icon: ReactElement, fontColor: string} => {
     let fontColor: string;
     let icon: ReactElement;
-    const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations)
     switch (type) {
         case "Studium Strażnicy":
         case "Watchtower Study": {
           fontColor = "#588D3F";
           icon = <MaterialCommunityIcons
               name="book-open-blank-variant"
-              size={21}
+              size={21 + fontIncrement}
               color={"white"}
             />;
           break;
@@ -24,7 +21,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           icon = (
             <MaterialCommunityIcons
               name="book-education"
-              size={21}
+              size={21 + fontIncrement}
               color={"white"}
             />
           );
@@ -36,7 +33,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           icon = (
             <MaterialCommunityIcons
               name="diamond-stone"
-              size={21}
+              size={21 + fontIncrement}
               color={"white"}
             />
           );
@@ -48,7 +45,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
           icon = (
             <MaterialCommunityIcons
               name="briefcase-upload"
-              size={21}
+              size={21 + fontIncrement}
               color={"white"}
             />
           );
@@ -57,7 +54,7 @@ export const chooseFontColorAndIcon = (type: string): {icon: ReactElement, fontC
         case "Chrześcijański tryb życia":
         case "Living As Christians": {
           fontColor = "#942926";
-          icon = <MaterialCommunityIcons name="sheep" size={21} color={"white"} />;
+          icon = <MaterialCommunityIcons name="sheep" size={21 + fontIncrement} color={"white"} />;
           break;
         }
         default: {

@@ -86,7 +86,7 @@ const MainNavigator = () => {
   theme.colors.secondaryContainer = secondaryContainerColor;
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <Tab.Navigator
         initialRouteName="Meetings"
         barStyle={{ backgroundColor: `${settingsContext.state.mainColor}15` }}
@@ -137,6 +137,7 @@ const MainNavigator = () => {
                 size={26}
               />
             ),
+            
           }} //view-split-horizontal
         /> }
         {((state.preacher && state.preacher.roles?.includes('can_see_audio_video')) || authContext.state.whoIsLoggedIn === "admin") && <Tab.Screen
@@ -153,22 +154,6 @@ const MainNavigator = () => {
             ),
           }}
         /> }
-
-        {authContext.state.whoIsLoggedIn === "admin" && <Tab.Screen
-          name="Preachers"
-          component={PreachersNavigator}
-          options={{
-            tabBarLabel: preacherTranslate.t("sectionText"),
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                name="account-group"
-                color={color}
-                size={26}
-              />
-            ),
-          }}
-        /> }
-        
         
         <Tab.Screen
           name="Settings Navigator"
@@ -182,6 +167,7 @@ const MainNavigator = () => {
                 size={26}
               />
             ),
+            
           }}
         />
       </Tab.Navigator>

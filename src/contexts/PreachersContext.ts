@@ -139,11 +139,11 @@ const generateLink = (dispatch: Function) => {
 }
 
 const addPreacher = (dispatch: Function) => {
-    return async (name: string, roles: string[]) => {
+    return async (name: string, roles: string[], privileges: string[]) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
-            const response = await territories.post('/preachers', {name, roles}, {
+            const response = await territories.post('/preachers', {name, roles, privileges}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }
@@ -161,11 +161,11 @@ const addPreacher = (dispatch: Function) => {
 }
 
 const editPreacher = (dispatch: Function) => {
-    return async (name: string, preacherID: string, roles: string[]) => {
+    return async (name: string, preacherID: string, roles: string[], privileges: string[]) => {
         try {
             dispatch({ type: 'turn_on_loading' })
             const token = await AsyncStorage.getItem('token');
-            const response = await territories.put(`/preachers/${preacherID}`, {preacher: {name, roles}}, {
+            const response = await territories.put(`/preachers/${preacherID}`, {preacher: {name, roles, privileges}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
                 }

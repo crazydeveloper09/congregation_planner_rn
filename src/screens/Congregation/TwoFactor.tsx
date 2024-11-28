@@ -16,7 +16,7 @@ const CongregationsTwoFactorScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor }]}>{i18n.t('twoFactorHeading')}</Text>
+            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{i18n.t('twoFactorHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             <MyInput 

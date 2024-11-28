@@ -74,7 +74,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
                 onValueChange={(value) => {
                     setIsNotFullHour(value)
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
                 color={settingsContext.state.mainColor}
             />
             {isNotFullHour && <>

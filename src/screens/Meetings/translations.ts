@@ -42,7 +42,7 @@ export const meetingsTranslations = {
         kingdomHallText: "Sala Królestwa",
         deleteConfirmHeaderText: "Potwierdź usunięcie zebrania",
         leadOrPrayer: "Prowadzący lub modlitwa",
-        taskOrReading: "Zadania lub lektorowanie"
+        taskOrReading: "Zadania lub lektorowanie",
     },
     en: {
         sectionText: "Meetings",

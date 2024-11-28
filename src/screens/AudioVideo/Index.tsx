@@ -95,7 +95,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
 
         {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
         {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
-          {state?.meetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntrytext")} /> : <>
+          {state?.meetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntryText")} /> : <>
           <FlatList
             keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}
@@ -108,14 +108,14 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
               />}
           </>}
         </View>: <View style={styles.container}>
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>Audio-video</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 19 + settingsContext.state.fontIncrement }]}>Audio-video</Text>
           {audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(audioVideo) => audioVideo._id}
               data={audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date")}
               renderItem={({ item }) => <AudioVideoAssignment assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{attendantTranslate.t("sectionText")}</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 19 + settingsContext.state.fontIncrement }]}>{attendantTranslate.t("sectionText")}</Text>
           {audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
             keyExtractor={(ordinal) => ordinal._id}
               data={audioVideoContext.state.ordinals?.filter((attendant) => new Date(attendant.meeting?.date).toString() !== "Invalid Date")}

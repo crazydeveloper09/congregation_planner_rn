@@ -18,9 +18,9 @@ const TopMenu: React.FC<TopMenuProps> = ({ state, data, updateState }) => {
         <>
           <TouchableOpacity onPress={() => updateState(item)} style={{ marginRight: 10 }}>
             {state === item ? (
-              <Text style={[styles.activeItem, { color: settingsContext.state.mainColor}]}>{item}</Text>
+              <Text style={[styles.activeItem, { color: settingsContext.state.mainColor, fontSize: 18 + settingsContext.state.fontIncrement}]}>{item}</Text>
             ) : (
-              <Text style={styles.item}>{item}</Text>
+              <Text style={[styles.item, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{item}</Text>
             )}
           </TouchableOpacity>
           { index !== data.length - 1 && <Divider orientation="vertical" color="black" />}

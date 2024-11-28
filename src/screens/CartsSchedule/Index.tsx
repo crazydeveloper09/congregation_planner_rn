@@ -141,8 +141,8 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === mainTranslate.t("all") && <View style={[styles.titleContainer, { backgroundColor: settingsContext.state.mainColor}]}>
             <>
-              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 }]}>{startDate}</Text>
-              {state.cartDay && <Text style={[styles.place, { color: 'white' }]}>{state.cartDay?.place}</Text>}
+              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 + settingsContext.state.fontIncrement }]}>{startDate}</Text>
+              {state.cartDay && <Text style={[styles.place, { color: 'white', fontSize: 17 + settingsContext.state.fontIncrement }]}>{state.cartDay?.place}</Text>}
             </>
             
         </View>}
@@ -163,6 +163,12 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               nextTitle={cartScheduleTranslate.t("next")}
               selectedStartDate={selectedStartDate}
               onDateChange={onDateChange}
+              nextTitleStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
+              previousTitleStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
+              monthTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
+              yearTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
+              selectedDayTextStyle={{ fontSize: 12 + settingsContext.state.fontIncrement }}
+              textStyle={{ fontSize: 12 + settingsContext.state.fontIncrement }}
             />
             <View style={styles.resultContainer}>
               {Boolean(state.cartDay) ? (
@@ -195,7 +201,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
                 keyExtractor={(hour) => hour._id}
                 data={state.cartHours}
                 renderItem={({ item }) => <>
-                  <Text style={styles.myDate}>{item.cartDay.date} - {item.timeDescription} - {item.cartDay.place}</Text>
+                  <Text style={[styles.myDate, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{item.cartDay.date} - {item.timeDescription} - {item.cartDay.place}</Text>
                   <IconLink 
                         onPress={() => addCartAssignmentToCalendar(item.cartDay.date, item.timeDescription, item.cartDay.place)}
                         iconName="calendar-month-outline"

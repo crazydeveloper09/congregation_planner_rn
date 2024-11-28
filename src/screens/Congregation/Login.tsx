@@ -26,7 +26,7 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
 
     return (
         <View style={styles.container}>
-            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor }]}>{i18n.t('loginHeading')}</Text>
+            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{i18n.t('loginHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             {route.params.type === "admin" ? <>

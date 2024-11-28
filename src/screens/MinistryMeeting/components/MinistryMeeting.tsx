@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { IMinistryMeeting } from "../../../contexts/interfaces";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { ListItem } from "@rneui/themed";
 import { addMinistryMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
@@ -22,7 +23,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
     const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"))
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
-    
+    const settingsContext = useContext(SettingsContext);
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
     const mainTranslate = useLocaLization(mainTranslations)
 
@@ -37,7 +38,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                     <>
                     
                     <ListItem.Content>
-                        <ListItem.Title style={styles.date}>
+                        <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>
                             {new Date(meeting.date).toLocaleString('pl-PL', { 
                                 year: 'numeric', 
                                 month: '2-digit', 

@@ -10,7 +10,7 @@ import territories from "../../api/territories";
 import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
 import { months } from "../../../defaultData";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
@@ -57,6 +57,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
     const { state, editMeeting } = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -139,8 +140,9 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 open={typeOpen}
                 setOpen={setTypeOpen}
                 items={typeItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingTranslate.t("typeLabel")}
                 placeholder={meetingTranslate.t("typePlaceholder")}
@@ -152,8 +154,9 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 open={cleaningGroupOpen}
                 setOpen={setCleaningGroupOpen}
                 items={cleaningGroupItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingTranslate.t("cleaningGroupLabel")}
                 placeholder={meetingTranslate.t("cleaningGroupPlaceholder")}
@@ -172,8 +175,9 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 open={leadOpen}
                 setOpen={setLeadOpen}
                 items={leadItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingTranslate.t("leadLabel")}
                 placeholder={meetingTranslate.t("leadPlaceholder")}
@@ -185,8 +189,9 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 open={beginPrayerOpen}
                 setOpen={setBeginPrayerOpen}
                 items={beginPrayerItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingTranslate.t("beginPrayerLabel")}
                 placeholder={meetingTranslate.t("beginPrayerPlaceholder")}
@@ -210,8 +215,9 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                 open={endPrayerOpen}
                 setOpen={setEndPrayerOpen}
                 items={endPrayerItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingTranslate.t("endPrayerLabel")}
                 placeholder={meetingTranslate.t("endPrayerPlaceholder")}
@@ -220,7 +226,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             <Switch  
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }] }}
                 color={settingsContext.state.mainColor}
             />
             {isOtherEndPrayer && <>

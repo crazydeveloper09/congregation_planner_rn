@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet, Platform } from "react-native";
-import { IconProps } from "react-native-vector-icons/Icon";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface IconDescriptionValueProps {
   iconName: string;
@@ -14,9 +14,10 @@ const IconDescriptionValue: React.FC<IconDescriptionValueProps> = ({
   description,
   value,
 }) => {
+  const settingsContext = useContext(SettingsContext);
   return (
-    <Text style={styles.text}>
-      <MaterialCommunityIcons name={iconName} size={20} />
+    <Text style={[styles.text, { fontSize: 16 + settingsContext.state.fontIncrement }]}>
+      <MaterialCommunityIcons name={iconName} size={20 + settingsContext.state.fontIncrement} />
       <Text> </Text>
       {description && <Text>{description}: </Text>}
       <Text style={styles.textBold}>{value}</Text>

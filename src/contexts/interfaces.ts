@@ -19,7 +19,9 @@ export interface IPreacher {
     name: string;
     congregation: ICongregation,
     link: string,
-    roles: string[]
+    roles: string[],
+    pushTokens: string[],
+    privileges: string[],
 }
 
 export interface ICongregation {

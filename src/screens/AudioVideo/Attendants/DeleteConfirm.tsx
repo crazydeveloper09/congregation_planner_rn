@@ -9,6 +9,7 @@ import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue
 import useLocaLization from "../../../hooks/useLocalization";
 import { attendantTranslations } from "./translations";
 import { mainTranslations } from "../../../../localization";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface AttendantDeleteConfirmScreenProps { 
     navigation: NavigationProp<any>
@@ -22,6 +23,7 @@ interface AttendantDeleteConfirmScreenProps {
 
 const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const { state, deleteAttendant } = useContext(AttendantContext)
+    const settingsContext = useContext(SettingsContext);
     const attendantTranslate = useLocaLization(attendantTranslations)
     const mainTranslate = useLocaLization(mainTranslations)
     return (
@@ -29,7 +31,7 @@ const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> 
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
             
                 <View>
-                    <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     <IconDescriptionValue 
                         iconName="account-supervisor"
                         description={attendantTranslate.t("hallwayLabel")}
@@ -57,7 +59,7 @@ const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> 
             
             </ListItem>
 
-            <Text style={styles.text}>{attendantTranslate.t("deleteConfirmText")}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{attendantTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteAttendant(route.params.meeting._id, route.params.attendant._id)} isLoading={state.isLoading} color="#AD371F" />

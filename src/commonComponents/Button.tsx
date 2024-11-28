@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from "react";
-import { Text } from "react-native";
-import { GestureResponderEvent, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import React, { useContext } from "react";
+import { StyleSheet } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Button } from "@rneui/base";
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
   isLoading?: boolean;
   color?: string;
+  fontColor?: string;
 }
 
 const ButtonC: React.FC<ButtonProps> = ({
@@ -16,23 +16,20 @@ const ButtonC: React.FC<ButtonProps> = ({
   onPress,
   isLoading,
   color,
+  fontColor
 }) => {
   const settingsContext = useContext(SettingsContext);
   // #AD1F1F
   return (
-    <Button
-      mode={"contained"}
-      textColor={"white"}
-      buttonColor={
-        color || settingsContext.state.mainColor
-      }
-      labelStyle={{ fontSize: 18 }}
-      style={[styles.button, { borderColor: color || "black" }]}
-      onPress={onPress}
-      loading={isLoading}
-    >
-      <Text>{title}</Text>
-    </Button>
+    <>
+      <Button 
+        title={title} 
+        buttonStyle={[styles.button, { backgroundColor: color || settingsContext.state.mainColor }]} 
+        titleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement, color: fontColor || 'white', }} 
+        onPress={onPress}
+        loading={isLoading}
+      />
+    </>
   );
 };
 
@@ -40,7 +37,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     borderRadius: 6,
-    paddingVertical: 4,
+    paddingVertical: 12,
   },
 });
 

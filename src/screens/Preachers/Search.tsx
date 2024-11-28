@@ -6,7 +6,7 @@ import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import Loading from "../../commonComponents/Loading";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "./components/Preacher";
-import Pagination from "../../commonComponents/Pagination";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { columnsNum } from "../../helpers/devices";
 import useLocaLization from "../../hooks/useLocalization";
 import { preachersTranslations } from "./translations";
@@ -16,6 +16,7 @@ const PreachersSearchScreen: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const { searchPreacher, state } = useContext(PreachersContext);
   const preacherTranslate = useLocaLization(preachersTranslations);
+  const settingsContext = useContext(SettingsContext);
 
   
   if(state.errMessage){
@@ -41,19 +42,19 @@ const PreachersSearchScreen: React.FC = () => {
 
       {!submitted ? (
         <View style={styles.noParamContainer}>
-          <FontAwesome name="search" size={45} sty />
-          <Text style={styles.noParamText}>{preacherTranslate.t("searchPlaceholderText")}</Text>
+          <FontAwesome name="search" size={45 + settingsContext.state.fontIncrement} sty />
+          <Text style={[styles.noParamText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{preacherTranslate.t("searchPlaceholderText")}</Text>
         </View>
       ) : state.isLoading ? (
         <Loading />
       ) : state.searchResults?.length === 0 ? (
         <View style={styles.noParamContainer}>
-            <Entypo name="emoji-sad" size={45} />
-          <Text style={styles.noParamText}>{preacherTranslate.t("noEntryFoundText")}</Text>
+            <Entypo name="emoji-sad" size={45 + settingsContext.state.fontIncrement} />
+          <Text style={[styles.noParamText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{preacherTranslate.t("noEntryFoundText")}</Text>
         </View>
       ) : (
         <View style={styles.resultsContainer}>
-          <Text style={styles.resultsText}>
+          <Text style={[styles.resultsText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
           {preacherTranslate.t("resultsLabelText")}: {state.searchResults?.length}
           </Text>
           <FlatList

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
-import { Input } from "react-native-elements";
 import ButtonC from "../../../commonComponents/Button";
 import { ICartDay } from "../../../contexts/interfaces";
 import MyInput from "../../../commonComponents/MyInput";

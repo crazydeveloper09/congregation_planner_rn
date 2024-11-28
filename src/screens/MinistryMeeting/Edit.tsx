@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
-import { Input } from "@rneui/base";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../commonComponents/Button";
-import Loading from "../../commonComponents/Loading";
 import territories from "../../api/territories";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMinistryMeeting, IPreacher } from "../../contexts/interfaces";
@@ -16,7 +13,7 @@ import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
 import { months } from "../../../defaultData";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
@@ -50,8 +47,8 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [leadItems, setLeadItems] = useState([]);
     const [isTopic, setIsTopic] = useState<boolean>(false);
     const [topic, setTopic] = useState<string>('')
-    const preachersContext = useContext(PreachersContext)
     const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -103,8 +100,9 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                     open={defaultPlaceOpen}
                     setOpen={setDefaultPlaceOpen}
                     items={defaultPlaceItems}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={ministryMeetingTranslate.t("defaultPlaceLabel")}
                     placeholder={ministryMeetingTranslate.t("defaultPlacePlaceholder")}
@@ -122,8 +120,9 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 open={leadOpen}
                 setOpen={setLeadOpen}
                 items={leadItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={ministryMeetingTranslate.t("leadLabel")}
                 placeholder={ministryMeetingTranslate.t("leadPlaceholder")}
@@ -132,7 +131,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
             <Switch  
                 value={isTopic}
                 onValueChange={(value) => setIsTopic(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 15 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 15 }}
                 color={settingsContext.state.mainColor}
             />
             {isTopic && <>

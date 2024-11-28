@@ -6,6 +6,7 @@ import MeetingAssignment from "./MeetingAssignment";
 import { IMeeting, IMeetingAssignment } from "../../../contexts/interfaces";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { useNavigation } from "@react-navigation/native";
 import { addMeetingAssignmentToCalendar } from "../helpers/calendar";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
@@ -28,6 +29,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const settingsContext = useContext(SettingsContext);
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const meetingTranslate = useLocaLization(meetingsTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
@@ -37,7 +39,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
           <>
             {state.preacher?._id === meeting.lead?._id && (
                 <View>
-                    <Text style={styles.title}>
+                    <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
                         {new Date(meeting?.date).toLocaleString('pl-PL', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -59,7 +61,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             )}
             {state.preacher?._id === meeting.beginPrayer?._id && (
                 <View>
-                    <Text style={styles.title}>
+                    <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
                         {new Date(meeting?.date).toLocaleString('pl-PL', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -80,7 +82,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             )}
             {state.preacher?._id === meeting.endPrayer?._id && (
                 <View>
-                    <Text style={styles.title}>
+                    <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
                         {new Date(meeting?.date).toLocaleString('pl-PL', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -112,7 +114,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleString('pl-PL', {
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(meeting.date).toLocaleString('pl-PL', {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',

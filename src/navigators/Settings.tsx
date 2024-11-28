@@ -1,12 +1,15 @@
 import React, { useContext, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar, StyleSheet } from "react-native";
-import SettingsScreen from "../screens/Settings";
-import PoliciesScreen from "../screens/Policies";
+import SettingsScreen from "../screens/Settings/Index";
+import PoliciesScreen from "../screens/Settings/Policies";
 import useLocaLization from "../hooks/useLocalization";
 import { mainTranslations } from "../../localization";
-import PoliciesEnScreen from "../screens/PoliciesEn";
+import PoliciesEnScreen from "../screens/Settings/PoliciesEn";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import PreachersNavigator from "./Preachers";
+import AuthNavigator from "./Auth";
+import CongregationsNavigator from "./CongregationNavigator";
 
 const Stack = createStackNavigator()
 
@@ -33,6 +36,8 @@ const SettingsNavigator = () => {
                 component={PoliciesEnScreen} 
                 options={{ headerTitle: 'Privacy policy and GPDR' }}
             />  
+            <Stack.Screen name="Preachers" component={PreachersNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="Cong" component={CongregationsNavigator} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

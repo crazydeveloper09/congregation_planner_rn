@@ -11,7 +11,7 @@ import { Input } from "react-native-elements";
 import { Switch } from "@rneui/base";
 import Label from "../../../commonComponents/Label";
 import MyInput from "../../../commonComponents/MyInput";
-import { defaultStyles } from "../../defaultStyles";
+import { defaultDropdownStyles } from "../../defaultStyles";
 import useLocaLization from "../../../hooks/useLocalization";
 import { cartScheduleTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
@@ -44,6 +44,8 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
   const {state} = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
   const settingsContext = useContext(SettingsContext);
+  const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+
 
   useEffect(() => {
 
@@ -60,9 +62,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{hour?.timeDescription}</Text>
+        <Text style={[styles.title, { fontSize: 23 + settingsContext.state.fontIncrement }]}>{hour?.timeDescription}</Text>
         {((state.preacher && state.preacher.roles?.includes("can_edit_cartSchedule") || state.preacher?.roles?.includes("can_self-assign_cartHour")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
-        {editMode ? <MaterialCommunityIcons name="eye-outline" size={23} /> : <MaterialCommunityIcons name="pencil" size={23} />}
+        {editMode ? <MaterialCommunityIcons name="eye-outline" size={23 + settingsContext.state.fontIncrement} /> : <MaterialCommunityIcons name="pencil" size={23 + settingsContext.state.fontIncrement} />}
         </TouchableOpacity>}
       
       </View>
@@ -78,8 +80,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 containerStyle={{
                   marginVertical: 10
                 }}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 modalTitle={cartScheduleTranslate.t("choosePreacher1Label", { timeDescription: hour?.timeDescription })}
                 placeholder={cartScheduleTranslate.t("choosePreacher1Placeholder")}
             />}
@@ -87,7 +90,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
             <Switch  
                 value={isOtherPreacher1}
                 onValueChange={(value) => setIsOtherPreacher1(value)}
-                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
                 color={settingsContext.state.mainColor}
             />
 
@@ -106,8 +109,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 open={preacher2Open}
                 setOpen={setPreacher2Open}
                 items={preacher2Items}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 searchable
                 containerStyle={{
@@ -120,7 +124,7 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
             <Switch  
                 value={isOtherPreacher2}
                 onValueChange={(value) => setIsOtherPreacher2(value)}
-                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
                 color={settingsContext.state.mainColor}
             />
             {isOtherPreacher2 && <>
@@ -142,9 +146,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
             />
       </> : <>
         
-        <Text style={[styles.preacher, !(hour?.preacher1?.name || hour.otherPreacher1) && { color: settingsContext.state.mainColor }]}>{hour?.preacher1?.name || hour.otherPreacher1 || cartScheduleTranslate.t("freeSpot")}</Text>
+        <Text style={[styles.preacher, !(hour?.preacher1?.name || hour.otherPreacher1) && { color: settingsContext.state.mainColor }, {fontSize: 18 + settingsContext.state.fontIncrement}]}>{hour?.preacher1?.name || hour.otherPreacher1 || cartScheduleTranslate.t("freeSpot")}</Text>
     
-        <Text style={[styles.preacher, !(hour?.preacher2?.name || hour.otherPreacher2) && { color: settingsContext.state.mainColor }]}>{hour?.preacher2?.name || hour.otherPreacher2 || cartScheduleTranslate.t("freeSpot")}</Text>
+        <Text style={[styles.preacher, !(hour?.preacher2?.name || hour.otherPreacher2) && { color: settingsContext.state.mainColor }, {fontSize: 18 + settingsContext.state.fontIncrement}]}>{hour?.preacher2?.name || hour.otherPreacher2 || cartScheduleTranslate.t("freeSpot")}</Text>
       </>}
       
     </View>

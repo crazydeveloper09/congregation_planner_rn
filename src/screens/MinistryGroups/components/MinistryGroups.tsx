@@ -11,6 +11,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../commonComponents/Loading";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { Context as AuthContext } from "../../../contexts/AuthContext";
 
 interface MinistryGroupsProps {
   congregationID: string;
@@ -20,6 +21,7 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
   const { state, loadMinistryGroups, deleteMinistryGroup } = useContext(MinistryGroupContext);
   const navigation = useNavigation()
   const settingsContext = useContext(SettingsContext);
+  const authContext = useContext(AuthContext)
 
   useEffect(() => {
     loadMinistryGroups(congregationID);
@@ -35,27 +37,28 @@ const MinistryGroups: React.FC<MinistryGroupsProps> = ({ congregationID }) => {
         data={state.ministryGroups}
         renderItem={(ministryGroup) => (
           <View>
-            <Text style={[styles.title, { backgroundColor: settingsContext.state.mainColor }]}>{ministryGroup.item.name}</Text>
+            <Text style={[styles.title, { backgroundColor: settingsContext.state.mainColor, fontSize: 16 + settingsContext.state.fontIncrement }]}>{ministryGroup.item.name}</Text>
             <FlatList
               data={ministryGroup.item.preachers}
               renderItem={(preacher) =>
                 preacher.item?.name === ministryGroup.item.overseer?.name ? (
-                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: `${settingsContext.state.mainColor}30` }]}>
+                  <Text style={[styles.preacher, { fontWeight: "bold", backgroundColor: `${settingsContext.state.mainColor}30`, fontSize: 15 + settingsContext.state.fontIncrement }]}>
                     {preacher.item?.name}
                   </Text>
                 ) : (
-                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: '#d6d6d6' }]}>{preacher.item?.name}</Text>
+                  <Text style={[styles.preacher, preacher.index % 2 === 0 && { backgroundColor: '#d6d6d6' }, {fontSize: 15 + settingsContext.state.fontIncrement}]}>{preacher.item?.name}</Text>
                 )
               }
             />
-            <View style={styles.iconContainer}>
+
+            {authContext.state.whoIsLoggedIn === "admin" && <View style={styles.iconContainer}>
               <TouchableOpacity onPress={() => navigation.navigate('EditMinistryGroup', { congregationID, ministryGroupID: ministryGroup.item._id })}>
-                <FontAwesome name="pencil" size={22} />
+                <FontAwesome name="pencil" size={22 + settingsContext.state.fontIncrement} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteMinistryGroup(congregationID, ministryGroup.item._id)}>
-                <FontAwesome name="trash" size={22} />
+                <FontAwesome name="trash" size={22 + settingsContext.state.fontIncrement} />
               </TouchableOpacity>
-            </View>
+            </View>}
           </View>
         )}
         horizontal

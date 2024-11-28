@@ -6,16 +6,17 @@ import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import DropDownPicker from 'react-native-dropdown-picker';
 import MyInput from '../../commonComponents/MyInput';
 import Label from '../../commonComponents/Label';
-import { defaultStyles } from '../defaultStyles';
+import { defaultDropdownStyles } from '../defaultStyles';
 import useLocaLization from '../../hooks/useLocalization';
 import { preachersTranslations } from './translations';
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 const PreachersNewScreen: React.FC = () => {
     const [name, setName] = useState('');
     const {addPreacher, state} = useContext(PreachersContext)
+    const preacherTranslate = useLocaLization(preachersTranslations);
     const [rolesValue, setRolesValue] = useState<string[]>(['can_see_meetings', 'can_see_minimeetings'])
     const [rolesOpen, setRolesOpen] = useState<boolean>(false);
-    const preacherTranslate = useLocaLization(preachersTranslations);
     const [rolesItems, setRolesItems] = useState([
         {label: preacherTranslate.t("can_see_meetings"), value: 'can_see_meetings'},
         {label: preacherTranslate.t("can_lead_meetings"), value: 'can_lead_meetings'},
@@ -36,6 +37,18 @@ const PreachersNewScreen: React.FC = () => {
         {label: preacherTranslate.t("can_be_ordinal"), value: 'can_be_ordinal'},
         {label: preacherTranslate.t("can_edit_audio_video"), value: 'can_edit_audio_video'}
     ]);
+    const [privilegesValue, setPrivilegesValue] = useState<string[]>([])
+    const [privilegesOpen, setPrivilegesOpen] = useState<boolean>(false);
+    const [privilegesItems, setPrivilegesItems] = useState([
+        {label: preacherTranslate.t("elder"), value: 'elder'},
+        {label: preacherTranslate.t("mini_servant"), value: 'mini_servant'},
+        {label: preacherTranslate.t("co"), value: 'co'},
+        {label: preacherTranslate.t("pioneer"), value: 'pioneer'},
+        {label: preacherTranslate.t("aux_pioneer"), value: 'aux_pioneer'},
+        {label: preacherTranslate.t("admin"), value: 'admin'},
+    ]);
+    const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     
     if(state.errMessage){
@@ -58,8 +71,9 @@ const PreachersNewScreen: React.FC = () => {
                 open={rolesOpen}
                 setOpen={setRolesOpen}
                 items={rolesItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={preacherTranslate.t("rolesLabel")}
                 containerStyle={{
@@ -67,7 +81,25 @@ const PreachersNewScreen: React.FC = () => {
                 }}
                 placeholder={preacherTranslate.t("rolesPlaceholder")}
             />
-            <ButtonC title="Dodaj głosiciela" isLoading={state.isLoading} onPress={() => addPreacher(name, rolesValue)} />
+            <Label text={preacherTranslate.t("privilegesLabel")} />
+            <DropDownPicker 
+                multiple={true}
+                value={privilegesValue}
+                setValue={setPrivilegesValue}
+                open={privilegesOpen}
+                setOpen={setPrivilegesOpen}
+                items={privilegesItems}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+                listMode="MODAL"
+                modalTitle={preacherTranslate.t("privilegesLabel")}
+                containerStyle={{
+                    marginVertical: 8
+                }}
+                placeholder={preacherTranslate.t("privilegesPlaceholder")}
+            />
+            <ButtonC title="Dodaj głosiciela" isLoading={state.isLoading} onPress={() => addPreacher(name, rolesValue, privilegesValue)} />
         </View>
     )
 }

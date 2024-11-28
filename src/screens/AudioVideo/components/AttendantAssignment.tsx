@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { IAttendant, IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addAudioVideoAssignmentToCalendar } from "../helpers/calendar";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { attendantTranslations } from "../Attendants/translations";
 import { mainTranslations } from "../../../../localization";
 import { meetingsTranslations } from "../../Meetings/translations";
@@ -19,13 +20,14 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
   preacher,
 }) => {
   const attendantTranslate = useLocaLization(attendantTranslations);
+  const settingsContext = useContext(SettingsContext);
   const mainTranslate = useLocaLization(mainTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
   return (
     <View>
       {preacher && preacher._id === assignment.hallway1?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("hallwayLabel")}
           </Text>
@@ -45,7 +47,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.hallway2?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("hallway2Label")}
           </Text>
@@ -65,7 +67,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.auditorium?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("auditoriumLabel")}
           </Text>
@@ -85,7 +87,7 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.parking?._id && (
         <View>
-          <Text style={styles.title}>
+          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
             {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
             {attendantTranslate.t("parkingLabel")}
           </Text>
@@ -115,34 +117,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "PoppinsRegular",
     marginTop: 6,
-  },
-  assignmentTitle: {
-    paddingVertical: 10,
-    fontSize: 18,
-    fontFamily: "InterRegular",
-  },
-  participant: {
-    fontSize: 16,
-    fontFamily: "InterSemiBold",
-  },
-  text: {
-    fontFamily: "InterRegular",
-    fontSize: 16,
-    marginTop: 20,
-  },
-  textBold: {
-    fontFamily: "InterSemiBold",
-  },
-  linkContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-  },
-  link: {
-    fontSize: 17,
-    paddingVertical: 10,
-    color: "#1f8aad",
-    textAlign: "center",
   },
 });
 

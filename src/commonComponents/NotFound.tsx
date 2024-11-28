@@ -1,12 +1,14 @@
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const NotFound: React.FC<{ title: string, icon?: string }> = ({ title, icon }) => {
+    const settingsContext = useContext(SettingsContext);
     return (
         <View style={styles.noParamContainer}>
-            <MaterialCommunityIcons name={icon || "emoticon-sad-outline"} size={55} />
-            <Text style={styles.noParamText}>{title}</Text>
+            <MaterialCommunityIcons name={icon || "emoticon-sad-outline"} size={55 + settingsContext.state.fontIncrement} />
+            <Text style={[styles.noParamText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{title}</Text>
         </View>
     )
 }

@@ -1,16 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
-import { Context as AuthContext } from '../../contexts/AuthContext';
 import Preacher from './components/Preacher';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import Loading from '../../commonComponents/Loading';
 import Pagination from '../../commonComponents/Pagination';
 import { columnsNum } from '../../helpers/devices';
-import MinistryGroups from '../MinistryGroups/components/MinistryGroups';
-import useLocaLization from '../../hooks/useLocalization';
-import { ministryGroupsTranslations } from '../MinistryGroups/translations';
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface PreachersIndexScreenProps {
     navigation: NavigationProp<any>
@@ -21,8 +18,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
     const { state, loadPreachers } = useContext(PreachersContext);
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
-    const authContext = useContext(AuthContext);
-    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
+    const settingsContext = useContext(SettingsContext);
 
     useEffect(() => {
         navigation.setOptions({
@@ -63,14 +59,6 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({ navigation 
                 numColumns={columnsNum}
             />
             <Pagination activePage={state.preachers?.page!} totalPages={state.preachers?.totalPages!} updateState={setPage}/>
-            <View style={styles.ministryGroupTitleContainer}>
-                <Text style={styles.header}>{ministryGroupTranslate.t("sectionText")}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('AddMinistryGroup', { congregationID: authContext.state.userID })}>
-                    <MaterialCommunityIcons name='plus' size={30} />
-                </TouchableOpacity>
-        
-            </View>
-            <MinistryGroups congregationID={authContext.state.userID!} />
         </ScrollView>
     )
 }

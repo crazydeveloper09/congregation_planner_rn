@@ -3,11 +3,11 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { NavigationProp } from "@react-navigation/native";
 import Loading from "../../commonComponents/Loading";
-import { FontAwesome } from "@expo/vector-icons";
 import ButtonC from "../../commonComponents/Button";
 import useLocaLization from "../../hooks/useLocalization";
 import { preachersTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface PreacherDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -22,7 +22,8 @@ const PreacherDeleteConfirmScreen: React.FC<PreacherDeleteConfirmScreenProps> = 
     const [preacherID, setPreacherID] = useState(route.params.id)
     const {state, loadPreacherInfo, deletePreacher} = useContext(PreachersContext);
     const preacherTranslate = useLocaLization(preachersTranslations);
-    const mainTranslate = useLocaLization(mainTranslations)
+    const mainTranslate = useLocaLization(mainTranslations);
+    const settingsContext = useContext(SettingsContext)
 
     useEffect(() => {
         loadPreacherInfo(preacherID)
@@ -39,13 +40,13 @@ const PreacherDeleteConfirmScreen: React.FC<PreacherDeleteConfirmScreenProps> = 
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{preacherTranslate.t("deleteConfirmText", {name: state.preacher?.name})}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{preacherTranslate.t("deleteConfirmText", {name: state.preacher?.name})}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deletePreacher(preacherID)} isLoading={state.isLoading} color="#AD371F" />
                 </View>
                 <View style={{ width: '48%' }}>
-                <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('PreachersList')} />
+                    <ButtonC title={mainTranslate.t("no")} onPress={() => navigation.navigate('PreachersList')} />
                 </View>
             
             </View>

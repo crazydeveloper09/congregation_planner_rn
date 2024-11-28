@@ -9,6 +9,7 @@ import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 interface MinistryMeetingDeleteConfirmScreenProps {
     navigation: NavigationProp<any>;
@@ -22,14 +23,15 @@ interface MinistryMeetingDeleteConfirmScreenProps {
 const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const {state, deleteMinistryMeeting} = useContext(MinistryMeetingContext);
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
-    const mainTranslate = useLocaLization(mainTranslations)
+    const mainTranslate = useLocaLization(mainTranslations);
+    const settingsContext = useContext(SettingsContext)
 
     return (
         <View style={styles.container}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
             
                 <View>
-                    <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     <IconDescriptionValue 
                         iconName={route.params.meeting?.defaultPlace === "Zoom" ? "video-box" : "home"}
                         description={ministryMeetingTranslate.t("placeLabel")}
@@ -50,7 +52,7 @@ const MinistryMeetingDeleteConfirmScreen: React.FC<MinistryMeetingDeleteConfirmS
                 
             
             </ListItem>
-            <Text style={styles.text}>{ministryMeetingTranslate.t("deleteConfirmText")}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{ministryMeetingTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteMinistryMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />

@@ -12,7 +12,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../../Meetings/components/Meeting";
 import Label from "../../../commonComponents/Label";
 import AudioVideo from "../components/AudioVideo";
-import { defaultStyles } from "../../defaultStyles";
+import { defaultDropdownStyles } from "../../defaultStyles";
 import { months } from "../../../../defaultData";
 import useLocaLization from "../../../hooks/useLocalization";
 import { mainTranslations } from "../../../../localization";
@@ -49,7 +49,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
     const { state, addAttendant } = useContext(AttendantContext);
     const meetingContext = useContext(MeetingContext)
     const settingsContext = useContext(SettingsContext);
-
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async () => {
         const token = await AsyncStorage.getItem('token')
@@ -79,12 +79,27 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
         loadPreachers()
     }, [])
 
+    const styles = StyleSheet.create({
+        container: {
+            padding: 15
+        },
+        meeting: {
+            fontSize: 21,
+            fontFamily: 'PoppinsSemiBold'
+        },
+        switch: {
+            alignSelf: 'flex-start',  
+            transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }],
+            marginVertical: 8
+        },
+    })
+
     return (
         <ScrollView style={styles.container}>
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
 
-            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }]}>Audio-video</Text>
+            <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
             
             <Label text={attendantTranslate.t("hallwayLabel")} />
@@ -94,8 +109,9 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 open={hallway1Open}
                 setOpen={setHallway1Open}
                 items={hallway1Items}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={attendantTranslate.t("hallwayLabel")}
                 placeholder={attendantTranslate.t("hallwayPlaceholder")}
@@ -116,8 +132,9 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                     open={hallway2Open}
                     setOpen={setHallway2Open}
                     items={hallway2Items}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={attendantTranslate.t("hallway2Label")}
                     placeholder={attendantTranslate.t("hallway2Placeholder")}
@@ -130,8 +147,9 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                 open={auditoriumOpen}
                 setOpen={setAuditoriumOpen}
                 items={auditoriumItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={attendantTranslate.t("auditoriumLabel")}
                 placeholder={attendantTranslate.t("auditoriumPlaceholder")}
@@ -154,8 +172,9 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
                     containerStyle={{
                         marginVertical: 10
                     }}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={attendantTranslate.t("parkingLabel")}
                     placeholder={attendantTranslate.t("parkingPlaceholder")}
@@ -172,20 +191,5 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 15
-    },
-    meeting: {
-        fontSize: 21,
-        fontFamily: 'PoppinsSemiBold'
-    },
-    switch: {
-        alignSelf: 'flex-start',  
-        transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
-        marginVertical: 8
-    },
-})
 
 export default AttendantNewScreen;

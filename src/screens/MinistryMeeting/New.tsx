@@ -13,7 +13,7 @@ import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
 import { months } from "../../../defaultData";
-import { defaultStyles } from "../defaultStyles";
+import { defaultDropdownStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
@@ -40,6 +40,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
     const { state, addMinistryMeeting } = useContext(MinistryMeetingContext)
     const preachersContext = useContext(PreachersContext)
     const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
         const token = await AsyncStorage.getItem('token')
@@ -86,8 +87,9 @@ const MinistryMeetingNewScreen: React.FC = () => {
                     open={defaultPlaceOpen}
                     setOpen={setDefaultPlaceOpen}
                     items={defaultPlaceItems}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={ministryMeetingTranslate.t("defaultPlaceLabel")}
                     placeholder={ministryMeetingTranslate.t("defaultPlacePlaceholder")}
@@ -105,8 +107,9 @@ const MinistryMeetingNewScreen: React.FC = () => {
                 open={leadOpen}
                 setOpen={setLeadOpen}
                 items={leadItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={ministryMeetingTranslate.t("leadLabel")}
                 placeholder={ministryMeetingTranslate.t("leadPlaceholder")}
@@ -115,7 +118,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
             <Switch  
                 value={isTopic}
                 onValueChange={(value) => setIsTopic(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 15 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 15 }}
                 color={settingsContext.state.mainColor}
             />
             {isTopic && <>

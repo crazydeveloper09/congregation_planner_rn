@@ -28,10 +28,12 @@ const IconLink: React.FC<IconLinkProps> = ({
           {
             color: color || settingsContext.state.mainColor,
             textAlign: isCentered ? "center" : "left",
+            paddingVertical: 10 + settingsContext.state.fontIncrement
           },
+          {fontSize: 17 + settingsContext.state.fontIncrement}
         ]}
       >
-        <MaterialCommunityIcons size={18} name={iconName} />
+        <MaterialCommunityIcons size={18 + settingsContext.state.fontIncrement} name={iconName} />
         <Text> </Text>
         <Text>{description}</Text>
       </Text>

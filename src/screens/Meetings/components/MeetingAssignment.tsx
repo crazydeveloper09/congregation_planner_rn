@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
 import IconContainer from "../../../commonComponents/IconContainer";
@@ -29,7 +30,8 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
   midSong,
   meeting,
 }) => {
-  const { icon, fontColor } = chooseFontColorAndIcon(type);
+  const settingsContext = useContext(SettingsContext);
+  const { icon, fontColor } = chooseFontColorAndIcon(type, settingsContext.state.fontIncrement);
   const navigation = useNavigation();
   const {state} = useContext(PreachersContext)
   const authContext = useContext(AuthContext)
@@ -46,7 +48,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         />
     
       )}
-      <Text style={[{ backgroundColor: fontColor }, styles.title]}>
+      <Text style={[styles.title, { backgroundColor: fontColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>
         {icon}
         <Text>{type}</Text>
       </Text>
@@ -55,7 +57,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         data={assignments[type]}
         renderItem={(assignment) => (
           <>
-            <Text style={[{ color: fontColor }, styles.assignmentTitle]}>
+            <Text style={[styles.assignmentTitle, { color: fontColor, fontSize: 18 + settingsContext.state.fontIncrement }]}>
               {assignment.item.topic || assignment.item.defaultTopic}
             </Text>
             <IconDescriptionValue 

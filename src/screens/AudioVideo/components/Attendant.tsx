@@ -5,6 +5,7 @@ import { ListItem } from "@rneui/themed";
 import NotFound from "../../../commonComponents/NotFound";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { useNavigation } from "@react-navigation/native";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
 import IconLink from "../../../commonComponents/IconLink";
@@ -24,6 +25,7 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const settingsContext = useContext(SettingsContext);
     const attendantTranslate = useLocaLization(attendantTranslations)
     const mainTranslate = useLocaLization(mainTranslations);
     return (
@@ -37,7 +39,7 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }

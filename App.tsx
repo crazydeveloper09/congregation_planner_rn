@@ -15,6 +15,7 @@ import SwitchNavigator from './src/navigators/Switch';
 import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
 import { useContext, useEffect, useState } from 'react';
+import PreachersNavigator from './src/navigators/Preachers';
 StatusBar.setBarStyle('light-content')
 
 function App() {

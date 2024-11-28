@@ -24,11 +24,11 @@ const Pagination: React.FC<PaginationProps> = ({ activePage, totalPages, updateS
               style={[styles.itemContainer, { backgroundColor: settingsContext.state.mainColor }]}
               onPress={() => updateState(item)}
             >
-              <Text style={[styles.text, { color: 'white' }]}>{item}</Text>
+              <Text style={[styles.text, { color: 'white', fontSize: 17 + settingsContext.state.fontIncrement }]}>{item}</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={[styles.itemContainer, { backgroundColor: "white" }]} onPress={() => updateState(item)}>
-              <Text style={styles.text}>{item}</Text>
+              <Text style={[styles.text, { fontSize: 17 + settingsContext.state.fontIncrement }]}>{item}</Text>
             </TouchableOpacity>
           )
         }

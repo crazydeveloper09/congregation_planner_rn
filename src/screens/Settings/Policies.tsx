@@ -5,10 +5,32 @@ import { ScrollView } from "react-native-gesture-handler";
 import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
-import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 
 const PoliciesScreen: React.FC = () => {
     const settingsContext = useContext(SettingsContext);
+
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: "#ece9e9",
+            padding: 15,
+            flex: 1
+        },
+        sectionHeader: {
+            fontSize: 23 + settingsContext.state.fontIncrement,
+            fontFamily: 'PoppinsSemiBold'
+        },
+        listHeader: {
+            fontSize: 19 + settingsContext.state.fontIncrement,
+            fontFamily: 'MontserratSemiBold'
+        },
+        listElement: {
+            fontSize: 16 + settingsContext.state.fontIncrement,
+            fontFamily: 'MontserratRegular',
+            flexShrink: 1
+        }
+    })
+
     return (
         <ScrollView style={styles.container}>
             <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Polityka Prywatności</Text>
@@ -47,6 +69,9 @@ const PoliciesScreen: React.FC = () => {
                         </Text>
                         <Text style={styles.listElement}>
                         Dostęp do bazy danych oraz do samego serwisu jest zabezpieczony weryfikacją dwuetapową. Poza tym z aplikacji może korzystać wyłącznie właściciel urządzenia dzięki potwierdzeniu tożsamości odciskiem palca/hasłem urządzenia/rozpoznanawaniem twarzy
+                        </Text>
+                        <Text style={styles.listElement}>
+                        Dane osobowe są szyfrowane najbardziej bezpiecznym szyfrem, zaakceptowanym i używanym przez Amerykańską Agencję Bezpieczeństwa.
                         </Text>
                         <Text style={styles.listElement}>
                         Hasła użytkowników są przechowywane w postaci hashowanej. Funkcja hashująca działa jednokierunkowo - nie jest możliwe odwrócenie jej działania, co stanowi obecnie współczesny standard w zakresie przechowywania haseł użytkowników.
@@ -277,26 +302,5 @@ W wyjątkowych sytuacjach, w celu zabezpieczenie prawnie uzasadnionego interesu 
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#ece9e9",
-        padding: 15,
-        flex: 1
-    },
-    sectionHeader: {
-        fontSize: 23,
-        fontFamily: 'PoppinsSemiBold'
-    },
-    listHeader: {
-        fontSize: 19,
-        fontFamily: 'MontserratSemiBold'
-    },
-    listElement: {
-        fontSize: 16,
-        fontFamily: 'MontserratRegular',
-        flexShrink: 1
-    }
-})
 
 export default PoliciesScreen;

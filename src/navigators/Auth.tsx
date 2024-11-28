@@ -2,8 +2,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "../screens/Welcome";
 import CongregationsLoginScreen from "../screens/Congregation/Login";
 import CongregationsTwoFactorScreen from "../screens/Congregation/TwoFactor";
-import { navigationRef } from "../RootNavigation";
-import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "../screens/Congregation/translations";

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { IMeeting, IMeetingAssignment } from "../../../contexts/interfaces";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import ButtonC from "../../../commonComponents/Button";
 import { ListItem } from "react-native-elements";
 import IconDescriptionValue from "../../../commonComponents/IconDescriptionValue";
@@ -24,19 +25,22 @@ interface MeetingAssignmentDeleteConfirmScreenProps {
 
 const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const { state, deleteAssignment } = useContext(MeetingContext)
-    const { icon, fontColor } = chooseFontColorAndIcon(route.params.assignment.type);
+    const settingsContext = useContext(SettingsContext);
+    const { icon, fontColor } = chooseFontColorAndIcon(route.params.assignment.type, settingsContext.state.fontIncrement);
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
+    
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
             
                 <View>
-                    <Text style={[{ backgroundColor: fontColor }, styles.title]}>
+                    <Text style={[{ backgroundColor: fontColor, fontSize: 21 + settingsContext.state.fontIncrement }, styles.title]}>
                         {icon}
                         <Text>{route.params.assignment.type}</Text>
                     </Text>
-                    <Text style={[{ color: fontColor }, styles.assignmentTitle]}>
+                    <Text style={[{ color: fontColor, fontSize: 18 + settingsContext.state.fontIncrement }, styles.assignmentTitle]}>
                         {route.params.assignment.topic || route.params.assignment.defaultTopic}
                     </Text>
                     <IconDescriptionValue 
@@ -55,7 +59,7 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
                 
             
             </ListItem>
-            <Text style={styles.text}>{meetingAssignmentsTranslate.t('deleteConfirmText')}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t('deleteConfirmText')}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t('yes')} onPress={() => deleteAssignment(route.params.meeting._id, route.params.assignment._id)} isLoading={state.isLoading} color="#AD371F" />

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
 import { IMeeting, IMeetingAssignment } from "../../contexts/interfaces";
 import ButtonC from "../../commonComponents/Button";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { groupBy } from "../../helpers/arrays";
 import { ListItem } from "@rneui/base";
 import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
@@ -23,6 +24,7 @@ interface MeetingDeleteConfirmScreenProps {
 
 const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({ navigation, route }) => {
     const { state, deleteMeeting } = useContext(MeetingContext)
+    const settingsContext = useContext(SettingsContext);
     const assignmentsGroup = groupBy<IMeetingAssignment>(route.params.meeting?.assignments, 'type');
     const meetingTranslate = useLocaLization(meetingsTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
@@ -31,7 +33,7 @@ const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({
             <ListItem containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}>
             
                 <View>
-                    <ListItem.Title style={styles.date}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(route.params.meeting.date).toLocaleDateString('pl-PL')}</ListItem.Title>
                     {route.params.meeting?.cleaningGroup && <IconDescriptionValue 
                             iconName="broom"
                             value={route.params.meeting?.cleaningGroup?.name}
@@ -73,7 +75,7 @@ const MeetingDeleteConfirmScreen: React.FC<MeetingDeleteConfirmScreenProps> = ({
             
             </ListItem>
 
-            <Text style={styles.text}>{meetingTranslate.t("deleteConfirmText")}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingTranslate.t("deleteConfirmText")}</Text>
             <View style={{ flexDirection: 'row', gap: 8, marginBottom: 90 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteMeeting(route.params.meeting._id)} isLoading={state.isLoading} color="#AD371F" />

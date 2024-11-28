@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet } from "react-native";
 import { IMeetingAssignment, IPreacher } from "../../../contexts/interfaces";
 import { addMeetingAssignmentToCalendar } from "../helpers/calendar";
@@ -8,6 +8,7 @@ import useLocaLization from "../../../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "../Assignments/translations";
 import { meetingsTranslations } from "../translations";
 import { mainTranslations } from "../../../../localization";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface PreacherAssignmentProps {
   type: string;
@@ -20,14 +21,14 @@ const PreacherAssignment: React.FC<PreacherAssignmentProps> = ({
   assignment,
   preacher,
 }) => {
-
-  const {icon, fontColor} = chooseFontColorAndIcon(type);
+  const settingsContext = useContext(SettingsContext);
+  const {icon, fontColor} = chooseFontColorAndIcon(type, settingsContext.state.fontIncrement);
   const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
   return (
     <>
-      <Text style={[{ color: fontColor }, styles.title]}>
+      <Text style={[{ color: fontColor, fontSize: 18 + settingsContext.state.fontIncrement }, styles.title]}>
         <Text>{new Date(assignment.meeting.date).toLocaleDateString()} - </Text>
         <Text>{assignment.topic || assignment.defaultTopic}</Text>
         {preacher && preacher._id === assignment.reader?._id && (

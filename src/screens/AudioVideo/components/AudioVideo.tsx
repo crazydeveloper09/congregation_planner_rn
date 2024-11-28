@@ -13,6 +13,7 @@ import { Divider } from "@rneui/base";
 import useLocaLization from "../../../hooks/useLocalization";
 import { audioVideoTranslations } from "../translations";
 import { mainTranslations } from "../../../../localization";
+import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface AudioVideoProps {
     meeting: IMeeting,
@@ -24,6 +25,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)
+    const settingsContext = useContext(SettingsContext);
     const audioVideoTranslate = useLocaLization(audioVideoTranslations)
     const mainTranslate = useLocaLization(mainTranslations);
     return (
@@ -37,7 +39,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={styles.date}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }

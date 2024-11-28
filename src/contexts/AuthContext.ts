@@ -31,6 +31,8 @@ export interface IAuthContext {
   verifyUser: Function;
   tryLocalSignIn: Function;
   logInPreacher: Function;
+  editCongregation: Function;
+  loadCongregationInfo: Function;
   loadCongregationActivities: Function;
 }
 
@@ -150,6 +152,23 @@ const tryLocalSignIn = (dispatch: Function) => {
   }
 }
 
+const loadCongregationInfo = (dispatch: Function) => {
+  return async () => {
+    try {
+      dispatch({ type: 'turn_on_loading' })
+      const token = await AsyncStorage.getItem('token');
+      const response = await tmApi.get(`/congregations`, {
+        headers: {
+          'Authorization': `bearer ${token}`
+        }
+      })
+      dispatch({ type: 'add_cong_info', payload: response.data.congregation })
+    } catch(err) {
+      dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+    }
+  }
+}
+
 const loadCongregationActivities = (dispatch: Function) => {
   return async (congregationID: string) => {
     try {
@@ -167,10 +186,30 @@ const loadCongregationActivities = (dispatch: Function) => {
   }
 }
 
-
+const editCongregation = (dispatch: Function) => {
+  return async (username: string, territoryServantEmail: string, ministryOverseerEmail: string, mainCity: string, congregationID: string) => {
+    try {
+        dispatch({ type: 'turn_on_loading' })
+        const token = await AsyncStorage.getItem('token');
+        const response = await tmApi.put(`/congregations/${congregationID}`, {congregation: {username, territoryServantEmail, ministryOverseerEmail, mainCity}}, {
+            headers: {
+                'Authorization': `bearer ${token}`
+            }
+        });
+        navigate('CongInfo');
+        dispatch({ type: 'turn_off_loading' })
+        showMessage({
+          message: `Poprawnie edytowano informacje zborowe`,
+          type: 'success',
+      })
+    } catch(err) {
+        dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+    }
+}
+}
 
 export const { Context, Provider } = createDataContext<IAuth, IAuthContext>(
   authReducer,
-  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, logInPreacher },
+  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, editCongregation, loadCongregationInfo, logInPreacher },
   { token: "", errMessage: "", successMessage: "" }
 );

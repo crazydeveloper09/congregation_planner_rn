@@ -1,17 +1,20 @@
 import { Input, InputProps } from "@rneui/base";
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text } from "react-native";
 import Label from "./Label";
+import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const MyInput: React.FC<InputProps> = (props) => {
+    const settingsContext = useContext(SettingsContext);
     return (
         <Input 
             value={props.value}
             onChangeText={props.onChangeText}
             label={<Label text={props.label as string} />}
-            inputContainerStyle={styles.inputContainer}
+            inputContainerStyle={[styles.inputContainer, { padding: 8 + settingsContext.state.fontIncrement }]}
             containerStyle={styles.containerInput}
             keyboardType={props.keyboardType}
+            inputStyle={{ fontSize: 15 + settingsContext.state.fontIncrement }}
             placeholder={props.placeholder}
             secureTextEntry={props.secureTextEntry}
             autoCorrect={props.autoCorrect}

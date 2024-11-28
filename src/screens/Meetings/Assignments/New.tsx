@@ -13,7 +13,7 @@ import Attendant from "../../AudioVideo/components/Attendant";
 import MyInput from "../../../commonComponents/MyInput";
 import Label from "../../../commonComponents/Label";
 import { months } from "../../../../defaultData";
-import { defaultStyles } from "../../defaultStyles";
+import { defaultDropdownStyles } from "../../defaultStyles";
 import useLocaLization from "../../../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "./translations";
 import { mainTranslations } from "../../../../localization";
@@ -73,6 +73,8 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
     const [otherParticipant, setOtherParticipant] = useState<string>('')
     const { state, addAssignment } = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+
 
 
     const loadPreachers = async () => {
@@ -114,11 +116,11 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, marginTop: 15 }]}>Audio-video</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement, marginTop: 15 }]}>Audio-video</Text>
             <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, marginTop: 15 }]}>{attendantTranslate.t("sectionText")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement, marginTop: 15 }]}>{attendantTranslate.t("sectionText")}</Text>
             <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
 
             <Label text={meetingAssignmentsTranslate.t("typeLabel")} />
@@ -128,8 +130,9 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 open={typeOpen}
                 setOpen={setTypeOpen}
                 items={typeItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={meetingAssignmentsTranslate.t("typeLabel")}
                 placeholder={meetingAssignmentsTranslate.t("typePlaceholder")}
@@ -143,8 +146,9 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     open={defaultTopicOpen}
                     setOpen={setDefaultTopicOpen}
                     items={defaultTopicItems}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={meetingAssignmentsTranslate.t("defaultTopicLabel")}
                     placeholder={meetingAssignmentsTranslate.t("defaultTopicPlaceholder")}
@@ -165,8 +169,9 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 open={participantOpen}
                 setOpen={setParticipantOpen}
                 items={participantItems}
-                labelStyle={defaultStyles.dropdown}
-                placeholderStyle={defaultStyles.dropdown}
+                modalTitleStyle={dropdownStyles.text}
+                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 searchable
                 modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
@@ -179,7 +184,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     setIsReader(value)
                     value === false && setReaderValue('')
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
                 color={settingsContext.state.mainColor}
             />
 
@@ -191,8 +196,9 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     open={readerOpen}
                     setOpen={setReaderOpen}
                     items={readerItems}
-                    labelStyle={defaultStyles.dropdown}
-                    placeholderStyle={defaultStyles.dropdown}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                     listMode="MODAL"
                     modalTitle={meetingAssignmentsTranslate.t("readerLabel")}
                     placeholder={meetingAssignmentsTranslate.t("readerPlaceholder")}
@@ -205,7 +211,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     setIsOtherParticipant(value)
                     value === true && setOtherParticipant('')
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }], marginVertical: 10 }}
+                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10)}], marginVertical: 10 }}
                 color={settingsContext.state.mainColor}
             />
             {isOtherParticipant && <>
