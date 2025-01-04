@@ -31,6 +31,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
         { label: ministryMeetingTranslate.t("placeDefaultValue"), value: '' },
         { label: ministryMeetingTranslate.t("kingdomHall"), value: ministryMeetingTranslate.t("kingdomHall") },
         { label: 'Zoom', value: 'Zoom' },
+        { label: 'Grupy', value: 'Grupy' },
     ]);
     const [leadValue, setLeadValue] = useState("");
     const [leadOpen, setLeadOpen] = useState(false);

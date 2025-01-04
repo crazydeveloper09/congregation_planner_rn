@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "../screens/Welcome";
 import CongregationsLoginScreen from "../screens/Congregation/Login";
 import CongregationsTwoFactorScreen from "../screens/Congregation/TwoFactor";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "../screens/Congregation/translations";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
@@ -13,6 +13,8 @@ const Stack = createStackNavigator();
 const AuthNavigator = () => {
     const i18n = useLocaLization(authTranslations);
     const settingsContext = useContext(SettingsContext);
+    StatusBar.setBackgroundColor(settingsContext.state.mainColor);
+    StatusBar.setBarStyle("light-content")
     return (
         
             <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: settingsContext.state.mainColor }, headerTitleStyle: headerStyles.title, headerTintColor: 'white' }}>

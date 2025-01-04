@@ -163,12 +163,12 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               nextTitle={cartScheduleTranslate.t("next")}
               selectedStartDate={selectedStartDate}
               onDateChange={onDateChange}
-              nextTitleStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
-              previousTitleStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
-              monthTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
-              yearTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
-              selectedDayTextStyle={{ fontSize: 12 + settingsContext.state.fontIncrement }}
-              textStyle={{ fontSize: 12 + settingsContext.state.fontIncrement }}
+              nextTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
+              previousTitleStyle={{ fontSize: 16 + settingsContext.state.fontIncrement }}
+              monthTitleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement }}
+              yearTitleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement }}
+              selectedDayTextStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
+              textStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
             />
             <View style={styles.resultContainer}>
               {Boolean(state.cartDay) ? (

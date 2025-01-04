@@ -65,8 +65,10 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
 
 
     useEffect(() => {
-        const selectItems = preacher?.roles.map((role) => role)
-        setRolesValue(selectItems)
+        const selectRolesItems = preacher?.roles.map((role) => role)
+        setRolesValue(selectRolesItems)
+        const selectPrivilegesItems = preacher?.privileges.map((privilege) => privilege)
+        setPrivilegesValue(selectPrivilegesItems)
     }, [])
 
     if(state.isLoading){

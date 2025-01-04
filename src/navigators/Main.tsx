@@ -33,6 +33,8 @@ Notifications.setNotificationHandler({
     }),
   });
 
+StatusBar.setBarStyle("light-content")
+
 const MainNavigator = () => {
   const {state, loadPreacherInfo} = useContext(PreachersContext)
   const authContext = useContext(AuthContext);
@@ -46,6 +48,7 @@ const MainNavigator = () => {
   const settingsContext = useContext(SettingsContext);
 
   const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
+
 
   useEffect(() => {
     loadPreacherInfo(authContext.state.preacherID);

@@ -25,7 +25,7 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
     const authContext = useContext(AuthContext)
     const settingsContext = useContext(SettingsContext);
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
-    const mainTranslate = useLocaLization(mainTranslations)
+    const mainTranslate = useLocaLization(mainTranslations);
 
     return (
         <View>
@@ -39,14 +39,15 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                     
                     <ListItem.Content>
                         <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>
-                            {new Date(meeting.date).toLocaleString('pl-PL', { 
+                            {meeting.defaultPlace !== "Grupy" ? new Date(meeting.date).toLocaleString('pl-PL', { 
                                 year: 'numeric', 
                                 month: '2-digit', 
                                 day: '2-digit', 
                                 hour: '2-digit', 
                                 minute: '2-digit',
                                 hour12: false // użycie formatu 12-godzinnego z AM/PM
-                            })} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }
+                            }): new Date(meeting.date).toLocaleDateString('pl-PL', { day: '2-digit', year: 'numeric', 
+                                month: '2-digit', })} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }
                         </ListItem.Title>
                     </ListItem.Content>
                     </>
@@ -62,11 +63,11 @@ const MinistryMeeting: React.FC<MinistryMeetingProps> = ({ meeting, navigate }) 
                         description={ministryMeetingTranslate.t("placeLabel")}
                         value={meeting?.place || meeting?.defaultPlace}
                     />
-                    <IconDescriptionValue 
+                    {meeting.defaultPlace !== "Grupy" && <IconDescriptionValue 
                         iconName="account-tie"
                         description={ministryMeetingTranslate.t("leadLabel")}
                         value={meeting?.lead?.name}
-                    />
+                    />}
 
                     {meeting?.topic && <IconDescriptionValue 
                         iconName="table-of-contents"

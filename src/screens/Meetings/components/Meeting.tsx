@@ -134,6 +134,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 {meeting?.cleaningGroup && <IconDescriptionValue 
                             iconName="broom"
                             value={meeting?.cleaningGroup?.name}
+                            description="Sprzątanie"
                         />}
                         <IconDescriptionValue 
                             iconName="music"

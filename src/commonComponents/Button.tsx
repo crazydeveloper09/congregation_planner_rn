@@ -9,6 +9,7 @@ interface ButtonProps {
   isLoading?: boolean;
   color?: string;
   fontColor?: string;
+  marginBottom?: number;
 }
 
 const ButtonC: React.FC<ButtonProps> = ({
@@ -16,7 +17,8 @@ const ButtonC: React.FC<ButtonProps> = ({
   onPress,
   isLoading,
   color,
-  fontColor
+  fontColor,
+  marginBottom
 }) => {
   const settingsContext = useContext(SettingsContext);
   // #AD1F1F
@@ -24,7 +26,7 @@ const ButtonC: React.FC<ButtonProps> = ({
     <>
       <Button 
         title={title} 
-        buttonStyle={[styles.button, { backgroundColor: color || settingsContext.state.mainColor }]} 
+        buttonStyle={[styles.button, { backgroundColor: color || settingsContext.state.mainColor, marginBottom }]} 
         titleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement, color: fontColor || 'white', }} 
         onPress={onPress}
         loading={isLoading}
