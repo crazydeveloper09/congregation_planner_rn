@@ -20,10 +20,10 @@ export default {
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
-        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
+        "NSRemindersUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
         "NSCalendarsFullAccessUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
-        "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
-        "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to use Face ID."
+        "NSRemindersFullAccessUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
+        "NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID."
       }
     },
     "android": {

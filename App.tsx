@@ -8,7 +8,7 @@ import { Provider as OrdinalsProvider } from './src/contexts/AttendantsContext';
 import { Provider as PreachersProvider } from './src/contexts/PreachersContext';
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
-import { StatusBar } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { navigationRef } from './src/RootNavigation';
 import SwitchNavigator from './src/navigators/Switch';
@@ -35,7 +35,13 @@ function App() {
   const [permissionStatus, setPermissionStatus] = useState<string>('')
   const loadCalendarPermission = async () => {
     const {status} = await Calendar.requestCalendarPermissionsAsync();
-    setPermissionStatus(status)
+    const { status: remindersStatus } = await Calendar.requestRemindersPermissionsAsync();
+
+    if (status === 'granted' && remindersStatus === 'granted') {
+      setPermissionStatus(status)
+    } else {
+      Alert.alert('Permission Denied', 'You need to grant calendar and reminders permissions to access this feature.');
+    }
   }
 
   useEffect(() => {
