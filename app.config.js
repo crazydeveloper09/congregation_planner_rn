@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.2.0",
+    "version": "3.2.1",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
