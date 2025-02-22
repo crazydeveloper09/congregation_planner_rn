@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.2.1",
+    "version": "3.2.7",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -39,7 +39,7 @@ export default {
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 25,
+      "versionCode": 26,
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {

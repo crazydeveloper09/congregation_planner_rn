@@ -52,24 +52,24 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
                     <IconDescriptionValue 
                         iconName="account-supervisor"
                         description={attendantTranslate.t("hallwayLabel")}
-                        value={attendant.hallway1.name}
+                        value={attendant.hallway1?.name}
                     />
 
                     {attendant.hallway2 && <IconDescriptionValue 
                         iconName="account-supervisor-outline"
                         description={attendantTranslate.t("hallway2Label")}
-                        value={attendant.hallway2.name}
+                        value={attendant.hallway2?.name}
                     />}
                     <IconDescriptionValue 
                         iconName="account-eye"
                         description={attendantTranslate.t("auditoriumLabel")}
-                        value={attendant.auditorium.name}
+                        value={attendant.auditorium?.name}
                     />
             
                     {attendant.parking && <IconDescriptionValue 
                         iconName="parking"
                         description={attendantTranslate.t("parkingLabel")}
-                        value={attendant.parking.name}
+                        value={attendant.parking?.name}
                     />}
                     {((state.preacher && state.preacher.roles?.includes("can_edit_audio_video")) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 

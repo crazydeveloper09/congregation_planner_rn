@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { groupBy } from "../../helpers/arrays";
-import { meetings } from "./data.mock";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
 import Meeting from "./components/Meeting";
@@ -22,6 +21,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import CleaningAssignment from "./components/CleaningAssignment";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -80,29 +80,28 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     return unsubscribe;
   }, [currentFilter, refreshing]);
 
-
   if (state.isLoading) {
     return <Loading />;
   }
 
-  const isType = Object.keys(groupBy<IMeeting>(state.meetings!, "type")).includes(type);
-  const isMonth = Object.keys(groupBy<IMeeting>(state.meetings!, "month")).includes(currentMonth);
+  const isType = Object.keys(groupBy<IMeeting>(state.allMeetings!, "type")).includes(type);
+  const isMonth = Object.keys(groupBy<IMeeting>(state.allMeetings!, "month")).includes(currentMonth);
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === mainTranslate.t("all") && state.meetings?.length !== 0 && <>
-        <TopMenu state={type} data={state?.meetings && Object.keys(groupBy(state?.meetings, "type"))!} updateState={setType} />
-        <TopMenu state={currentMonth} data={state?.meetings && Object.keys(groupBy(state?.meetings, "month"))!} updateState={setCurrentMonth} />
+      {currentFilter === mainTranslate.t("all") && state.allMeetings?.length !== 0 && <>
+        <TopMenu state={type} data={state?.allMeetings && Object.keys(groupBy(state?.allMeetings, "type"))!} updateState={setType} />
+        <TopMenu state={currentMonth} data={state?.allMeetings && Object.keys(groupBy(state?.allMeetings, "month"))!} updateState={setCurrentMonth} />
       </>}
       
 
-      {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_have_assignment") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
+      {preachersContext.state.preacher && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
       { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
       
-        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
+        {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
         {!isType && <NotFound title={meetingTranslate.t("typePlaceholder")} icon="format-list-bulleted" />}
         {!isMonth && isType && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
-        {groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
+        {groupBy<IMeeting>(state?.allMeetings, "type")[type]?.filter(
             (meeting) => meeting.month === currentMonth
           ).length === 0 ? (
             isMonth && <NotFound title={meetingTranslate.t("notFoundText")} />
@@ -110,7 +109,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
             <>
               <FlatList
                 keyExtractor={(meeting) => meeting._id}
-                data={groupBy<IMeeting>(state?.meetings, "type")[type]?.filter(
+                data={groupBy<IMeeting>(state?.allMeetings, "type")[type]?.filter(
                   (meeting) => meeting.month === currentMonth
                 )}
                 renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
@@ -124,21 +123,35 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
             </>
           )}
         </>}
+        
       </View> : <View style={styles.container}>
-        <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
-        {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
-            keyExtractor={(meeting) => meeting?._id}
-            data={state.meetings}
-            renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
-            scrollEnabled={false}
-          />}
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("taskOrReading")}</Text>
+        { (preachersContext.state.preacher?.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
+          {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
+              keyExtractor={(meeting) => meeting?._id}
+              data={state.meetings}
+              renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
+              scrollEnabled={false}
+            />}
+        </>}
+        
+          {preachersContext.state.preacher?.roles?.includes("can_have_assignment") && <>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("taskOrReading")}</Text>
             {state.assignments?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(assignment) => assignment?._id}
               data={state.assignments}
               renderItem={({ item }) => <PreacherAssignment type={item.type} assignment={item} preacher={preachersContext.state.preacher!} />}
               scrollEnabled={false}
             />}
+          </>}
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>Sprzątanie</Text>
+            {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
+              keyExtractor={(meeting) => meeting?._id}
+              data={state.allMeetings?.filter(meeting => meeting.cleaningGroup?.preachers.includes(preachersContext.state.preacher?._id.toString()!))}
+              renderItem={({ item }) => <CleaningAssignment meetingDate={new Date(item.date)} />}
+              scrollEnabled={false}
+          />}
+        
       </View>}
       
     </ScrollView>

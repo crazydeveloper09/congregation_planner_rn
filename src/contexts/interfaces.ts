@@ -64,7 +64,7 @@ export interface ITerritory {
 export interface IMinistryGroup {
     _id: string;
     name: string;
-    preachers: IPreacher[];
+    preachers: IPreacher[] | string[];
     overseer: IPreacher;
     congregation: ICongregation;
 }

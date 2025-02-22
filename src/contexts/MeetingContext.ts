@@ -15,6 +15,7 @@ const meetingTranslate = useLocaLization(meetingsTranslations);
 
 interface IMeetingState {
   isLoading?: boolean;
+  allMeetings?: IMeeting[];
   meetings?: IMeeting[];
   assignments?: IMeetingAssignment[];
   errMessage?: string;
@@ -43,7 +44,7 @@ const meetingReducer = (
       return {
         ...state,
         isLoading: false,
-        meetings: action.payload,
+        allMeetings: action.payload,
         errMessage: "",
       };
     case "load_preacher_data":
@@ -331,5 +332,5 @@ export const { Context, Provider } = createDataContext<
 >(
   meetingReducer,
   { loadMeetings, loadPreacherMeetingAssignments, addMeeting, editMeeting, deleteMeeting, addAssignment, editAssignment, deleteAssignment },
-  { isLoading: false, meetings: [] }
+  { isLoading: false, meetings: [], allMeetings: [] }
 );

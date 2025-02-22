@@ -53,24 +53,24 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                     <IconDescriptionValue 
                         iconName="laptop"
                         description={audioVideoTranslate.t("videoOperatorLabel")}
-                        value={audioVideo.videoOperator.name}
+                        value={audioVideo.videoOperator?.name}
                     />
                     
                     {audioVideo.audioOperator && <IconDescriptionValue 
                         iconName="audio-video"
                         description={audioVideoTranslate.t("audioOperatorLabel")}
-                        value={audioVideo.audioOperator.name}
+                        value={audioVideo.audioOperator?.name}
                     />}
                     <IconDescriptionValue 
                         iconName="microphone"
                         description={audioVideoTranslate.t("mic1Label")}
-                        value={audioVideo.microphone1Operator.name}
+                        value={audioVideo.microphone1Operator?.name}
                     />
         
                     {audioVideo.microphone2Operator && <IconDescriptionValue 
                         iconName="microphone-outline"
                         description={audioVideoTranslate.t("mic2Label")}
-                        value={audioVideo.microphone2Operator.name}
+                        value={audioVideo.microphone2Operator?.name}
                     />}
                     {((state.preacher && state.preacher.roles?.includes('can_edit_audio_video')) || authContext.state.whoIsLoggedIn === "admin") && <IconContainer>
                         <IconLink 

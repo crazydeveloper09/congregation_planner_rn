@@ -81,8 +81,8 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
     return <Loading />;
   }
 
-  const meetingsGroup = groupBy<IMeeting>(state.meetings!, "month");
-  const isMonth = Object.keys(groupBy<IMeeting>(state.meetings!, "month")).includes(currentMonth);
+  const meetingsGroup = groupBy<IMeeting>(state.allMeetings!, "month");
+  const isMonth = Object.keys(groupBy<IMeeting>(state.allMeetings!, "month")).includes(currentMonth);
   
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -95,7 +95,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
 
         {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
         {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
-          {state?.meetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntryText")} /> : <>
+          {state?.allMeetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntryText")} /> : <>
           <FlatList
             keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}

@@ -74,8 +74,8 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             {state.ministryMeetings?.length !== 0 && <>
                 <TopMenu state={currentMonth} data={ministryMeetingsGroup && Object.keys(ministryMeetingsGroup)} updateState={setCurrentMonth} />
-                {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_minimeetings")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
             </> }
+            {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_minimeetings")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
             
             <View style={styles.container}>
            
