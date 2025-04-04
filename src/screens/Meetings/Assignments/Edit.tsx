@@ -87,7 +87,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
-            const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {

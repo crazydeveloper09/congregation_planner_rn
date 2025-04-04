@@ -67,7 +67,7 @@ const MeetingNewScreen: React.FC = () => {
         .then((response) => {
             const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
-            const currentMonthMeetings = state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.beginPrayer?.name === preacher.name || meeting.endPrayer?.name === preacher.name).length
 

@@ -64,7 +64,7 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
         .then((response) => {
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
-            const currentMonthMeetings = meetingContext.state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const currentMonthMeetings = meetingContext.state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectVideoItems = response.data.filter((preacher) => preacher.roles.includes("can_be_video")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.videoOperator?.name === preacher.name).length
 

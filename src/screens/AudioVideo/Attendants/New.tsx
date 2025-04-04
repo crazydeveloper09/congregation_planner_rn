@@ -61,7 +61,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
         .then((response) => {
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
-            const currentMonthMeetings = meetingContext.state.meetings?.filter((meeting) => meeting.month === currentMonth);
+            const currentMonthMeetings = meetingContext.state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
             const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.ordinal?.hallway1?.name === preacher.name || meeting.ordinal?.hallway2?.name === preacher.name || meeting.ordinal?.auditorium?.name === preacher.name || meeting.ordinal?.parking?.name === preacher.name).length
 
