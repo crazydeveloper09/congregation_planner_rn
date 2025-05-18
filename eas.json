@@ -1,4 +1,9 @@
 {
+    "cli": {
+        "hooks": {
+          "post-install": "scripts/copy-localizations.ts"
+        }
+    },
     "build": {
       "development": {
         "distribution": "internal",
@@ -24,10 +29,7 @@
         "channel": "preview"
       },
       "production": {
-        "channel": "main",
-        "hooks": {
-          "post-install": "scripts/copy-localizations.ts"
-        }
+        "channel": "main"
       }
     },
     "submit": {
