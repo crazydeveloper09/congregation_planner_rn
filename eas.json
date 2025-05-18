@@ -25,17 +25,11 @@
       },
       "production": {
         "channel": "main",
-        "ios": {
-          "extraFiles": {
-            "locales/en.lproj/InfoPlist.strings": "ios/en.lproj/InfoPlist.strings",
-            "locales/pl.lproj/InfoPlist.strings": "ios/pl.lproj/InfoPlist.strings"
-          }
-        },
-        "android": {
-          "extraFiles": {
-            "android-res/values/strings.xml": "android/app/src/main/res/values/strings.xml",
-            "android-res/values-pl/strings.xml": "android/app/src/main/res/values-pl/strings.xml"
-          }
+        "extraFiles": {
+          "locales/en.lproj/InfoPlist.strings": "ios/en.lproj/InfoPlist.strings",
+          "locales/pl.lproj/InfoPlist.strings": "ios/pl.lproj/InfoPlist.strings",
+          "android-res/values/strings.xml": "android/app/src/main/res/values/strings.xml",
+          "android-res/values-pl/strings.xml": "android/app/src/main/res/values-pl/strings.xml"
         }
       }
     },
