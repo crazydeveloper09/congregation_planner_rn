@@ -7,6 +7,7 @@ export default {
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/mysplash.png",
       "resizeMode": "contain",
@@ -49,9 +50,6 @@ export default {
       "expo-font",
       [
         "expo-calendar",
-        {
-          "calendarPermission": "@string/calendar_permission"
-        }
       ],
       "expo-localization",
       [
