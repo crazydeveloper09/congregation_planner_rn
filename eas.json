@@ -1,9 +1,4 @@
 {
-    "cli": {
-        "hooks": {
-          "post-install": "scripts/copy-localizations.ts"
-        }
-    },
     "build": {
       "development": {
         "distribution": "internal",
