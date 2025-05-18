@@ -17,14 +17,6 @@ function run() {
       src: "locales/pl.lproj/InfoPlist.strings",
       dest: "ios/pl.lproj/InfoPlist.strings",
     },
-    {
-      src: "android-res/values/strings.xml",
-      dest: "android/app/src/main/res/values/strings.xml",
-    },
-    {
-      src: "android-res/values-pl/strings.xml",
-      dest: "android/app/src/main/res/values-pl/strings.xml",
-    },
   ];
 
   for (const { src, dest } of filesToCopy) {
