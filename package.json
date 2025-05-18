@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:scripts": "tsc",
-    "postinstall": "npm run build:scripts && node dist/scripts/copy-localizations.js"
+    "build:scripts": "tsc --noEmitOnError false",
+    "postinstall": "node dist/scripts/copy-localizations.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
