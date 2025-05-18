@@ -12,22 +12,28 @@ interface CleaningAssignmentProps {
 }
 
 const CleaningAssignment: React.FC<CleaningAssignmentProps> = ({
- meetingDate
+  meetingDate,
 }) => {
   const settingsContext = useContext(SettingsContext);
   const meetingTranslate = useLocaLization(meetingsTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
+  const dateToDisplay = new Date(meetingDate).toLocaleDateString();
   return (
     <>
-      <Text style={[{ fontSize: 18 + settingsContext.state.fontIncrement }, styles.title]}>
-        <Text>{new Date(meetingDate).toLocaleDateString()} - </Text>
-        <Text>Sprzątanie Sali Królestwa</Text>
+      <Text
+        style={[
+          { fontSize: 18 + settingsContext.state.fontIncrement },
+          styles.title,
+        ]}
+      >
+        <Text>{dateToDisplay} - </Text>
+        <Text>{meetingTranslate.t("cleaningTitle")}</Text>
       </Text>
       <IconLink
         onPress={() =>
           addMeetingAssignmentToCalendar(
             meetingDate,
-            'Sprzątanie Sali Królestwa',
+            meetingTranslate.t("cleaningTitle"),
             meetingTranslate.t("kingdomHallText")
           )
         }

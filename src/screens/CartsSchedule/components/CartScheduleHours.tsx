@@ -15,6 +15,7 @@ import { defaultDropdownStyles } from "../../defaultStyles";
 import useLocaLization from "../../../hooks/useLocalization";
 import { cartScheduleTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { convertTo12HourRange } from "../helpers/time";
 
 interface CartsScheduleHoursProps {
   hour: ICartHour;
@@ -62,7 +63,9 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={[styles.title, { fontSize: 23 + settingsContext.state.fontIncrement }]}>{hour?.timeDescription}</Text>
+        <Text style={[styles.title, { fontSize: 23 + settingsContext.state.fontIncrement }]}>
+          {settingsContext.state.format12h ? convertTo12HourRange(hour?.timeDescription) : hour?.timeDescription}
+        </Text>
         {((state.preacher && state.preacher.roles?.includes("can_edit_cartSchedule") || state.preacher?.roles?.includes("can_self-assign_cartHour")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
         {editMode ? <MaterialCommunityIcons name="eye-outline" size={23 + settingsContext.state.fontIncrement} /> : <MaterialCommunityIcons name="pencil" size={23 + settingsContext.state.fontIncrement} />}
         </TouchableOpacity>}

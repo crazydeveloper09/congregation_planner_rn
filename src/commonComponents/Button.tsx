@@ -10,6 +10,7 @@ interface ButtonProps {
   color?: string;
   fontColor?: string;
   marginBottom?: number;
+  isTransparent?: boolean;
 }
 
 const ButtonC: React.FC<ButtonProps> = ({
@@ -18,16 +19,27 @@ const ButtonC: React.FC<ButtonProps> = ({
   isLoading,
   color,
   fontColor,
-  marginBottom
+  marginBottom,
+  isTransparent,
 }) => {
   const settingsContext = useContext(SettingsContext);
-  // #AD1F1F
+
   return (
     <>
-      <Button 
-        title={title} 
-        buttonStyle={[styles.button, { backgroundColor: color || settingsContext.state.mainColor, marginBottom }]} 
-        titleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement, color: fontColor || 'white', }} 
+      <Button
+        title={title}
+        buttonStyle={[
+          styles.button,
+          {
+            backgroundColor: color || settingsContext.state.mainColor,
+            marginBottom,
+          },
+          isTransparent && { borderWidth: 1, borderColor: fontColor },
+        ]}
+        titleStyle={{
+          fontSize: 18 + settingsContext.state.fontIncrement,
+          color: fontColor || "white",
+        }}
         onPress={onPress}
         loading={isLoading}
       />

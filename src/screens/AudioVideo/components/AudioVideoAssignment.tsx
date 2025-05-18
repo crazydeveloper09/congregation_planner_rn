@@ -23,12 +23,14 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
   const mainTranslate = useLocaLization(mainTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
   const settingsContext = useContext(SettingsContext);
+  const dateToDisplay = new Date(assignment.meeting?.date).toLocaleDateString();
+
   return (
     <View>
       {preacher && preacher._id === assignment.videoOperator?._id && (
         <View>
           <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+            {dateToDisplay} - {""}
             {audioVideoTranslate.t("videoOperatorLabel")}
           </Text>
           <IconLink
@@ -48,7 +50,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.audioOperator?._id && (
         <View>
           <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+            {dateToDisplay} - {""}
             {audioVideoTranslate.t("audioOperatorLabel")}
           </Text>
           <IconLink
@@ -68,7 +70,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.microphone1Operator?._id && (
         <View>
           <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+            {dateToDisplay} - {""}
             {audioVideoTranslate.t("mic1Label")}
           </Text>
           <IconLink
@@ -88,7 +90,7 @@ const AudioVideoAssignment: React.FC<AudioVideoAssignmentProps> = ({
       {preacher && preacher._id === assignment.microphone2Operator?._id && (
         <View>
           <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+            {dateToDisplay} - {""}
             {audioVideoTranslate.t("mic2Label")}
           </Text>
           <IconLink

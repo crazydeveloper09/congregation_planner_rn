@@ -10,11 +10,16 @@ import { Context as SettingsContext } from "../contexts/SettingsContext";
 import PreachersNavigator from "./Preachers";
 import AuthNavigator from "./Auth";
 import CongregationsNavigator from "./CongregationNavigator";
+import HelpInTranslationScreen from "../screens/Settings/HelpInTranslation";
+import ShareIdeaScreen from "../screens/Settings/ShareIdea";
+import RaiseIssueScreen from "../screens/Settings/RaiseIssue";
+import { settingsTranslations } from "../screens/Settings/translations";
 
 const Stack = createStackNavigator()
 
 const SettingsNavigator = () => {
   const mainTranslate = useLocaLization(mainTranslations);
+  const settingsTranslate = useLocaLization(settingsTranslations);
   const settingsContext = useContext(SettingsContext);
   useEffect(() => {
 
@@ -36,6 +41,21 @@ const SettingsNavigator = () => {
                 component={PoliciesEnScreen} 
                 options={{ headerTitle: 'Privacy policy and GPDR' }}
             />  
+            <Stack.Screen 
+                name="Translate" 
+                component={HelpInTranslationScreen} 
+                options={{ headerTitle: settingsTranslate.t("translateLabel") }}
+            />
+            <Stack.Screen 
+                name="Suggestion" 
+                component={ShareIdeaScreen} 
+                options={{ headerTitle: settingsTranslate.t("feedbackLabel") }}
+            />
+            <Stack.Screen 
+                name="Error" 
+                component={RaiseIssueScreen} 
+                options={{ headerTitle: settingsTranslate.t("issueLabel") }}
+            />
             <Stack.Screen name="Preachers" component={PreachersNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="Cong" component={CongregationsNavigator} options={{ headerShown: false }} />
         </Stack.Navigator>

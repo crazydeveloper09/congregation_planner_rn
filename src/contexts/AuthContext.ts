@@ -34,6 +34,7 @@ export interface IAuthContext {
   editCongregation: Function;
   loadCongregationInfo: Function;
   loadCongregationActivities: Function;
+  askAccess: Function;
 }
 
 interface ISignIn {
@@ -187,11 +188,11 @@ const loadCongregationActivities = (dispatch: Function) => {
 }
 
 const editCongregation = (dispatch: Function) => {
-  return async (username: string, territoryServantEmail: string, ministryOverseerEmail: string, mainCity: string, congregationID: string) => {
+  return async (username: string, territoryServantEmail: string, ministryOverseerEmail: string, congregationID: string) => {
     try {
         dispatch({ type: 'turn_on_loading' })
         const token = await AsyncStorage.getItem('token');
-        const response = await tmApi.put(`/congregations/${congregationID}`, {congregation: {username, territoryServantEmail, ministryOverseerEmail, mainCity}}, {
+        const response = await tmApi.put(`/congregations/${congregationID}`, {congregation: {username, territoryServantEmail, ministryOverseerEmail}}, {
             headers: {
                 'Authorization': `bearer ${token}`
             }
@@ -199,7 +200,24 @@ const editCongregation = (dispatch: Function) => {
         navigate('CongInfo');
         dispatch({ type: 'turn_off_loading' })
         showMessage({
-          message: `Poprawnie edytowano informacje zborowe`,
+          message: authTranslate.t("editCongMessage"),
+          type: 'success',
+      })
+    } catch(err) {
+        dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+    }
+}
+}
+
+const askAccess = (dispatch: Function) => {
+  return async (name: string, congName: string, contactEmail: string) => {
+    try {
+        dispatch({ type: 'turn_on_loading' })
+        const response = await tmApi.post(`/ask-access`, {name, congName, contactEmail});
+        navigate('Welcome');
+        dispatch({ type: 'turn_off_loading' })
+        showMessage({
+          message: authTranslate.t("askAccessMessage"),
           type: 'success',
       })
     } catch(err) {
@@ -210,6 +228,6 @@ const editCongregation = (dispatch: Function) => {
 
 export const { Context, Provider } = createDataContext<IAuth, IAuthContext>(
   authReducer,
-  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, editCongregation, loadCongregationInfo, logInPreacher },
+  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, editCongregation, loadCongregationInfo, logInPreacher, askAccess },
   { token: "", errMessage: "", successMessage: "" }
 );

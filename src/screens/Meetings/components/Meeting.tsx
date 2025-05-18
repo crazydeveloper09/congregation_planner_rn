@@ -33,6 +33,14 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const meetingTranslate = useLocaLization(meetingsTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
+    const dateToDisplay = new Date(meeting?.date).toLocaleString("pl-PL", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        year: "numeric",
+        hour12: settingsContext.state.format12h,
+    });
 
     if(state.preacher && filter === mainTranslate.t("myAssignments")) {
         return (
@@ -40,14 +48,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.lead?._id && (
                 <View>
                     <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-                        {new Date(meeting?.date).toLocaleString('pl-PL', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false
-                            })} - {""}
+                        {new Date(meeting?.date).toLocaleDateString()} - {""}
                          {meetingTranslate.t("leadLabel")}
                     </Text>
                     <IconLink 
@@ -62,14 +63,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.beginPrayer?._id && (
                 <View>
                     <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-                        {new Date(meeting?.date).toLocaleString('pl-PL', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false
-                            })} - {""}
+                        {new Date(meeting?.date).toLocaleDateString()} - {""}
                         {meetingTranslate.t("beginPrayerLabel")}
                     </Text>
                     <IconLink 
@@ -83,14 +77,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
             {state.preacher?._id === meeting.endPrayer?._id && (
                 <View>
                     <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-                        {new Date(meeting?.date).toLocaleString('pl-PL', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false
-                            })} - {""}
+                        {new Date(meeting?.date).toLocaleDateString()} - {""}
                         {meetingTranslate.t("endPrayerLabel")}
                     </Text>
                     <IconLink
@@ -114,14 +101,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(meeting.date).toLocaleString('pl-PL', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    })} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{dateToDisplay} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }
@@ -134,7 +114,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                 {meeting?.cleaningGroup && <IconDescriptionValue 
                             iconName="broom"
                             value={meeting?.cleaningGroup?.name}
-                            description="Sprzątanie"
+                            description={meetingTranslate.t("cleaningLabel")}
                         />}
                         <IconDescriptionValue 
                             iconName="music"

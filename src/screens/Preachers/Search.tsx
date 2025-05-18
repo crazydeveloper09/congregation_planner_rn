@@ -33,7 +33,7 @@ const PreachersSearchScreen: React.FC = () => {
         containerStyle={styles.containerInput}
       />
       <ButtonC
-        title="Szukaj"
+        title={preacherTranslate.t("searchButtonText")}
         onPress={() => {
           searchPreacher(param);
           setSubmitted(true);

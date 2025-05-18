@@ -7,6 +7,7 @@ import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "../screens/Congregation/translations";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { useContext } from "react";
+import CongregationAskAccessScreen from "../screens/Congregation/AskAccess";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,11 @@ const AuthNavigator = () => {
                     options={{ 
                         headerTitle: i18n.t('loginHeaderText'), 
                     }}
+                />
+                <Stack.Screen 
+                    name="Ask access" 
+                    component={CongregationAskAccessScreen} 
+                    options={{ headerTitle: i18n.t('askAccessLabel') }}
                 />  
                 <Stack.Screen 
                     name="TwoFactor" 

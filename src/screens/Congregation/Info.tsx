@@ -13,6 +13,7 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { FlatList } from 'react-native-gesture-handler';
 import Preacher from '../Preachers/components/Preacher';
 import { columnsNum } from '../../helpers/devices';
+import { authTranslations } from './translations';
 
 interface CongregationsInfoScreenProps {
     navigation: NavigationProp<any>
@@ -23,12 +24,13 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
     const preacherContext = useContext(PreacherContext);
     const settingsContext = useContext(SettingsContext);
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
+    const congregationTranslate = useLocaLization(authTranslations);
 
     useEffect(() => {
         loadCongregationInfo();
         preacherContext.loadAllPreachers();
         navigation.setOptions({
-            headerTitle: state.congregation?.username || 'Zbór',
+            headerTitle: state.congregation?.username || congregationTranslate.t("sectionLabel"),
             headerRight: () =>
             state.whoIsLoggedIn === "admin" && <View style={styles.headerRight}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditCong')}>
@@ -60,17 +62,17 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
     return (
         <ScrollView style={styles.container}>
             { state.whoIsLoggedIn === "admin" ? <>
-                <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Ogólne informacje</Text>
+                <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("mainInfo")}</Text>
                 <View style={styles.congregationInfo}>
-                    <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>Email głównego admina</Text>
+                    <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("adminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.territoryServantEmail}</Text>
                 </View>
                 <View style={styles.congregationInfo}>
-                    <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>Email drugiego admina</Text>
+                    <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("secondAdminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.ministryOverseerEmail}</Text>
                 </View>
             </> : <>
-                <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Jeśli potrzebujesz pomocy z aplikacją zwróć się do: </Text>
+                <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("helpText")}</Text>
                 <FlatList 
                     keyExtractor={((preacher) => preacher._id)}
                     data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('admin'))}
@@ -81,7 +83,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             </> }
     
 
-            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Starsi</Text>
+            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("elder")}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('elder'))}
@@ -89,7 +91,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
-            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Słudzy pomocniczy</Text>
+            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("minSer")}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('mini_servant'))}
@@ -97,7 +99,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
-            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Pionierzy stali</Text>
+            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("pioneer")}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('pioneer'))}
@@ -105,7 +107,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
-            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>Pionierzy pomocniczy</Text>
+            <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("auxPioneer")}</Text>
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('aux_pioneer'))}

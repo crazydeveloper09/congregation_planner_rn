@@ -23,12 +23,19 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
   const settingsContext = useContext(SettingsContext);
   const mainTranslate = useLocaLization(mainTranslations);
   const meetingTranslate = useLocaLization(meetingsTranslations);
+  const dateToDisplay = new Date(assignment.meeting?.date).toLocaleDateString();
+
   return (
     <View>
       {preacher && preacher._id === assignment.hallway1?._id && (
         <View>
-          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {dateToDisplay} - {""}
             {attendantTranslate.t("hallwayLabel")}
           </Text>
           <IconLink
@@ -47,8 +54,13 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.hallway2?._id && (
         <View>
-          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {dateToDisplay} - {""}
             {attendantTranslate.t("hallway2Label")}
           </Text>
           <IconLink
@@ -67,8 +79,13 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.auditorium?._id && (
         <View>
-          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {dateToDisplay} - {""}
             {attendantTranslate.t("auditoriumLabel")}
           </Text>
           <IconLink
@@ -87,8 +104,13 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
       )}
       {preacher && preacher._id === assignment.parking?._id && (
         <View>
-          <Text style={[styles.title, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-            {new Date(assignment.meeting?.date).toLocaleString("pl-PL")} - {""}
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {dateToDisplay} - {""}
             {attendantTranslate.t("parkingLabel")}
           </Text>
           <IconLink

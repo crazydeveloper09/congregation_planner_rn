@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.2.8",
+    "version": "3.10.0",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -39,7 +39,7 @@ export default {
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 27,
+      "versionCode": 28,
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {
@@ -50,7 +50,7 @@ export default {
       [
         "expo-calendar",
         {
-          "calendarPermission": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza"
+          "calendarPermission": "@string/calendar_permission"
         }
       ],
       "expo-localization",

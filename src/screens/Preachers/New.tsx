@@ -99,7 +99,7 @@ const PreachersNewScreen: React.FC = () => {
                 }}
                 placeholder={preacherTranslate.t("privilegesPlaceholder")}
             />
-            <ButtonC title="Dodaj głosiciela" isLoading={state.isLoading} onPress={() => addPreacher(name, rolesValue, privilegesValue)} />
+            <ButtonC title={preacherTranslate.t("addButtonText")} isLoading={state.isLoading} onPress={() => addPreacher(name, rolesValue, privilegesValue)} />
         </View>
     )
 }

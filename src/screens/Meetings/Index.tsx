@@ -144,7 +144,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
               scrollEnabled={false}
             />}
           </>}
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>Sprzątanie</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("cleaningLabel")}</Text>
             {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(meeting) => meeting?._id}
               data={state.allMeetings?.filter(meeting => meeting.cleaningGroup?.preachers.includes(preachersContext.state.preacher?._id.toString()!))}

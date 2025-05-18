@@ -7,6 +7,7 @@ import { authTranslations } from "./Congregation/translations";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import ButtonC from "../commonComponents/Button";
 import { isTablet } from "../helpers/devices";
+import { mainTranslations } from "../../localization";
 
 interface WelcomeScreenProps {
     navigation: NavigationProp<any>
@@ -15,24 +16,34 @@ interface WelcomeScreenProps {
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
     const settingsContext = useContext(SettingsContext);
     const i18n = useLocaLization(authTranslations);
+    const mainTranslate = useLocaLization(mainTranslations)
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: settingsContext.state.mainColor }]} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
-            {isTablet ? <Image source={logo_transparent} width={200} height={200} /> : <Image source={logo_transparent} style={styles.image} />}
+            {isTablet ? <Image source={logo_transparent} width={150} height={150} /> : <Image source={logo_transparent} style={styles.image} />}
             <Text style={[styles.title, { fontSize: ( isTablet ? 30: 25) + settingsContext.state.fontIncrement }]}>{i18n.t('greeting')}</Text>
             
-            <View style={{ flexDirection: 'column', gap: 20 }}>
-                <ButtonC 
-                    title={i18n.t('adminLoginButton')}
-                    onPress={() => navigation.navigate("Log in", { type: "admin" })}
-                    color="#ffffff35"
-                />
-
+            <View style={{ flexDirection: 'column', gap: 20, marginTop: 20, width: '100%' }}>
+            
+                <Text style={styles.label}>{mainTranslate.t("registeredCong")}</Text>
                 <ButtonC 
                     title={i18n.t('preacherLoginButton')}
                     onPress={() => navigation.navigate("Log in", { type: "preacher" })}
                     color="white"
                     fontColor={settingsContext.state.mainColor}
+                />
+                <ButtonC 
+                    title={i18n.t('adminLoginButton')}
+                    onPress={() => navigation.navigate("Log in", { type: "admin" })}
+                    color="#ffffff35"
+                />
+                <Text style={styles.label}>{mainTranslate.t("newCong")}</Text>
+                <ButtonC 
+                    title={i18n.t("askAccessLabel")}
+                    onPress={() => navigation.navigate("Ask access")}
+                    color="rgba(0, 0, 0, 0.0)"
+                    fontColor={"white"}
+                    isTransparent
                 />
             </View>
             
@@ -44,11 +55,17 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         padding: 25,
+        paddingTop: 15
     },
     title: {
         fontFamily: "SatisfyRegular",
         marginBottom: 30,
         color: 'white'
+    },
+    label: {
+        fontSize: 18,
+        fontFamily: "PoppinsRegular",
+        color: "white"
     },
     image: {
         width: '100%',

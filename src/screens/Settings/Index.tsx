@@ -1,26 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, StyleSheet, Switch, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { Context as AuthContext } from "../../contexts/AuthContext";
 import packageJson from "../../../package.json";
-import { Button } from "@rneui/themed";
-import { NavigationProp } from "@react-navigation/native";
 import useLocaLization from "../../hooks/useLocalization";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
-import { Slider } from "@rneui/base";
+import { Slider, Switch } from "@rneui/base";
 import { ScrollView } from "react-native";
 import SectionTitle from "./components/SectionTitle";
 import SectionLink from "./components/SectionLink";
 import SectionButton from "./components/SectionButton";
-
+import { preachersTranslations } from "../Preachers/translations";
+import { authTranslations } from "../Congregation/translations";
+import { settingsTranslations } from "./translations";
 
 const SettingsScreen: React.FC = () => {
   const auth = useContext(AuthContext);
   const mainTranslate = useLocaLization(mainTranslations);
-  const { state, changeMainColor, loadColor, incrementFont } =
+  const preacherTranslate = useLocaLization(preachersTranslations);
+  const congregationTranslate = useLocaLization(authTranslations);
+  const settingsTranslate = useLocaLization(settingsTranslations);
+  const { state, changeMainColor, loadColor, incrementFont, changeFormat } =
     useContext(SettingsContext);
-  const [fontIncrement, setFontIncrement] = useState<number>(state.fontIncrement || 0);
+  const [fontIncrement, setFontIncrement] = useState<number>(
+    state.fontIncrement || 0
+  );
+  const [format12h, setFormat12h] = useState(false);
 
   useEffect(() => {
     loadColor();
@@ -72,26 +78,31 @@ const SettingsScreen: React.FC = () => {
       style={styles.container}
       contentContainerStyle={{ justifyContent: "center", paddingBottom: 40 }}
     >
-      <SectionTitle iconName="account-group-outline" value="Zbór" />
+      <SectionTitle
+        iconName="account-group-outline"
+        value={congregationTranslate.t("sectionLabel")}
+      />
       <View style={styles.section}>
         <SectionLink
           screen="Cong"
           iconName="information-outline"
-          description="Informacje"
+          description={settingsTranslate.t("infoLabel")}
         />
         {auth.state.whoIsLoggedIn === "admin" && (
           <SectionLink
             screen="Preachers"
             iconName="account"
-            description="Głosiciele"
+            description={preacherTranslate.t("sectionText")}
           />
         )}
-  
       </View>
       {auth.state.whoIsLoggedIn === "admin" && ""}
-      <SectionTitle iconName="palette-outline" value="Personalizacja" />
+      <SectionTitle
+        iconName="palette-outline"
+        value={settingsTranslate.t("customizeSectionLabel")}
+      />
       <View style={styles.section}>
-        <Text style={styles.title}>{mainTranslate.t("chooseColor")}</Text>
+        <Text style={styles.title}>{settingsTranslate.t("chooseColor")}</Text>
         <FlatList
           data={availableColors}
           renderItem={({ item }) => (
@@ -111,7 +122,7 @@ const SettingsScreen: React.FC = () => {
           numColumns={2}
           contentContainerStyle={{ gap: 15, marginTop: 15, paddingBottom: 25 }}
         />
-        <Text style={styles.title}>Dostosuj wielkość czcionki</Text>
+        <Text style={styles.title}>{settingsTranslate.t("fontIncreaseLabel")}</Text>
         <View style={{ marginVertical: 20 }}>
           <Slider
             value={fontIncrement}
@@ -123,27 +134,76 @@ const SettingsScreen: React.FC = () => {
             thumbTintColor={state.mainColor}
           />
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 20,
+          }}
+        >
+          <Text style={styles.title}>{settingsTranslate.t("12hFormat")}</Text>
+          <Switch
+            color={state.mainColor}
+            style={{
+              alignSelf: "flex-start",
+              transform: [
+                { scaleX: 1.3 + state.fontIncrement / 10 },
+                { scaleY: 1.3 + state.fontIncrement / 10 },
+              ],
+            }}
+            value={format12h}
+            onValueChange={(value) => {
+              setFormat12h(value);
+              changeFormat(value)
+            }}
+          />
+        </View>
+      </View>
+      <SectionTitle
+        iconName="handshake-outline"
+        value={settingsTranslate.t("contributionLabel")}
+      />
+      <View style={[styles.section, { marginBottom: 20 }]}>
+        <SectionLink
+          screen={`Translate`}
+          iconName="google-translate"
+          description={settingsTranslate.t("translateLabel")}
+        />
+        <SectionLink
+          screen={`Suggestion`}
+          iconName="message-reply-text-outline"
+          description={settingsTranslate.t("feedbackLabel")}
+        />
+        <SectionLink
+          screen={`Error`}
+          iconName="bug"
+          description={settingsTranslate.t("issueLabel")}
+        />
       </View>
 
-      <SectionTitle iconName="file-document-outline" value="Prawo" />
+      <SectionTitle
+        iconName="file-document-outline"
+        value={settingsTranslate.t("lawLabel")}
+      />
       <View style={styles.section}>
         <SectionLink
           screen={`Policy_${mainTranslate.locale}`}
           iconName="file-document"
-          description={mainTranslate.t("policyLabel")}
+          description={settingsTranslate.t("policyLabel")}
         />
       </View>
       <SectionButton
         iconName="power"
-        description={mainTranslate.t("logOutLabel")}
+        description={settingsTranslate.t("logOutLabel")}
         onPress={() => auth.signOut()}
       />
       <View style={{ paddingTop: 15 }}>
         <Text style={styles.versionText}>
-          {mainTranslate.t("copyrightLabel")}
+          {settingsTranslate.t("copyrightLabel")}
         </Text>
         <Text style={styles.versionText}>
-          {mainTranslate.t("versionLabel")} {packageJson.version}
+          {settingsTranslate.t("versionLabel")} {packageJson.version}
         </Text>
       </View>
     </ScrollView>

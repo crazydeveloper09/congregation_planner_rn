@@ -4,13 +4,16 @@ import { Context as AuthContext } from "../../contexts/AuthContext";
 import Loading from "../../commonComponents/Loading";
 import ButtonC from "../../commonComponents/Button";
 import MyInput from "../../commonComponents/MyInput";
+import useLocaLization from "../../hooks/useLocalization";
+import { authTranslations } from "./translations";
 
 const CongregationEditScreen: React.FC = () => {
     const { editCongregation, state, loadCongregationInfo } = useContext(AuthContext);
     const [username, setUsername] = useState('')
     const [ministryOverseerEmail, setMinistryOverseerEmail] = useState('')
     const [territoryServantEmail, setTerritoryServantEmail] = useState('')
-    const [mainCity, setMainCity] = useState('')
+    const [mainCity, setMainCity] = useState('');
+    const authTranslate = useLocaLization(authTranslations)
 
     useEffect(() => {
         loadCongregationInfo();
@@ -30,32 +33,26 @@ const CongregationEditScreen: React.FC = () => {
     return (
         <View style={styles.container}>
             <MyInput 
-                label="Edytuj nazwę zboru"
-                placeholder='Wpisz nazwę zboru'
+                label={authTranslate.t("usernameLabel")}
+                placeholder={authTranslate.t("usernamePlaceholder")}
                 value={username}
                 onChangeText={setUsername}
             />
 
             <MyInput 
-                label="Edytuj mail sługi terenu"
-                placeholder='Wpisz mail sługi terenu'
+                label={authTranslate.t("adminLabel")}
+                placeholder={authTranslate.t("adminPlaceholder")}
                 value={territoryServantEmail}
                 onChangeText={setTerritoryServantEmail}
             />
             <MyInput 
-                label="Edytuj mail nadzorcy służby"
-                placeholder='Wpisz mail nadzorcy służby'
+                label={authTranslate.t("secondAdminLabel")}
+                placeholder={authTranslate.t("secondAdminPlaceholder")}
                 value={ministryOverseerEmail}
                 onChangeText={setMinistryOverseerEmail}
             />
-            <MyInput 
-                label="Edytuj główne miasto zboru"
-                placeholder='Wpisz główne miasto zboru'
-                value={mainCity}
-                onChangeText={setMainCity}
-            />
 
-            <ButtonC title='Edytuj zbór' isLoading={state.isLoading} onPress={() => editCongregation(username, territoryServantEmail, ministryOverseerEmail, mainCity, state.congregation?._id)} />
+            <ButtonC title={authTranslate.t("editCongText")} isLoading={state.isLoading} onPress={() => editCongregation(username, territoryServantEmail, ministryOverseerEmail, state.congregation?._id)} />
         </View>
     )
 }

@@ -28,6 +28,14 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
     const settingsContext = useContext(SettingsContext);
     const audioVideoTranslate = useLocaLization(audioVideoTranslations)
     const mainTranslate = useLocaLization(mainTranslations);
+      const dateToDisplay = new Date(meeting?.date).toLocaleString("pl-PL", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    year: "numeric",
+    hour12: settingsContext.state.format12h,
+  });
     return (
         <View>
             <ListItem.Accordion
@@ -39,7 +47,7 @@ const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
                 <>
                 
                 <ListItem.Content>
-                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{new Date(meeting.date).toLocaleDateString('pl-PL')} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
+                    <ListItem.Title style={[styles.date, { fontSize: 20 + settingsContext.state.fontIncrement }]}>{dateToDisplay} { new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL") && mainTranslate.t("today") }</ListItem.Title>
                 </ListItem.Content>
                 </>
             }

@@ -26,6 +26,7 @@ import HeaderRight from "../../commonComponents/HeaderRight";
 import useLocaLization from "../../hooks/useLocalization";
 import { cartScheduleTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { convertTo12HourRange } from "./helpers/time";
 
 interface CartsScheduleIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -201,7 +202,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
                 keyExtractor={(hour) => hour._id}
                 data={state.cartHours}
                 renderItem={({ item }) => <>
-                  <Text style={[styles.myDate, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{item.cartDay.date} - {item.timeDescription} - {item.cartDay.place}</Text>
+                  <Text style={[styles.myDate, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{item.cartDay.date} - {settingsContext.state.format12h ? convertTo12HourRange(item.timeDescription) : item.timeDescription} - {item.cartDay.place}</Text>
                   <IconLink 
                         onPress={() => addCartAssignmentToCalendar(item.cartDay.date, item.timeDescription, item.cartDay.place)}
                         iconName="calendar-month-outline"

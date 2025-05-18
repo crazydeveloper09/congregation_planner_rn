@@ -19,6 +19,8 @@ const MyInput: React.FC<InputProps> = (props) => {
             secureTextEntry={props.secureTextEntry}
             autoCorrect={props.autoCorrect}
             autoCapitalize={props.autoCapitalize}
+            multiline={props.multiline}
+            numberOfLines={props.numberOfLines}
         />
     )
 }
