@@ -1,5 +1,6 @@
 locales/
 scripts/
-build-localizations/
 *.ts
 *.tsx
+*.map
+node_modules/

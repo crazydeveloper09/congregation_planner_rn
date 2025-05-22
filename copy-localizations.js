@@ -28,8 +28,8 @@ function run() {
   console.log("📦 Copying localization files...");
 
   // iOS InfoPlist.strings
-  const iosLocalesDir = path.join(__dirname, "../locales/ios");
-  const iosDestRoot = path.join(__dirname, "../ios");
+  const iosLocalesDir = path.join(__dirname, "./locales");
+  const iosDestRoot = path.join(__dirname, "./ios");
   copyDirContents(iosLocalesDir, iosDestRoot);
 
   console.log("🎉 Localization files copied.");
