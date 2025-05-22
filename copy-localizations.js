@@ -1,27 +1,38 @@
 const fs = require("fs");
 const path = require("path");
 
-function copyFile(src, dest) {
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
-  console.log(`✅ Copied ${src} → ${dest}`);
+function copyDirContents(srcDir, destDir) {
+  if (!fs.existsSync(srcDir)) {
+    console.warn(`Source directory does not exist: ${srcDir}`);
+    return;
+  }
+
+  fs.mkdirSync(destDir, { recursive: true });
+
+  const items = fs.readdirSync(srcDir);
+  for (const item of items) {
+    const srcPath = path.join(srcDir, item);
+    const destPath = path.join(destDir, item);
+
+    const stat = fs.statSync(srcPath);
+    if (stat.isDirectory()) {
+      copyDirContents(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+      console.log(`✅ Copied ${srcPath} → ${destPath}`);
+    }
+  }
 }
 
 function run() {
-  const filesToCopy = [
-    {
-      src: "locales/en.lproj/InfoPlist.strings",
-      dest: "ios/en.lproj/InfoPlist.strings",
-    },
-    {
-      src: "locales/pl.lproj/InfoPlist.strings",
-      dest: "ios/pl.lproj/InfoPlist.strings",
-    },
-  ];
+  console.log("📦 Copying localization files...");
 
-  for (const { src, dest } of filesToCopy) {
-    copyFile(src, dest);
-  }
+  // iOS InfoPlist.strings
+  const iosLocalesDir = path.join(__dirname, "../locales/ios");
+  const iosDestRoot = path.join(__dirname, "../ios");
+  copyDirContents(iosLocalesDir, iosDestRoot);
+
+  console.log("🎉 Localization files copied.");
 }
 
 run();

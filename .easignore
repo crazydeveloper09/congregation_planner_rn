@@ -1,2 +1,5 @@
+locales/
 scripts/
-dist/
+build-localizations/
+*.ts
+*.tsx

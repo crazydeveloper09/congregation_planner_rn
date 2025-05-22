@@ -24,7 +24,10 @@
         "channel": "preview"
       },
       "production": {
-        "channel": "main"
+        "channel": "main",
+        "hooks": {
+          "prebuild": "node scripts/copy-localizations.js"
+        }
       }
     },
     "submit": {
