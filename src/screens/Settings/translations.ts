@@ -32,7 +32,7 @@ export const settingsTranslations = {
         chooseColor: "Choose application main color",
         chooseMonth: "Choose month",
         infoLabel: "Info",
-        customizeSectionLabel: "Customization",
+        customizeSectionLabel: "Personalisation",
         fontIncreaseLabel: "Adjust font size",
         lawLabel: "Law",
         policyLabel: "Privacy policy and GPDR clause",
@@ -50,9 +50,9 @@ export const settingsTranslations = {
         toLangPlaceholder: "Write language which you want app to translate",
         contributionLabel: "Your contribution",
         translateLabel: "Help in translation",
-        successTranslateLabel: "Poprawnie zgłoszono chęć pomocy w tłumaczeniu",
-        successFeedbackLabel: "Poprawnie podzielono się sugestią",
-        successRaiseIssueLabel: "Poprawnie zgłoszono błąd",
+        successTranslateLabel: "Successfully agreed to help with translation",
+        successFeedbackLabel: "Successfully shared an idea",
+        successRaiseIssueLabel: "Successfully raised an issue",
         feedbackLabel: "Share suggestion",
         issueLabel: "Raise issue"
     }

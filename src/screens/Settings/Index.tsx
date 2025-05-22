@@ -26,7 +26,7 @@ const SettingsScreen: React.FC = () => {
   const [fontIncrement, setFontIncrement] = useState<number>(
     state.fontIncrement || 0
   );
-  const [format12h, setFormat12h] = useState(false);
+  const [format12h, setFormat12h] = useState(state.format12h || false);
 
   useEffect(() => {
     loadColor();
@@ -54,7 +54,7 @@ const SettingsScreen: React.FC = () => {
       padding: 15,
     },
     title: {
-      fontSize: 18 + state.fontIncrement,
+      fontSize: 20 + state.fontIncrement,
       fontFamily: "MontserratRegular",
     },
     section: {

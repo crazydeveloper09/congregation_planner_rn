@@ -1,13 +1,12 @@
 {
   "name": "congregation_planner",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "postinstall": "node copy-localizations.js"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
@@ -24,11 +23,14 @@
     "date-fns": "^3.6.0",
     "expo": "~52.0.46",
     "expo-calendar": "~14.0.6",
+    "expo-constants": "~17.0.8",
     "expo-font": "~13.0.4",
     "expo-local-authentication": "~15.0.2",
     "expo-localization": "~16.0.1",
+    "expo-notifications": "~0.29.14",
     "expo-status-bar": "~2.0.1",
     "expo-updates": "~0.27.4",
+    "formik": "^2.4.6",
     "i18n-js": "^4.4.3",
     "make-plural": "^7.4.0",
     "react": "18.3.1",
@@ -45,8 +47,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.13",
-    "expo-notifications": "~0.29.14",
-    "expo-constants": "~17.0.8"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

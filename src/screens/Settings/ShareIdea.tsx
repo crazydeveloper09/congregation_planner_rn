@@ -1,62 +1,116 @@
-import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { View, StyleSheet } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 import MyInput from "../../commonComponents/MyInput";
-import useLocaLization from "../../hooks/useLocalization";
-import { authTranslations } from "../Congregation/translations";
-import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import ButtonC from "../../commonComponents/Button";
+import useLocaLization from "../../hooks/useLocalization";
+import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
+import { mainTranslations } from "../../../localization";
 
 const ShareIdeaScreen: React.FC = () => {
-    const [name, setName] = useState('')
-    const [shortDescription, setShortDescription] = useState('');
-    const [detailedDescription, setDetailedDescription] = useState('');
-    const [email, setEmail] = useState('');
-    
     const authTranslate = useLocaLization(authTranslations);
     const settingsTranslate = useLocaLization(settingsTranslations);
-    const {state, shareIdea} = useContext(SettingsContext)
+    const mainTranslate = useLocaLization(mainTranslations);
+    const { state, shareIdea } = useContext(SettingsContext);
+
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required(mainTranslate.t("emptyField")),
+        shortDescription: Yup.string().required(mainTranslate.t("emptyField")),
+        detailedDescription: Yup.string().required(mainTranslate.t("emptyField")),
+        email: Yup.string()
+            .email(mainTranslate.t("invalidEmail"))
+            .required(mainTranslate.t("emptyField")),
+    });
 
     return (
         <View style={styles.container}>
-            <MyInput 
-                label={authTranslate.t("nameLabel")}
-                placeholder={authTranslate.t("namePlaceholder")}
-                value={name}
-                onChangeText={setName}
-            />
-            <MyInput 
-                label={settingsTranslate.t("shortDescriptionLabel")}
-                placeholder={settingsTranslate.t("shortDescriptionPlaceholder")}
-                value={shortDescription}
-                onChangeText={setShortDescription}
-            />
-            <MyInput 
-                label={settingsTranslate.t("detailedDescriptionLabel")}
-                placeholder={settingsTranslate.t("detailedDescriptionPlaceholder")}
-                value={detailedDescription}
-                onChangeText={setDetailedDescription}
-                multiline
-                numberOfLines={6}
-            />
-            <MyInput 
-                label={authTranslate.t("emailLabel")}
-                placeholder={authTranslate.t("emailPlaceholder")}
-                value={email}
-                onChangeText={setEmail}
-            />
-             <ButtonC 
-                title={settingsTranslate.t("feedbackLabel")}
-                isLoading={state.isLoading}
-                onPress={() => shareIdea(name, shortDescription, detailedDescription, email)}
-            />
+            <Formik
+                initialValues={{
+                    name: '',
+                    shortDescription: '',
+                    detailedDescription: '',
+                    email: '',
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values) =>
+                    shareIdea(
+                        values.name,
+                        values.shortDescription,
+                        values.detailedDescription,
+                        values.email
+                    )
+                }
+            >
+                {({
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    values,
+                    errors,
+                    touched,
+                }) => (
+                    <>
+                        <MyInput
+                            label={authTranslate.t("nameLabel")}
+                            placeholder={authTranslate.t("namePlaceholder")}
+                            value={values.name}
+                            onChangeText={handleChange("name")}
+                            onBlur={handleBlur("name")}
+                            error={touched.name && errors.name ? errors.name : undefined}
+                        />
+                        <MyInput
+                            label={settingsTranslate.t("shortDescriptionLabel")}
+                            placeholder={settingsTranslate.t("shortDescriptionPlaceholder")}
+                            value={values.shortDescription}
+                            onChangeText={handleChange("shortDescription")}
+                            onBlur={handleBlur("shortDescription")}
+                            error={
+                                touched.shortDescription && errors.shortDescription
+                                    ? errors.shortDescription
+                                    : undefined
+                            }
+                        />
+                        <MyInput
+                            label={settingsTranslate.t("detailedDescriptionLabel")}
+                            placeholder={settingsTranslate.t("detailedDescriptionPlaceholder")}
+                            value={values.detailedDescription}
+                            onChangeText={handleChange("detailedDescription")}
+                            onBlur={handleBlur("detailedDescription")}
+                            multiline
+                            numberOfLines={6}
+                            error={
+                                touched.detailedDescription && errors.detailedDescription
+                                    ? errors.detailedDescription
+                                    : undefined
+                            }
+                        />
+                        <MyInput
+                            label={authTranslate.t("emailLabel")}
+                            placeholder={authTranslate.t("emailPlaceholder")}
+                            value={values.email}
+                            onChangeText={handleChange("email")}
+                            onBlur={handleBlur("email")}
+                            error={touched.email && errors.email ? errors.email : undefined}
+                        />
+                        <ButtonC
+                            title={settingsTranslate.t("feedbackLabel")}
+                            isLoading={state.isLoading}
+                            onPress={handleSubmit as any}
+                        />
+                    </>
+                )}
+            </Formik>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
-      padding: 15,
+        padding: 15,
     },
 });
 

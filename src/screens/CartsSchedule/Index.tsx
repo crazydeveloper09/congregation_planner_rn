@@ -142,7 +142,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === mainTranslate.t("all") && <View style={[styles.titleContainer, { backgroundColor: settingsContext.state.mainColor}]}>
             <>
-              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 + settingsContext.state.fontIncrement }]}>{startDate}</Text>
+              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 + settingsContext.state.fontIncrement }]}>{selectedStartDate.toLocaleDateString()}</Text>
               {state.cartDay && <Text style={[styles.place, { color: 'white', fontSize: 17 + settingsContext.state.fontIncrement }]}>{state.cartDay?.place}</Text>}
             </>
             

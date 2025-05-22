@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: "SatisfyRegular",
         marginBottom: 30,
-        color: 'white'
+        color: 'white',
+        textAlign: "center",
+        width: '100%'
     },
     label: {
         fontSize: 18,

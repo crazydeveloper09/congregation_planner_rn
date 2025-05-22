@@ -49,7 +49,8 @@ const PoliciesEnScreen: React.FC = () => {
                                 <Text style={styles.listElement}>Presentation of ministry meeting plans</Text>
                                 <Text style={styles.listElement}>Presentation of cart schedule</Text>
                                 <Text style={styles.listElement}>Presentation of audio video & attendants plans</Text>
-                                <Text style={styles.listElement}>Presentation of preachers and ministry group list in admin account</Text>
+                                <Text style={styles.listElement}>Presentation of list of preachers in admin account </Text>
+                                <Text style={styles.listElement}>Presentation of ministry group list</Text>
                             </MarkedList>
                         </View>
                         <View style={{ flexShrink: 1 }}>

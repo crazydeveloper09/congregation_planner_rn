@@ -49,6 +49,8 @@ const PoliciesScreen: React.FC = () => {
                                 <Text style={styles.listElement}>Prezentacja planu zbiórek</Text>
                                 <Text style={styles.listElement}>Prezentacja planu wózka</Text>
                                 <Text style={styles.listElement}>Prezentacja planu audio-wideo i porządkowych</Text>
+                                <Text style={styles.listElement}>Prezentacja grup służby</Text>
+                                <Text style={styles.listElement}>Prezentacja listy głosicieli na koncie administratora</Text>
                             </MarkedList>
                         </View>
                         <View style={{ flexShrink: 1 }}>

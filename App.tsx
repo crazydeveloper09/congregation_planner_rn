@@ -16,6 +16,7 @@ import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
 import { useContext, useEffect, useState } from 'react';
 import PreachersNavigator from './src/navigators/Preachers';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 StatusBar.setBarStyle('light-content')
 
 function App() {
@@ -53,8 +54,8 @@ function App() {
   }
   
   return (
-    
-     <AudioVideoProvider>
+    <GestureHandlerRootView>
+      <AudioVideoProvider>
       <AuthProvider>
         <CartsScheduleProvider>
           <MeetingProvider>
@@ -76,8 +77,7 @@ function App() {
       </AuthProvider>
       <FlashMessage position={'bottom'} />
      </AudioVideoProvider>
-  
-   
+    </GestureHandlerRootView>
   );
 }
 export default App;
