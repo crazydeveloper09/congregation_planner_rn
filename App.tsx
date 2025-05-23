@@ -54,8 +54,8 @@ function App() {
   }
   
   return (
-    <GestureHandlerRootView>
-      <AudioVideoProvider>
+  
+    <AudioVideoProvider>
       <AuthProvider>
         <CartsScheduleProvider>
           <MeetingProvider>
@@ -76,8 +76,7 @@ function App() {
         </CartsScheduleProvider>
       </AuthProvider>
       <FlashMessage position={'bottom'} />
-     </AudioVideoProvider>
-    </GestureHandlerRootView>
+    </AudioVideoProvider>
   );
 }
 export default App;
