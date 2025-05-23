@@ -7,6 +7,7 @@ export default {
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "entryPoint": "./index.js",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/mysplash.png",
