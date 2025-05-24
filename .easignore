@@ -1,6 +1,4 @@
 locales/
 scripts/
-*.ts
-*.tsx
 *.map
 node_modules/
