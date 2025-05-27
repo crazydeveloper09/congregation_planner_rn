@@ -87,6 +87,7 @@ const MainNavigator = () => {
 
   const theme = useTheme();
   theme.colors.secondaryContainer = secondaryContainerColor;
+  theme.dark = false;
 
   return (
     <PaperProvider theme={theme}>
