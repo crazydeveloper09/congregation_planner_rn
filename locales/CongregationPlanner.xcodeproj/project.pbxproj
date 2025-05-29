@@ -131,17 +131,9 @@
 			isa = PBXGroup;
 			children = (
 				94B63D762DE86BFD0056EA17 /* AutoSizingStack.swift */,
-				94B63D7A2DE86E9E0056EA17 /* ExpoSwiftUI */,
-			);
-			path = Swift;
-			sourceTree = "<group>";
-		};
-		94B63D7A2DE86E9E0056EA17 /* ExpoSwiftUI */ = {
-			isa = PBXGroup;
-			children = (
 				94B63D7B2DE86EDB0056EA17 /* AutoSizingStack.swift */,
 			);
-			path = ExpoSwiftUI;
+			path = Swift;
 			sourceTree = "<group>";
 		};
 		A74688ABE7C39BA0D203B184 /* ExpoModulesProviders */ = {
@@ -534,10 +526,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -592,10 +581,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
