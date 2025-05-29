@@ -17,6 +17,7 @@ export const mainTranslations = {
         successfullyAddedEventMessage: "Poprawnie dodano wydarzenie z kalendarza",
         alreadyAddedEvent: "Dodałeś już to wydarzenie do kalendarza",
         pdfInfo: "Zaloguj się w aplikacji internetowej, by wygenerowac plik do druku",
+        chooseMonth: "Wybierz miesiąc",
         january: "Styczeń", 
         february: "Luty", 
         march: "Marzec", 

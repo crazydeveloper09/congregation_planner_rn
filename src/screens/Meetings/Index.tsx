@@ -95,7 +95,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
       </>}
       
 
-      {preachersContext.state.preacher && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
+      {preachersContext.state.preacher && authContext.state.whoIsLoggedIn === "preacher" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
       { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
       
         {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
