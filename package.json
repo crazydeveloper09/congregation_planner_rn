@@ -4,10 +4,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
-    "postinstall": "node copy-localizations.js"
+    "postinstall": "rm -f node_modules/expo-modules-core/ios/Core/Views/SwiftUI/AutoSizingStack.swift"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -55,7 +55,8 @@
     "@react-native-community/datetimepicker": "8.3.0",
     "@types/react": "~19.0.10",
     "@types/react-native-calendar-picker": "^8.0.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "@react-native-community/cli": "latest"
   },
   "private": true
 }
