@@ -22,6 +22,7 @@ import { Platform } from "react-native";
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import territories from "../api/territories";
+import { hexToRGB } from "../helpers/colors";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -75,7 +76,7 @@ const MainNavigator = () => {
   useEffect(() => {
     settingsContext.loadColor();
     StatusBar.setBackgroundColor(settingsContext.state.mainColor);
-    setSecondaryContainerColor(`${settingsContext.state.mainColor}50`);
+    setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
   }, [settingsContext.state.mainColor]);
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const MainNavigator = () => {
     <PaperProvider theme={theme}>
       <Tab.Navigator
         initialRouteName="Meetings"
-        barStyle={{ backgroundColor: `${settingsContext.state.mainColor}15` }}
+        barStyle={{ backgroundColor: hexToRGB(settingsContext.state.mainColor, 0.08) }}
         screenOptions={{
           tabBarColor: secondaryContainerColor,
         }}
