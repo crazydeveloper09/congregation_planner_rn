@@ -1,0 +1,16 @@
+version: 1.0
+
+identifier: default-workflow
+name: Default Workflow
+
+actions:
+  - name: Install Pods
+    script:
+      - cd ios
+      - pod install
+
+  - build:
+      name: Build App
+      platform: ios
+      scheme: CongregationPlanner
+      configuration: Debug
