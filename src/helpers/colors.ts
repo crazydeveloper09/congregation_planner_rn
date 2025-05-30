@@ -1,3 +1,5 @@
+import { MD3LightTheme } from 'react-native-paper';
+
 export function hexToRGB(hex: string, alpha: number) {
     var r = parseInt(hex.slice(1, 3), 16),
         g = parseInt(hex.slice(3, 5), 16),
@@ -9,3 +11,13 @@ export function hexToRGB(hex: string, alpha: number) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
 }
+
+export const buildTheme = (mainColor: string) => ({
+  ...MD3LightTheme,
+  dark: false,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: mainColor,
+    secondaryContainer: hexToRGB(mainColor, 0.2),
+  },
+});

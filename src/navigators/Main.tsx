@@ -22,7 +22,7 @@ import { Platform } from "react-native";
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import territories from "../api/territories";
-import { hexToRGB } from "../helpers/colors";
+import { buildTheme, hexToRGB } from "../helpers/colors";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -86,9 +86,7 @@ const MainNavigator = () => {
     }
   }, [expoPushToken]);
 
-  const theme = useTheme();
-  theme.colors.secondaryContainer = secondaryContainerColor;
-  theme.dark = false;
+  const theme = buildTheme(settingsContext.state.mainColor);
 
   return (
     <PaperProvider theme={theme}>
