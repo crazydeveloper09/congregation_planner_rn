@@ -105,6 +105,7 @@ const SettingsScreen: React.FC = () => {
         <Text style={styles.title}>{settingsTranslate.t("chooseColor")}</Text>
         <FlatList
           data={availableColors}
+          keyExtractor={(color) => color}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => changeMainColor(item)}

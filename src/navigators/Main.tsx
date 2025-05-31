@@ -74,16 +74,20 @@ const MainNavigator = () => {
   }, []);
 
   useEffect(() => {
-    StatusBar.setBackgroundColor(settingsContext.state.mainColor);
-    setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
-  }, [settingsContext.state.mainColor]);
-
-  useEffect(() => {
     if (expoPushToken) {
       // Send the token to your backend
       sendTokenToBackend(expoPushToken, authContext.state?.preacherID!);
     }
   }, [expoPushToken]);
+
+  if(!settingsContext.state.loaded) {
+    return null;
+  }
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor(settingsContext.state.mainColor);
+    setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
+  }, [settingsContext.state.mainColor]);
 
   const theme = buildTheme(settingsContext.state.mainColor);
 
