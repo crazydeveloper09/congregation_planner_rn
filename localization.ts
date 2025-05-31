@@ -22,6 +22,8 @@ export const mainTranslations = {
         february: "Luty", 
         march: "Marzec", 
         april: "Kwiecień", 
+        yes: "Tak",
+        no: "Nie",
         may: "Maj", 
         june: "Czerwiec", 
         july: "Lipiec", 

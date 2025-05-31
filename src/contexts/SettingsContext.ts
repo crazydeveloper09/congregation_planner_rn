@@ -14,7 +14,8 @@ interface ISettingsState {
   fontIncrement: number;
   format12h: boolean;
   isLoading: boolean;
-  errMessage: ''
+  errMessage: '';
+  loaded: boolean;
 }
 
 interface ISettingsContext {
@@ -38,6 +39,9 @@ const settingsReducer = (
     }
     case "change_increment": {
       return { ...state, fontIncrement: action.payload };
+    }
+    case "set_loaded": {
+      return { ...state, loaded: action.payload };
     }
     case "change_format": {
       return { ...state, format12h: action.payload };
@@ -67,6 +71,7 @@ const loadColor = (dispatch: Function) => {
         dispatch({ type: "change_increment", payload: Number(fontIncrement) });
         if (is12hFormat) {
           dispatch({ type: "change_format", payload: Boolean(is12hFormat) });
+          dispatch({ type: "set_loaded", payload: true})
         }
       } else {
         dispatch({ type: "load_color" });
@@ -158,5 +163,5 @@ export const { Context, Provider } = createDataContext<
 >(
   settingsReducer,
   { changeMainColor, changeFormat, loadColor, incrementFont, shareIdea, raiseIssue, helpInTranslation },
-  { mainColor: "#1f8aad", fontIncrement: 0, format12h: false, isLoading: false, errMessage: '' }
+  { mainColor: "#1f8aad", fontIncrement: 0, format12h: false, isLoading: false, errMessage: '', loaded: false }
 );
