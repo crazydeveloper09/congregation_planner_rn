@@ -45,8 +45,8 @@ const MainNavigator = () => {
   const preacherTranslate = useLocaLization(preachersTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
 
-  const [secondaryContainerColor, setSecondaryContainerColor] = useState<string>('#97D7ED40');
   const settingsContext = useContext(SettingsContext);
+  const [secondaryContainerColor, setSecondaryContainerColor] = useState<string>(hexToRGB(settingsContext.state.mainColor, 0.30));
 
   const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
 
@@ -74,7 +74,6 @@ const MainNavigator = () => {
   }, []);
 
   useEffect(() => {
-    settingsContext.loadColor();
     StatusBar.setBackgroundColor(settingsContext.state.mainColor);
     setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
   }, [settingsContext.state.mainColor]);
