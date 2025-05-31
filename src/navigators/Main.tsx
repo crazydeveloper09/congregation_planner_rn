@@ -80,14 +80,12 @@ const MainNavigator = () => {
     }
   }, [expoPushToken]);
 
-  if(!settingsContext.state.loaded) {
-    return null;
-  }
-
   useEffect(() => {
-    StatusBar.setBackgroundColor(settingsContext.state.mainColor);
-    setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
-  }, [settingsContext.state.mainColor]);
+    if(settingsContext.state.loaded) {
+      StatusBar.setBackgroundColor(settingsContext.state.mainColor);
+      setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.30));
+    }
+  }, [settingsContext.state.mainColor, settingsContext.state.loaded]);
 
   const theme = buildTheme(settingsContext.state.mainColor);
 
