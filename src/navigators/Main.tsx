@@ -97,7 +97,6 @@ const MainNavigator = () => {
         screenOptions={{
           tabBarColor: secondaryContainerColor,
         }}
-        theme={theme}
       >
         {((state.preacher && state.preacher.roles?.includes('can_see_meetings')) || authContext.state.whoIsLoggedIn === "admin") &&  <Tab.Screen
           name="Meetings"

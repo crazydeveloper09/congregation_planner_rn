@@ -59,28 +59,32 @@ const settingsReducer = (
       return state;
   }
 };
-
 const loadColor = (dispatch: Function) => {
   return async () => {
-    const mainColor = await AsyncStorage.getItem("mainColor");
-    const fontIncrement = await AsyncStorage.getItem("fontIncrement");
-    const is12hFormat = await AsyncStorage.getItem("is12hFormat");
-    if (mainColor) {
-      dispatch({ type: "change_color", payload: mainColor });
-      if (fontIncrement) {
-        dispatch({ type: "change_increment", payload: Number(fontIncrement) });
-        if (is12hFormat) {
-          dispatch({ type: "change_format", payload: Boolean(is12hFormat) });
-          dispatch({ type: "set_loaded", payload: true})
-        }
-      } else {
-        dispatch({ type: "load_color" });
+    try {
+      const mainColor = await AsyncStorage.getItem("mainColor");
+      const fontIncrement = await AsyncStorage.getItem("fontIncrement");
+      const is12hFormat = await AsyncStorage.getItem("is12hFormat");
+
+      if (mainColor) {
+        dispatch({ type: "change_color", payload: mainColor });
       }
-    } else {
+
+      if (fontIncrement !== null) {
+        dispatch({ type: "change_increment", payload: Number(fontIncrement) });
+      }
+
+      if (is12hFormat !== null) {
+        dispatch({ type: "change_format", payload: is12hFormat === "true" });
+      }
+
+      dispatch({ type: "set_loaded", payload: true });
+    } catch (err) {
       dispatch({ type: "load_color" });
     }
   };
 };
+
 
 const changeMainColor = (dispatch: Function) => {
   return async (newColor: string) => {
