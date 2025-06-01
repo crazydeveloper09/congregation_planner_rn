@@ -7,7 +7,7 @@ export default {
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/mysplash.png",
       "resizeMode": "contain",
@@ -18,7 +18,7 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "11",
+      "buildNumber": "12",
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
