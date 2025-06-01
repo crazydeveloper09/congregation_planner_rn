@@ -7,7 +7,7 @@ export default {
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/mysplash.png",
       "resizeMode": "contain",
