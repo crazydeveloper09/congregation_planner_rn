@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MeetingsNavigator from "./Meetings";
 import MinistryMeetingNavigator from "./MinistryMeetings";
 import CartsScheduleNavigator from "./CartsSchedule";
 import AudioVideoNavigator from "./AudioVideo";
-import { Button, PaperProvider, useTheme } from "react-native-paper";
+import { Button, PaperProvider, TouchableRipple, useTheme } from "react-native-paper";
 import { Context as PreachersContext } from "../contexts/PreachersContext";
 import { Context as AuthContext } from "../contexts/AuthContext";
 import PreachersNavigator from "./Preachers";
@@ -31,6 +31,8 @@ Notifications.setNotificationHandler({
       shouldShowAlert: true,
       shouldPlaySound: true,
       shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true
     }),
   });
 
@@ -87,16 +89,14 @@ const MainNavigator = () => {
     }
   }, [settingsContext.state.mainColor, settingsContext.state.loaded]);
 
-  const theme = buildTheme(settingsContext.state.mainColor);
-
   return (
-    <PaperProvider theme={theme}>
       <Tab.Navigator
         initialRouteName="Meetings"
         barStyle={{ backgroundColor: hexToRGB(settingsContext.state.mainColor, 0.08) }}
-        screenOptions={{
+        screenOptions={({ route }) => ({
           tabBarColor: secondaryContainerColor,
-        }}
+        })}
+        renderTouchable={({ key, ...props }) => <TouchableRipple key={key} {...props} />}
       >
         {((state.preacher && state.preacher.roles?.includes('can_see_meetings')) || authContext.state.whoIsLoggedIn === "admin") &&  <Tab.Screen
           name="Meetings"
@@ -175,11 +175,6 @@ const MainNavigator = () => {
           }}
         />
       </Tab.Navigator>
-
-    </PaperProvider>
-        
-
-      
   );
 };
 

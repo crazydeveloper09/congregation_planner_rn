@@ -1,7 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext } from "react";
-import { StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 interface IconLinkProps {
@@ -21,7 +20,7 @@ const IconLink: React.FC<IconLinkProps> = ({
 }) => {
   const settingsContext = useContext(SettingsContext);
   return (
-    <TouchableOpacity onPress={() => onPress()}>
+    <Pressable onPress={() => onPress()}>
       <Text
         style={[
           styles.link,
@@ -37,7 +36,7 @@ const IconLink: React.FC<IconLinkProps> = ({
         <Text> </Text>
         <Text>{description}</Text>
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { groupBy } from "../../helpers/arrays";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
 import Meeting from "./components/Meeting";
 import NotFound from "../../commonComponents/NotFound";

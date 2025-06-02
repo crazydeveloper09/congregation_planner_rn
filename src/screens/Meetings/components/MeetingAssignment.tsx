@@ -18,7 +18,7 @@ import { meetingsTranslations } from "../translations";
 interface MeetingAssignmentProps {
   type: string;
   assignments: {
-    [key: string]: IMeetingAssignment[];
+    [type: string]: IMeetingAssignment[];
   };
   midSong: number;
   meeting: IMeeting;
