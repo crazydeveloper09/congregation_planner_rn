@@ -16,6 +16,7 @@ import FlashMessage from 'react-native-flash-message';
 import * as Calendar from 'expo-calendar';
 import { useContext, useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AppContent } from './AppContent';
 StatusBar.setBarStyle('light-content')
 
 function App() {
@@ -63,9 +64,7 @@ function App() {
                 <PreachersProvider>
                   <MinistryGroupProvider>
                     <SettingsProvider>
-                      <NavigationContainer ref={navigationRef}>
-                        <SwitchNavigator />
-                      </NavigationContainer>
+                      <AppContent />
                     </SettingsProvider>
                   </MinistryGroupProvider>
                 </PreachersProvider>

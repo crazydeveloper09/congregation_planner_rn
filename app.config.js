@@ -18,7 +18,7 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "12",
+      "buildNumber": "13",
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",

@@ -141,7 +141,7 @@ const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
                         )}
                         
                         <FlatList 
-                            keyExtractor={(assignmentType) => assignmentType}
+                            keyExtractor={(assignmentType, index) => index.toString()}
                             data={Object.keys(assignmentsGroup)}
                             renderItem={({ item }) => <MeetingAssignment type={item} assignments={assignmentsGroup} midSong={meeting?.midSong} meeting={meeting} />}
                             contentContainerStyle={{borderBottomWidth: 1, borderBottomColor: 'black' }}

@@ -6,13 +6,11 @@ import AuthNavigator from "./Auth";
 import * as LocalAuthentication from 'expo-local-authentication';
 import useLocaLization from "../hooks/useLocalization";
 import { mainTranslations } from "../../localization";
-import { Context as SettingsContext } from "../contexts/SettingsContext";
 
 const SwitchNavigator = () => {
     const { state, tryLocalSignIn, signOut } = useContext(AuthContext);
     const preachersContext = useContext(PreachersContext)
     const mainTranslate = useLocaLization(mainTranslations)
-    const settingsContext = useContext(SettingsContext);
 
     const checkIdentity = () => {
         LocalAuthentication
@@ -31,7 +29,6 @@ const SwitchNavigator = () => {
 
     useEffect(() => {
         checkIdentity()
-        settingsContext.loadColor()
     }, [])
 
     return state.token ? <MainNavigator /> : <AuthNavigator />

@@ -18,6 +18,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ state, data, updateState }) => {
   return (
     <><FlatList
       data={data}
+      keyExtractor={(item) => item}
       renderItem={({ item, index }) => (
         <>
           <TouchableOpacity onPress={() => updateState(item)} style={{ marginRight: 10 }}>
