@@ -1,0 +1,5 @@
+"NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza";
+"NSRemindersUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień";
+"NSCalendarsFullAccessUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza";
+"NSRemindersFullAccessUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień";
+"NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID.";
