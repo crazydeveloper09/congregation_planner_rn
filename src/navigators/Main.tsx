@@ -102,9 +102,6 @@ const MainNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Meetings"
-      barStyle={{
-        backgroundColor: hexToRGB(settingsContext.state.mainColor, 0.08),
-      }}
       screenOptions={({ route }) => ({
         tabBarColor: secondaryContainerColor,
       })}
