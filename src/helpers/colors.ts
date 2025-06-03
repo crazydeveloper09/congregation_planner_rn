@@ -18,13 +18,16 @@ export const buildTheme = (mainColor: string) => {
   const brightness = base.getBrightness();
   const isDark = brightness < 70;
 
+  const tooLight = ["#662389", "#225354", "#19482A"];
+  const tooDark = ["#AD1F64", "#8A2177", "#6D4420"];
+
   const secondaryContainer = isDark
-    ? base.clone().lighten(50).toHexString()
-    : base.clone().lighten(15).toHexString();
+    ? base.clone().lighten(tooLight.includes(mainColor) ? 35 : 50).toHexString()
+    : base.clone().lighten(tooDark.includes(mainColor) ? 35 : 15).toHexString();
 
   const elevationLevel2 = isDark
-    ? base.clone().lighten(65).toHexString()
-    : base.clone().lighten(40).toHexString();
+    ? base.clone().lighten(tooLight.includes(mainColor) ? 50 : 65).toHexString()
+    : base.clone().lighten(tooDark.includes(mainColor) ? 50 : 40).toHexString();
   
   return {
   ...DefaultTheme,
