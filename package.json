@@ -63,7 +63,8 @@
     "@types/react-native-calendar-picker": "^8.0.0",
     "@types/tinycolor2": "^1.4.6",
     "typescript": "~5.8.3",
-    "@react-native-community/cli": "latest"
+    "@react-native-community/cli": "latest",
+    "@types/tinycolor2": "^1.4.6"
   },
   "private": true
 }
