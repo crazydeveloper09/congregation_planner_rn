@@ -1,4 +1,5 @@
 import { DefaultTheme, MD3LightTheme } from 'react-native-paper';
+import tinycolor from 'tinycolor2';
 
 export function hexToRGB(hex: string, alpha: number) {
     var r = parseInt(hex.slice(1, 3), 16),
@@ -12,15 +13,21 @@ export function hexToRGB(hex: string, alpha: number) {
     }
 }
 
-export const buildTheme = (mainColor: string) => ({
-   ...DefaultTheme,
+export const buildTheme = (mainColor: string) => {
+  const base = tinycolor(mainColor);
+  const secondaryContainer = base.clone().setAlpha(0.3).toRgbString(); // rgba()
+  const elevationLevel2 = base.clone().setAlpha(0.08).toRgbString();
+  
+  return {
+  ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
     primary: mainColor,
-    secondaryContainer: hexToRGB(mainColor, 0.2),
+    secondaryContainer,
     elevation: {
       ...DefaultTheme.colors.elevation,
-      level2: hexToRGB(mainColor, 0.1),
+      level2: elevationLevel2,
     },
   },
-});
+}
+};
