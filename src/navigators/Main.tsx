@@ -100,15 +100,9 @@ const MainNavigator = () => {
     setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.3));
   }, [settingsContext.state.mainColor]);
 
-  const tabBarBackground = tinycolor(settingsContext.state.mainColor).setAlpha(0.08).toRgbString();
-
   return (
     <Tab.Navigator
       initialRouteName="Meetings"
-      barStyle={{
-        backgroundColor: tabBarBackground,
-        elevation: 0,
-      }}
     >
       {(state.preacher?.roles?.includes("can_see_meetings") ||
         authContext.state.whoIsLoggedIn === "admin") && (

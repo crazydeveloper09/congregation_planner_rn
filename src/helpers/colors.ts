@@ -15,8 +15,16 @@ export function hexToRGB(hex: string, alpha: number) {
 
 export const buildTheme = (mainColor: string) => {
   const base = tinycolor(mainColor);
-  const secondaryContainer = base.clone().setAlpha(0.3).toRgbString(); // rgba()
-  const elevationLevel2 = base.clone().setAlpha(0.08).toRgbString();
+  const brightness = base.getBrightness();
+  const isDark = brightness < 70;
+
+  const secondaryContainer = isDark
+    ? base.clone().lighten(50).toHexString()
+    : base.clone().lighten(15).toHexString();
+
+  const elevationLevel2 = isDark
+    ? base.clone().lighten(65).toHexString()
+    : base.clone().lighten(40).toHexString();
   
   return {
   ...DefaultTheme,
