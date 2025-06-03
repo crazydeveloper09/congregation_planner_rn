@@ -28,6 +28,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import territories from "../api/territories";
 import { buildTheme, hexToRGB } from "../helpers/colors";
+import tinycolor from "tinycolor2";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -99,12 +100,15 @@ const MainNavigator = () => {
     setSecondaryContainerColor(hexToRGB(settingsContext.state.mainColor, 0.3));
   }, [settingsContext.state.mainColor]);
 
+  const tabBarBackground = tinycolor(settingsContext.state.mainColor).setAlpha(0.08).toRgbString();
+
   return (
     <Tab.Navigator
       initialRouteName="Meetings"
-      screenOptions={({ route }) => ({
-        tabBarColor: secondaryContainerColor,
-      })}
+      barStyle={{
+        backgroundColor: tabBarBackground,
+        elevation: 0,
+      }}
     >
       {(state.preacher?.roles?.includes("can_see_meetings") ||
         authContext.state.whoIsLoggedIn === "admin") && (

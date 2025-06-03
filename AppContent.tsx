@@ -17,7 +17,7 @@ export const AppContent = () => {
   }, [settingsState.loaded])
 
   if (!settingsState.loaded) {
-    return <Text>Loading theme</Text>; // or SplashScreen, or a loading spinner
+    return <Text>Loading theme</Text>;
   }
 
   const theme = buildTheme(settingsState.mainColor);
