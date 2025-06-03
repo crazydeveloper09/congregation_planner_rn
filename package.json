@@ -62,9 +62,9 @@
     "@types/react": "~19.0.10",
     "@types/react-native-calendar-picker": "^8.0.0",
     "@types/react-native-html-to-pdf": "^0.8.3",
-    "@types/tinycolor2": "^1.4.6",
     "typescript": "~5.8.3",
-    "@react-native-community/cli": "latest"
+    "@react-native-community/cli": "latest",
+    "@types/tinycolor2": "^1.4.6"
   },
   "private": true
 }
