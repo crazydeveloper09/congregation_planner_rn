@@ -18,14 +18,15 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "18",
+      "buildNumber": "21",
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
         "NSRemindersUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
         "NSCalendarsFullAccessUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
         "NSRemindersFullAccessUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
-        "NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID."
+        "NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID.",
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
