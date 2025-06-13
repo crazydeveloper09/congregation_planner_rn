@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.10.1",
+    "version": "3.10.2",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -18,7 +18,6 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "21",
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
