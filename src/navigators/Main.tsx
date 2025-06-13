@@ -34,7 +34,6 @@ const Tab = createMaterialBottomTabNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
     shouldShowBanner: true,
@@ -83,8 +82,8 @@ const MainNavigator = () => {
       });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
+      notificationListener.remove();
+      responseListener.remove();
     };
   }, []);
 
@@ -202,11 +201,11 @@ async function registerForPushNotificationsAsync() {
     alert("Failed to get push token for push notification!");
     return;
   }
-  if (Constants.appOwnership === "expo") {
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-  } else {
-    token = (await Notifications.getDevicePushTokenAsync()).data;
-  }
+
+  const projectId = Constants.expoConfig?.extra?.eas?.projectId || Constants.easConfig?.projectId
+
+  token = (await Notifications.getExpoPushTokenAsync(projectId)).data;
+  
 
   if (Platform.OS === "android") {
     Notifications.setNotificationChannelAsync("default", {
