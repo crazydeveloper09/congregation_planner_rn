@@ -126,7 +126,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
         
       </View> : <View style={styles.container}>
         { (preachersContext.state.preacher?.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <>
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
           {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(meeting) => meeting?._id}
               data={state.meetings}
@@ -136,7 +136,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
         </>}
         
           {preachersContext.state.preacher?.roles?.includes("can_have_assignment") && <>
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("taskOrReading")}</Text>
+            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("taskOrReading")}</Text>
             {state.assignments?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(assignment) => assignment?._id}
               data={state.assignments}
@@ -144,7 +144,7 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
               scrollEnabled={false}
             />}
           </>}
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor}]}>{meetingTranslate.t("cleaningLabel")}</Text>
+          <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("cleaningLabel")}</Text>
             {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(meeting) => meeting?._id}
               data={state.allMeetings?.filter(meeting => meeting.cleaningGroup?.preachers.includes(preachersContext.state.preacher?._id.toString()!))}

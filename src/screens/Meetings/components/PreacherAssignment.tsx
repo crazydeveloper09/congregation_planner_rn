@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   title: {
-    fontSize: 18,
     fontFamily: "PoppinsRegular",
     marginTop: 6,
   },
