@@ -204,11 +204,12 @@ async function registerForPushNotificationsAsync() {
     return;
   }
 
-  const projectId = Constants.expoConfig?.extra?.eas?.projectId || Constants.easConfig?.projectId
-
-  token = (await Notifications.getExpoPushTokenAsync(projectId)).data;
   
-  console.log(token)
+  if (Constants.appOwnership === "expo") {
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } else {
+    token = (await Notifications.getDevicePushTokenAsync()).data;
+  }
 
   if (Platform.OS === "android") {
     Notifications.setNotificationChannelAsync("default", {

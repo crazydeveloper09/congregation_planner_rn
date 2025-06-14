@@ -42,7 +42,7 @@ export default {
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 30,
+      "versionCode": 31,
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {

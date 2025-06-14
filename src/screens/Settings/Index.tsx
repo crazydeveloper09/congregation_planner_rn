@@ -137,7 +137,9 @@ const SettingsScreen: React.FC = () => {
         </View>
         <View
           style={{
+            flex: 1,
             flexDirection: "row",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
             marginBottom: 20,
