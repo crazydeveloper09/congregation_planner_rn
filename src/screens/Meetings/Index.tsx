@@ -22,6 +22,7 @@ import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import CleaningAssignment from "./components/CleaningAssignment";
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { Platform } from 'react-native';
@@ -65,42 +66,18 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     try {
 
       const html = buildMeetingsPDF(meetings, type, month);
-if (Platform.OS === 'web') {
-      let html2pdf: any;
-          html2pdf = require("html2pdf.js");
-            // Create a temporary container for the HTML
-            const element = document.createElement('div');
-            element.innerHTML = html;
-            document.body.appendChild(element);
 
-            // Use html2pdf to generate and save the PDF
-            await html2pdf()
-              .set({
-                margin: 0.5,
-                filename: `${type}_${month}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-              })
-              .from(element)
-              .save();
+      const { uri } = await Print.printToFileAsync({ html });
 
-            // Clean up the temporary element
-            document.body.removeChild(element);
-          } else {
-            // Native platforms (iOS/Android) - your original code
-            const { uri } = await Print.printToFileAsync({ html });
+      const newPath = FileSystem.documentDirectory + `${type}_${month}.pdf`;
+      await FileSystem.copyAsync({
+        from: uri,
+        to: newPath,
+      });
 
-            const newPath = FileSystem.documentDirectory + `${type}_${month}.pdf`;
-            await FileSystem.copyAsync({
-              from: uri,
-              to: newPath,
-            });
-
-            if (await Sharing.isAvailableAsync()) {
-              await Sharing.shareAsync(newPath);
-            }
-          }
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(newPath);
+      }
     } catch (error) {
       Alert.alert("Error", mainTranslate.t("generatePDFError"));
     }
