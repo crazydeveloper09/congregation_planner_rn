@@ -92,8 +92,8 @@ android {
         applicationId 'com.crazydev09.congregation_planner'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 31
-        versionName "3.10.2"
+        versionCode 32
+        versionName "3.10.10"
     }
     signingConfigs {
         debug {
