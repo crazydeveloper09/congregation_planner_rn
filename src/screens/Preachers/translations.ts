@@ -44,7 +44,8 @@ export const preachersTranslations = {
         deleteConfirmHeader: "Potwierdź usunięcie głosiciela",
         successfulAddedMessage: "Poprawnie dodano głosiciela",
         successfulEditedMessage: "Poprawnie edytowano głosiciela",
-        successfulDeletedMessage: "Poprawnie usunięto głosiciela"
+        successfulDeletedMessage: "Poprawnie usunięto głosiciela",
+        notFoundText: "Nie dodano jeszcze głosicieli",
     },
     en: {
         sectionText: "Preachers",
@@ -91,6 +92,7 @@ export const preachersTranslations = {
         deleteConfirmHeader: "Confirm preacher deletion",
         successfulAddedMessage: "Successfully added preacher",
         successfulEditedMessage: "Successfully edited preacher",
-        successfulDeletedMessage: "Successfully deleted preacher"
+        successfulDeletedMessage: "Successfully deleted preacher",
+        notFoundText: "No preachers found yet",
     },
 }

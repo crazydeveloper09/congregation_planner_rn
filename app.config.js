@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.10.2",
+    "version": "3.10.10",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -18,7 +18,6 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "3",
       "bundleIdentifier": "com.miszki.congregation-planner",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
@@ -42,7 +41,7 @@ export default {
         "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.crazydev09.congregation_planner",
-      "versionCode": 31,
+      "versionCode": 32,
       "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {

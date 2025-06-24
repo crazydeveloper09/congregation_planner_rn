@@ -25,7 +25,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
             
             <View style={{ flexDirection: 'column', gap: 20, marginTop: 20, width: '100%' }}>
             
-                <Text style={styles.label}>{mainTranslate.t("registeredCong")}</Text>
+                <Text style={[styles.label, { fontSize: 18 + settingsContext.state.fontIncrement}]}>{mainTranslate.t("registeredCong")}</Text>
                 <ButtonC 
                     title={i18n.t('preacherLoginButton')}
                     onPress={() => navigation.navigate("Log in", { type: "preacher" })}
@@ -37,7 +37,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
                     onPress={() => navigation.navigate("Log in", { type: "admin" })}
                     color="#ffffff35"
                 />
-                <Text style={styles.label}>{mainTranslate.t("newCong")}</Text>
+                <Text style={[styles.label, { fontSize: 18 + settingsContext.state.fontIncrement}]}>{mainTranslate.t("newCong")}</Text>
                 <ButtonC 
                     title={i18n.t("askAccessLabel")}
                     onPress={() => navigation.navigate("Ask access")}

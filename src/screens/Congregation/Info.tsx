@@ -63,20 +63,20 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
         <ScrollView style={styles.container}>
             { state.whoIsLoggedIn === "admin" ? <>
                 <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("mainInfo")}</Text>
-                <View style={styles.congregationInfo}>
+                <View style={[styles.congregationInfo, {borderColor: settingsContext.state.mainColor}]}>
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("adminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.territoryServantEmail}</Text>
                 </View>
-                <View style={styles.congregationInfo}>
+                {state.congregation?.ministryOverseerEmail && <View style={styles.congregationInfo}>
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("secondAdminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.ministryOverseerEmail}</Text>
-                </View>
+                </View>}
             </> : <>
                 <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("helpText")}</Text>
                 <FlatList 
                     keyExtractor={((preacher) => preacher._id)}
                     data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('admin'))}
-                    renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} />}
+                    renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                     scrollEnabled={false}
                     numColumns={columnsNum}
                 />
@@ -87,7 +87,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('elder'))}
-                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} />}
+                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
@@ -95,7 +95,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('mini_servant'))}
-                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} />}
+                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
@@ -103,7 +103,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('pioneer'))}
-                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} />}
+                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />
@@ -111,7 +111,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
             <FlatList 
                 keyExtractor={((preacher) => preacher._id)}
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('aux_pioneer'))}
-                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} />}
+                renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
                 numColumns={columnsNum}
             />

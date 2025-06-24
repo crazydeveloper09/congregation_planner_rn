@@ -10,7 +10,7 @@ import territories from "../../api/territories";
 import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
-import { defaultDropdownStyles } from "../defaultStyles";
+import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import { months } from "../../../defaultData";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
@@ -226,7 +226,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             <Switch  
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }] }}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherEndPrayer, 'left').container}
                 color={settingsContext.state.mainColor}
             />
             {isOtherEndPrayer && <>

@@ -17,7 +17,7 @@ import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
 import { months } from "../../../defaultData";
-import { defaultDropdownStyles } from "../defaultStyles";
+import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
@@ -210,7 +210,7 @@ const MeetingNewScreen: React.FC = () => {
             <Switch  
                 value={isOtherEndPrayer}
                 onValueChange={(value) => setIsOtherEndPrayer(value)}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10)}, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }] }}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherEndPrayer, 'left').container}
                 color={settingsContext.state.mainColor}
             />
             {isOtherEndPrayer && <>

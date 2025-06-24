@@ -14,6 +14,7 @@ import SectionButton from "./components/SectionButton";
 import { preachersTranslations } from "../Preachers/translations";
 import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
+import { defaultSwitchStyles } from "../defaultStyles";
 
 const SettingsScreen: React.FC = () => {
   const auth = useContext(AuthContext);
@@ -105,7 +106,7 @@ const SettingsScreen: React.FC = () => {
         <Text style={styles.title}>{settingsTranslate.t("chooseColor")}</Text>
         <FlatList
           data={availableColors}
-          keyExtractor={(color) => color}
+          keyExtractor={(color, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => changeMainColor(item)}
@@ -131,7 +132,7 @@ const SettingsScreen: React.FC = () => {
             onSlidingComplete={() => incrementFont(fontIncrement)}
             step={1}
             maximumValue={10}
-            thumbTouchSize={{ width: 20, height: 20 }}
+            thumbTouchSize={{ width: 25, height: 25 }}
             thumbTintColor={state.mainColor}
           />
         </View>
@@ -148,13 +149,7 @@ const SettingsScreen: React.FC = () => {
           <Text style={styles.title}>{settingsTranslate.t("12hFormat")}</Text>
           <Switch
             color={state.mainColor}
-            style={{
-              alignSelf: "flex-start",
-              transform: [
-                { scaleX: 1.3 + state.fontIncrement / 10 },
-                { scaleY: 1.3 + state.fontIncrement / 10 },
-              ],
-            }}
+            style={defaultSwitchStyles(state.fontIncrement, format12h, 'right').container}
             value={format12h}
             onValueChange={(value) => {
               setFormat12h(value);

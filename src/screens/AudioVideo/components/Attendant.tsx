@@ -18,11 +18,12 @@ import { mainTranslations } from "../../../../localization";
 interface AttendantProps {
   meeting: IMeeting;
   attendant: IAttendant;
+  shouldAutomaticallyExpand?: boolean;
 }
 
-const Attendant: React.FC<AttendantProps> = ({ attendant, meeting }) => {
+const Attendant: React.FC<AttendantProps> = ({ attendant, meeting, shouldAutomaticallyExpand = true }) => {
   const [expanded, setExpanded] = useState<boolean>(
-    new Date(meeting.date).toLocaleDateString("pl-PL") ===
+    shouldAutomaticallyExpand && new Date(meeting.date).toLocaleDateString("pl-PL") ===
       new Date().toLocaleDateString("pl-PL")
   );
   const navigation = useNavigation();

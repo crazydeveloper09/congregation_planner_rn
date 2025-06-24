@@ -17,11 +17,12 @@ import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface AudioVideoProps {
     meeting: IMeeting,
-    audioVideo: IAudioVideo
+    audioVideo: IAudioVideo,
+    shouldAutomaticallyExpand?: boolean;
 }
 
-const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting }) => {
-    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"));
+const AudioVideo: React.FC<AudioVideoProps> = ({ audioVideo, meeting, shouldAutomaticallyExpand = true }) => {
+    const [expanded, setExpanded] = useState<boolean>(shouldAutomaticallyExpand && new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"));
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)
     const authContext = useContext(AuthContext)

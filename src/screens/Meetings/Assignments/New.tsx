@@ -13,7 +13,7 @@ import Attendant from "../../AudioVideo/components/Attendant";
 import MyInput from "../../../commonComponents/MyInput";
 import Label from "../../../commonComponents/Label";
 import { months } from "../../../../defaultData";
-import { defaultDropdownStyles } from "../../defaultStyles";
+import { defaultDropdownStyles, defaultSwitchStyles } from "../../defaultStyles";
 import useLocaLization from "../../../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "./translations";
 import { mainTranslations } from "../../../../localization";
@@ -117,11 +117,11 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
     return (
         <ScrollView style={styles.container}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
-            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} shouldAutomaticallyExpand={false} />
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement, marginTop: 15 }]}>Audio-video</Text>
-            <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
+            <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} shouldAutomaticallyExpand={false} />
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement, marginTop: 15 }]}>{attendantTranslate.t("sectionText")}</Text>
-            <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} />
+            <Attendant meeting={route.params.meeting} attendant={route.params.meeting.ordinal} shouldAutomaticallyExpand={false} />
 
             <Label text={meetingAssignmentsTranslate.t("typeLabel")} />
             <DropDownPicker 
@@ -184,7 +184,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     setIsReader(value)
                     value === false && setReaderValue('')
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isReader, 'left').container}
                 color={settingsContext.state.mainColor}
             />
 
@@ -211,7 +211,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                     setIsOtherParticipant(value)
                     value === true && setOtherParticipant('')
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10)}], marginVertical: 10 }}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherParticipant, 'left').container}
                 color={settingsContext.state.mainColor}
             />
             {isOtherParticipant && <>

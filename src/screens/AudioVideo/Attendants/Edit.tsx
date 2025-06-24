@@ -12,7 +12,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Meeting from "../../Meetings/components/Meeting";
 import Label from "../../../commonComponents/Label";
 import AudioVideo from "../components/AudioVideo";
-import { defaultDropdownStyles } from "../../defaultStyles";
+import { defaultDropdownStyles, defaultSwitchStyles } from "../../defaultStyles";
 import { months } from "../../../../defaultData";
 import useLocaLization from "../../../hooks/useLocalization";
 import { mainTranslations } from "../../../../localization";
@@ -90,28 +90,13 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
         }
     }, [])
 
-    const styles = StyleSheet.create({
-        container: {
-            padding: 15
-        },
-        meeting: {
-            fontSize: 21,
-            fontFamily: 'PoppinsSemiBold'
-        },
-        switch: {
-            alignSelf: 'flex-start',  
-            transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }],
-            marginVertical: 8
-        },
-    })
-
     return (
         <ScrollView style={styles.container}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
-            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} />
+            <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} shouldAutomaticallyExpand={false} />
 
             <Text style={[styles.meeting, { marginTop: 15, color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>Audio-video</Text>
-            <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} />
+            <AudioVideo meeting={route.params.meeting} audioVideo={route.params.meeting.audioVideo} shouldAutomaticallyExpand={false} />
 
             <Label text={attendantTranslate.t("hallwayLabel")} />
             <DropDownPicker 
@@ -131,7 +116,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
             <Switch  
                 value={isHallway2}
                 onValueChange={(value) => setIsHallway2(value)}
-                style={styles.switch}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isHallway2, 'left').container}
                 color={settingsContext.state.mainColor}
             />
 
@@ -170,7 +155,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
             <Switch  
                 value={isParking}
                 onValueChange={(value) => setIsParking(value)}
-                style={styles.switch}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isParking, 'left').container}
                 color={settingsContext.state.mainColor}
             />
             {isParking && <>
@@ -202,5 +187,15 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 15
+    },
+    meeting: {
+        fontSize: 21,
+        fontFamily: 'PoppinsSemiBold'
+    },
+})
 
 export default AttendantEditScreen;

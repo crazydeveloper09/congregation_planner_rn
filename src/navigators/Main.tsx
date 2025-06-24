@@ -88,8 +88,7 @@ const MainNavigator = () => {
   }, []);
 
   useEffect(() => {
-    if (expoPushToken) {
-      // Send the token to your backend
+    if (expoPushToken && authContext.state.whoIsLoggedIn !== "admin") {
       sendTokenToBackend(expoPushToken, authContext.state?.preacherID!);
     }
   }, [expoPushToken]);

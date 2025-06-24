@@ -88,14 +88,14 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       {currentFilter === mainTranslate.t("all") && <>
         <TopMenu state={type} data={types} updateState={setType} />
-        <TopMenu state={currentMonth} data={meetingsGroup && Object.keys(meetingsGroup)} updateState={setCurrentMonth} />
+        {state.allMeetings?.length !== 0 && <TopMenu state={currentMonth} data={meetingsGroup && Object.keys(meetingsGroup)} updateState={setCurrentMonth} />}
       </>}
      
       {authContext.state.whoIsLoggedIn !== "admin" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
 
         {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
-        {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
           {state?.allMeetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntryText")} /> : <>
+          {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
           <FlatList
             keyExtractor={(meeting) => meeting._id}
             data={meetingsGroup && meetingsGroup[currentMonth]}

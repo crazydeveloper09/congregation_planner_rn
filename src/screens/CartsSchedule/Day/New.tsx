@@ -9,6 +9,7 @@ import { cartScheduleTranslations } from "../translations";
 import { Switch } from "react-native-paper";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import Label from "../../../commonComponents/Label";
+import { defaultSwitchStyles } from "../../defaultStyles";
 
 interface CartDayNewScreenProps {
     route: {
@@ -74,7 +75,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
                 onValueChange={(value) => {
                     setIsNotFullHour(value)
                 }}
-                style={{ alignSelf: 'flex-start',  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isNotFullHour, 'left').container}
                 color={settingsContext.state.mainColor}
             />
             {isNotFullHour && <>

@@ -17,7 +17,6 @@ const PreachersSearchScreen: React.FC = () => {
   const { searchPreacher, state } = useContext(PreachersContext);
   const preacherTranslate = useLocaLization(preachersTranslations);
   const settingsContext = useContext(SettingsContext);
-
   
   if(state.errMessage){
     Alert.alert("Server error", state.errMessage)
