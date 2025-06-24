@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'center',
+        flexWrap: 'wrap',
         gap: 10
     }
 })

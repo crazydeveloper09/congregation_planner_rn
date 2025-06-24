@@ -20,11 +20,12 @@ import { mainTranslations } from "../../../../localization";
 
 interface MeetingProps {
     meeting: IMeeting,
-    filter: string
+    filter: string,
+    shouldAutomaticallyExpand?: boolean;
 }
 
-const Meeting: React.FC<MeetingProps> = ({ meeting, filter }) => {
-    const [expanded, setExpanded] = useState<boolean>(new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"))
+const Meeting: React.FC<MeetingProps> = ({ meeting, filter, shouldAutomaticallyExpand = true }) => {
+    const [expanded, setExpanded] = useState<boolean>(shouldAutomaticallyExpand && new Date(meeting.date).toLocaleDateString("pl-PL") === new Date().toLocaleDateString("pl-PL"))
     const assignmentsGroup = groupBy<IMeetingAssignment>(meeting?.assignments, 'type');
     const navigation = useNavigation();
     const {state} = useContext(PreachersContext)

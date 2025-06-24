@@ -15,9 +15,10 @@ import Label from "../../../commonComponents/Label";
 interface PreacherProps {
     preacher: IPreacher;
     displayAdditionalInfo?: boolean;
+    isOnlyInfoCard?: boolean;
 }
 
-const Preacher: React.FC<PreacherProps> = ({ preacher, displayAdditionalInfo = true }) => {
+const Preacher: React.FC<PreacherProps> = ({ preacher, displayAdditionalInfo = true, isOnlyInfoCard = false }) => {
     const navigation = useNavigation();
     const preacherTranslate = useLocaLization(preachersTranslations);
     const settingsContext = useContext(SettingsContext);
@@ -53,7 +54,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher, displayAdditionalInfo = t
         <View style={[styles.container, { borderColor: settingsContext.state.mainColor }, !displayAdditionalInfo && { flex: 1, alignItems: 'center' }]}>
             <View style={styles.titleContainer}>
                 <Text style={[styles.title, { fontSize: 19 + settingsContext.state.fontIncrement }]}>{preacher.name}</Text>
-                {authContext.state.whoIsLoggedIn === "admin" && <View style={styles.iconContainer}>
+                {authContext.state.whoIsLoggedIn === "admin" && !isOnlyInfoCard && <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('EditPreacher', {preacher} as unknown as never)}>
                         <MaterialCommunityIcons name='pencil' color={settingsContext.state.mainColor} size={22 + settingsContext.state.fontIncrement} />
                     </TouchableOpacity>
