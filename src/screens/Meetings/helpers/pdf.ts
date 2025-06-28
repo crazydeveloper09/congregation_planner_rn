@@ -65,50 +65,97 @@ const baseHtmlHead = `
   </head>
 `;
 
-export function buildMeetingsPDF(meetings: IMeeting[], type: string, month: string) {
-    const meetingTranslate = useLocaLization(meetingsTranslations);
-    const assignmentsTranslate = useLocaLization(meetingAssignmentTranslations)
+export function buildMeetingsPDF(
+  meetings: IMeeting[],
+  type: string,
+  month: string
+) {
+  const meetingTranslate = useLocaLization(meetingsTranslations);
+  const assignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
 
-  const content = meetings.map(meeting => {
-    const assignmentsByType = groupBy(meeting.assignments, 'type');
+  const content = meetings
+    .map((meeting) => {
+      const assignmentsByType = groupBy(meeting.assignments, "type");
 
-    return `
+      return `
       <div class="meeting" style="margin-bottom: 80px;">
-        <h3 style="font-size: 18px;">${new Date(meeting.date).toLocaleString('pl-PL', {
-          year: 'numeric', month: '2-digit', day: '2-digit',
-          hour: '2-digit', minute: '2-digit', hour12: false
-        })}</h3>
-        <div class="info">${meetingTranslate.t('cleaningLabel')}: <strong>${meeting.cleaningGroup?.name || ''}</strong></div>
-        <div class="info">${meetingTranslate.t('songLabel')}: <strong>${meeting.beginSong}</strong></div>
-        <div class="info">${meetingTranslate.t('leadLabel')}: <strong>${meeting.lead?.name || ''}</strong></div>
-        <div class="info">${meetingTranslate.t('prayerLabel')}: <strong>${meeting.beginPrayer?.name || ''}</strong></div>
+        <h3 style="font-size: 18px;">${new Date(meeting.date).toLocaleString(
+          "pl-PL",
+          {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }
+        )}</h3>
+        <div class="info">${meetingTranslate.t("cleaningLabel")}: <strong>${
+        meeting.cleaningGroup?.name || ""
+      }</strong></div>
+        <div class="info">${meetingTranslate.t("songLabel")}: <strong>${
+        meeting.beginSong
+      }</strong></div>
+        <div class="info">${meetingTranslate.t("leadLabel")}: <strong>${
+        meeting.lead?.name || ""
+      }</strong></div>
+        <div class="info">${meetingTranslate.t("prayerLabel")}: <strong>${
+        meeting.beginPrayer?.name || ""
+      }</strong></div>
         <div class="assignments">
-          ${Object.keys(assignmentsByType).map(type => {
-            const color = chooseFontColorAndIcon(type).fontColor;
-            const songs = (type === assignmentsTranslate.t('watchtowerStudy') || type === assignmentsTranslate.t('livingAsChristians')) ? `
-              <div class="info">${meetingTranslate.t('songLabel')}: <strong>${meeting.midSong}</strong></div>
-            ` : '';
-            const assignmentItems = assignmentsByType[type].map(a => `
-              <p class="assignment_topic" style="color: ${color};">${a.topic || a.defaultTopic}</p>
-              <div class="info"><strong>${a.participant?.name || a.otherParticipant}</strong></div>
-              ${a.reader ? `<div class="info">${assignmentsTranslate.t('readerLabel')}: <strong>${a.reader?.name}</strong></div>` : ''}
-            `).join('');
-            return `
+          ${Object.keys(assignmentsByType)
+            .map((type) => {
+              const color = chooseFontColorAndIcon(type).fontColor;
+              const songs =
+                type === assignmentsTranslate.t("watchtowerStudy") ||
+                type === assignmentsTranslate.t("livingAsChristians")
+                  ? `
+              <div class="info">${meetingTranslate.t("songLabel")}: <strong>${
+                      meeting.midSong
+                    }</strong></div>
+            `
+                  : "";
+              const assignmentItems = assignmentsByType[type]
+                .map(
+                  (a) => `
+              <p class="assignment_topic" style="color: ${color};">${
+                    a.topic || a.defaultTopic
+                  }</p>
+              <div class="info"><strong>${
+                a.participant?.name || a.otherParticipant
+              }</strong></div>
+              ${
+                a.reader
+                  ? `<div class="info">${assignmentsTranslate.t(
+                      "readerLabel"
+                    )}: <strong>${a.reader?.name}</strong></div>`
+                  : ""
+              }
+            `
+                )
+                .join("");
+              return `
               <div class="assignment">
                 ${songs}
                 <div class="assignment_type" style="background: ${color};">${type}</div>
                 ${assignmentItems}
               </div>
             `;
-          }).join('')}
+            })
+            .join("")}
         </div>
         <hr style="height: 1px; background-color: black;">
-        <div class="info">${meetingTranslate.t('songLabel')}: <strong>${meeting.endSong}</strong></div>
-        <div class="info">${meetingTranslate.t('endPrayerLabel')}: <strong>${meeting.endPrayer?.name || meeting.otherEndPrayer || ''}</strong></div>
+        <div class="info">${meetingTranslate.t("songLabel")}: <strong>${
+        meeting.endSong
+      }</strong></div>
+        <div class="info">${meetingTranslate.t("endPrayerLabel")}: <strong>${
+        meeting.endPrayer?.name || meeting.otherEndPrayer || ""
+      }</strong></div>
       </div>
       <hr>
     `;
-  }).join('');
+    })
+    .join("");
 
   return `
     <html>
