@@ -23,7 +23,8 @@ export const audioVideoTranslations = {
         deleteConfirmHeaderText: "Potwierdzenie usunięcia danych o audio-video",
         successfullyAddedMessage: "Poprawnie dodano dane o audio-video na zebranie",
         successfullyEditedMessage: "Poprawnie edytowano dane o audio-video na zebranie",
-        successfullyDeletedMessage: "Poprawnie usunięto dane o audio-video na zebranie"
+        successfullyDeletedMessage: "Poprawnie usunięto dane o audio-video na zebranie",
+        noAssignmentText: "Nie przydzielono"
     },
     en: {
         videoOperatorLabel: "Video operator",
@@ -49,6 +50,7 @@ export const audioVideoTranslations = {
         deleteConfirmHeaderText: "Deletion confirmation of audio-video data",
         successfullyAddedMessage: "Successfully added audio-video data to the meeting",
         successfullyEditedMessage: "Successfully edited audio-video data to the meeting",
-        successfullyDeletedMessage: "Successfully deleted audio-video data to the meeting"
+        successfullyDeletedMessage: "Successfully deleted audio-video data to the meeting",
+        noAssignmentText: "Not assigned"
     },
 }

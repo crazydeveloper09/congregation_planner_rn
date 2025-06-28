@@ -40,7 +40,17 @@ export const authTranslations = {
     askAccessMessage: "Poprawnie wysłano prośbę o dostęp",
     editCongMessage: "Poprawnie edytowano informacje zborowe",
     noUserFound: "Nie znaleziono takiego użytkownika",
-    logOutMessage: "Wylogowano z Congregation Planner"
+    logOutMessage: "Wylogowano z Congregation Planner",
+    registerLabel: "Załóż konto zboru",
+    repeatPasswordLabel: "Powtórz hasło",
+    repeatPasswordPlaceholder: "Wpisz hasło jeszcze raz",
+    passwordsDontMatch: "Hasła nie są te same",
+    verificationLabel: "Weryfikacja konta",
+    verificationButtonText: "Zweryfikuj konto",
+    successfulRegisterMessage: "Witaj w Congregation Planner. Bardzo nam miło, że do nas dołączyłeś",
+    emailVerificationMessage: "Na podane e-maile został wysłany kod weryfikacyjny. Wpisz go poniżej",
+    privacyAccept: "Przeczytałem i zapoznałem się z ",
+    privacyPolicy: "polityką prywatności"
   },
   en: {
     sectionLabel: "Congregation",
@@ -83,6 +93,16 @@ export const authTranslations = {
     askAccessMessage: "Successfully sent ask for access",
     editCongMessage: "Successfully edited congregation info",
     noUserFound: "We couldn't find that user",
-    logOutMessage: "Successfully logout from Congregation Planner"
+    logOutMessage: "Successfully logout from Congregation Planner",
+    registerLabel: "Create account",
+    repeatPasswordLabel: "Repeat password",
+    repeatPasswordPlaceholder: "Write password one more time",
+    passwordsDontMatch: "Passwords do not match",
+    verificationLabel: "Account verification",
+    verificationButtonText: "Verify account",
+    successfulRegisterMessage: "Welcome to Congregation Planner. We are very pleased you joined us",
+    emailVerificationMessage: "For given emails we have sent verification code. Please write it down below",
+    privacyAccept: "I've read ",
+    privacyPolicy: "privacy policy"
   },
 };

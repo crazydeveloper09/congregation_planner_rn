@@ -25,7 +25,8 @@ export const ministryMeetingsTranslations = {
         successfulAddMessage: "Poprawnie dodano zbiórkę",
         successfulEditMessage: "Poprawnie edytowano zbiórkę",
         successfulDeleteMessage: "Poprawnie usunięto zbiórkę",
-        calendarEventTitle: "Prowadzenie zbiórki"
+        calendarEventTitle: "Prowadzenie zbiórki",
+        leadChooseTopicText: "Prowadzący sam wybiera temat"
     },
     en: {
         sectionText: "Field Service Meetings",
@@ -53,6 +54,7 @@ export const ministryMeetingsTranslations = {
         successfulAddMessage: "Successfully added field service meeting",
         successfulEditMessage: "Successfully edited field service meeting",
         successfulDeleteMessage: "Successfully deleted field service meeting",
-        calendarEventTitle: "Leading field service meeting"
+        calendarEventTitle: "Leading field service meeting",
+        leadChooseTopicText: "Chairman choose topic by himself"
     },
 }

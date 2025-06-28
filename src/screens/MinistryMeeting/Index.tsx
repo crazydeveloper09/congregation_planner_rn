@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -18,6 +18,11 @@ import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { IMinistryMeeting } from "../../contexts/interfaces";
+import { buildMinistryMeetingsPDF } from "./helpers/pdf";
+import * as Sharing from 'expo-sharing';
+import * as Print from 'expo-print';
+import * as FileSystem from 'expo-file-system';
+import IconLink from "../../commonComponents/IconLink";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
@@ -41,6 +46,27 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
           setRefreshing(false);
         }, 2000);
       }, []);
+
+    const generateMinistryMeetingsPDF = async (meetings: IMinistryMeeting[], month: string) => {
+        try {
+    
+          const html = buildMinistryMeetingsPDF(meetings, month);
+    
+          const { uri } = await Print.printToFileAsync({ html });
+    
+          const newPath = FileSystem.documentDirectory + `${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`;
+          await FileSystem.copyAsync({
+            from: uri,
+            to: newPath,
+          });
+    
+          if (await Sharing.isAvailableAsync()) {
+            await Sharing.shareAsync(newPath);
+          }
+        } catch (error) {
+          Alert.alert("Error", mainTranslate.t("generatePDFError"));
+        }
+      }
 
     useEffect(() => {
         currentFilter === mainTranslate.t("all") ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
@@ -88,10 +114,18 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
                     scrollEnabled={false}
                     
                 />
-                { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
+                {authContext.state.whoIsLoggedIn === "admin" && (
+                    <IconLink
                     iconName="download"
-                    value={mainTranslate.t("pdfInfo")}
-                />}
+                      description={`Generuj plik ${ministryMeetingTranslate.t("sectionText")} - ${currentMonth}`}
+                      onPress={() =>
+                        generateMinistryMeetingsPDF(
+                          ministryMeetingsGroup && ministryMeetingsGroup[currentMonth],
+                          currentMonth
+                        )
+                      }
+                    />
+                  )}
                 </> }
 
                 
