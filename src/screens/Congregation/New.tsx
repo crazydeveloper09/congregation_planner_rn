@@ -104,7 +104,6 @@ const CongregationRegisterScreen: React.FC = () => {
                             <Checkbox
                                 status={values.termsAccepted ? 'checked' : 'unchecked'}
                                 onPress={() => setFieldValue('termsAccepted', !values.termsAccepted)}
-                                
                             />
                 
                                 <Pressable onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
