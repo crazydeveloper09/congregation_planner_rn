@@ -42,7 +42,9 @@ export const mainTranslations = {
         today: "(dzisiaj)",
         calendarPermission: "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
         reminderIOSPermission: "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
-        faceIDPermission: "Pozwól $(PRODUCT_NAME) na używanie Face ID."
+        faceIDPermission: "Pozwól $(PRODUCT_NAME) na używanie Face ID.",
+        generatePDFError: "Nie udało się wygenerować pliku PDF.",
+        dateLabel: "Data"
     },
     en: {
         greeting: "Welcome to Congregation Planner",
@@ -85,6 +87,8 @@ export const mainTranslations = {
         today: "(today)",
         calendarPermission: "This app for helpful functions need permission to calendar",
         reminderIOSPermission: "Let $(PRODUCT_NAME) for accessing reminders",
-        faceIDPermission: "Let $(PRODUCT_NAME) for using Face ID."
+        faceIDPermission: "Let $(PRODUCT_NAME) for using Face ID.",
+        generatePDFError: "We could not generate PDF.",
+        dateLabel: "Date"
     }
 }

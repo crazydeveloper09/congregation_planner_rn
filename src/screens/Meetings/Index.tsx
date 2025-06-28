@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity, Alert } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { ScrollView } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -22,6 +22,13 @@ import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import CleaningAssignment from "./components/CleaningAssignment";
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import * as Sharing from 'expo-sharing';
+import * as Print from 'expo-print';
+import { Platform } from 'react-native';
+import { buildMeetingsPDF } from "./helpers/pdf";
+import ButtonC from "../../commonComponents/Button";
+import * as FileSystem from 'expo-file-system';
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -54,6 +61,27 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
           setRefreshing(false);
         }, 2000);
       }, []);
+
+  const generateMeetingsPDF = async (meetings: IMeeting[], type: string, month: string) => {
+    try {
+
+      const html = buildMeetingsPDF(meetings, type, month);
+
+      const { uri } = await Print.printToFileAsync({ html });
+
+      const newPath = FileSystem.documentDirectory + `${type}_${month}.pdf`;
+      await FileSystem.copyAsync({
+        from: uri,
+        to: newPath,
+      });
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(newPath);
+      }
+    } catch (error) {
+      Alert.alert("Error", mainTranslate.t("generatePDFError"));
+    }
+  }
 
   useEffect(() => {
     currentFilter === mainTranslate.t("all") ? loadMeetings() : loadPreacherMeetingAssignments();
@@ -88,72 +116,196 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   const isMonth = Object.keys(groupBy<IMeeting>(state.allMeetings!, "month")).includes(currentMonth);
 
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === mainTranslate.t("all") && state.allMeetings?.length !== 0 && <>
-        <TopMenu state={type} data={state?.allMeetings && Object.keys(groupBy(state?.allMeetings, "type"))!} updateState={setType} />
-        <TopMenu state={currentMonth} data={state?.allMeetings && Object.keys(groupBy(state?.allMeetings, "month"))!} updateState={setCurrentMonth} />
-      </>}
-      
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {currentFilter === mainTranslate.t("all") &&
+        state.allMeetings?.length !== 0 && (
+          <>
+            <TopMenu
+              state={type}
+              data={
+                state?.allMeetings &&
+                Object.keys(groupBy(state?.allMeetings, "type"))!
+              }
+              updateState={setType}
+            />
+            <TopMenu
+              state={currentMonth}
+              data={
+                state?.allMeetings &&
+                Object.keys(groupBy(state?.allMeetings, "month"))!
+              }
+              updateState={setCurrentMonth}
+            />
+          </>
+        )}
 
-      {preachersContext.state.preacher && authContext.state.whoIsLoggedIn === "preacher" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
-      { currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
-      
-        {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noEntryText")} /> : <>
-        {!isType && <NotFound title={meetingTranslate.t("typePlaceholder")} icon="format-list-bulleted" />}
-        {!isMonth && isType && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
-        {groupBy<IMeeting>(state?.allMeetings, "type")[type]?.filter(
-            (meeting) => meeting.month === currentMonth
-          ).length === 0 ? (
-            isMonth && <NotFound title={meetingTranslate.t("notFoundText")} />
+      {preachersContext.state.preacher &&
+        authContext.state.whoIsLoggedIn === "preacher" && (
+          <TopMenu
+            state={currentFilter}
+            data={filters}
+            updateState={setCurrentFilter}
+          />
+        )}
+      {currentFilter === mainTranslate.t("all") ? (
+        <View style={styles.container}>
+          {state.allMeetings?.length === 0 ? (
+            <NotFound title={meetingTranslate.t("noEntryText")} />
           ) : (
             <>
-              <FlatList
-                keyExtractor={(meeting) => meeting._id}
-                data={groupBy<IMeeting>(state?.allMeetings, "type")[type]?.filter(
-                  (meeting) => meeting.month === currentMonth
-                )}
-                renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
-                scrollEnabled={false}
-              />
-              { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
-                iconName="download"
-                value={mainTranslate.t("pdfInfo")}
-              />}
-              
+              {!isType && (
+                <NotFound
+                  title={meetingTranslate.t("typePlaceholder")}
+                  icon="format-list-bulleted"
+                />
+              )}
+              {!isMonth && isType && (
+                <NotFound
+                  title={mainTranslate.t("chooseMonth")}
+                  icon="calendar-month-outline"
+                />
+              )}
+              {groupBy<IMeeting>(state?.allMeetings, "type")[type]?.filter(
+                (meeting) => meeting.month === currentMonth
+              ).length === 0 ? (
+                isMonth && (
+                  <NotFound title={meetingTranslate.t("notFoundText")} />
+                )
+              ) : (
+                <>
+                  <FlatList
+                    keyExtractor={(meeting) => meeting._id}
+                    data={groupBy<IMeeting>(state?.allMeetings, "type")[
+                      type
+                    ]?.filter((meeting) => meeting.month === currentMonth)}
+                    renderItem={({ item }) => (
+                      <Meeting meeting={item} filter={currentFilter} />
+                    )}
+                    scrollEnabled={false}
+                  />
+                  {authContext.state.whoIsLoggedIn === "admin" && (
+                    <IconLink
+                    iconName="download"
+                      description={`Generuj plik ${type} - ${currentMonth}`}
+                      onPress={() =>
+                        generateMeetingsPDF(
+                          groupBy<IMeeting>(state?.allMeetings, "type")[
+                            type
+                          ]?.filter(
+                            (meeting) => meeting.month === currentMonth
+                          ),
+                          type,
+                          currentMonth
+                        )
+                      }
+                    />
+                  )}
+                </>
+              )}
             </>
           )}
-        </>}
-        
-      </View> : <View style={styles.container}>
-        { (preachersContext.state.preacher?.roles?.includes("can_lead_meetings") || preachersContext.state.preacher?.roles?.includes("can_say_prayer")) && <>
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("leadOrPrayer")}</Text>
-          {state.meetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
+        </View>
+      ) : (
+        <View style={styles.container}>
+          {(preachersContext.state.preacher?.roles?.includes(
+            "can_lead_meetings"
+          ) ||
+            preachersContext.state.preacher?.roles?.includes(
+              "can_say_prayer"
+            )) && (
+            <>
+              <Text
+                style={[
+                  styles.meeting,
+                  {
+                    color: settingsContext.state.mainColor,
+                    fontSize: 19 + settingsContext.state.fontIncrement,
+                  },
+                ]}
+              >
+                {meetingTranslate.t("leadOrPrayer")}
+              </Text>
+              {state.meetings?.length === 0 ? (
+                <NotFound title={meetingTranslate.t("noAssigmentsText")} />
+              ) : (
+                <FlatList
+                  keyExtractor={(meeting) => meeting?._id}
+                  data={state.meetings}
+                  renderItem={({ item }) => (
+                    <Meeting meeting={item} filter={currentFilter} />
+                  )}
+                  scrollEnabled={false}
+                />
+              )}
+            </>
+          )}
+
+          {preachersContext.state.preacher?.roles?.includes(
+            "can_have_assignment"
+          ) && (
+            <>
+              <Text
+                style={[
+                  styles.meeting,
+                  {
+                    color: settingsContext.state.mainColor,
+                    fontSize: 19 + settingsContext.state.fontIncrement,
+                  },
+                ]}
+              >
+                {meetingTranslate.t("taskOrReading")}
+              </Text>
+              {state.assignments?.length === 0 ? (
+                <NotFound title={meetingTranslate.t("noAssigmentsText")} />
+              ) : (
+                <FlatList
+                  keyExtractor={(assignment) => assignment?._id}
+                  data={state.assignments}
+                  renderItem={({ item }) => (
+                    <PreacherAssignment
+                      type={item.type}
+                      assignment={item}
+                      preacher={preachersContext.state.preacher!}
+                    />
+                  )}
+                  scrollEnabled={false}
+                />
+              )}
+            </>
+          )}
+          <Text
+            style={[
+              styles.meeting,
+              {
+                color: settingsContext.state.mainColor,
+                fontSize: 19 + settingsContext.state.fontIncrement,
+              },
+            ]}
+          >
+            {meetingTranslate.t("cleaningLabel")}
+          </Text>
+          {state.allMeetings?.length === 0 ? (
+            <NotFound title={meetingTranslate.t("noAssigmentsText")} />
+          ) : (
+            <FlatList
               keyExtractor={(meeting) => meeting?._id}
-              data={state.meetings}
-              renderItem={({ item }) => <Meeting meeting={item} filter={currentFilter} />}
+              data={state.allMeetings?.filter((meeting) =>
+                meeting.cleaningGroup?.preachers.includes(
+                  preachersContext.state.preacher?._id.toString()!
+                )
+              )}
+              renderItem={({ item }) => (
+                <CleaningAssignment meetingDate={new Date(item.date)} />
+              )}
               scrollEnabled={false}
-            />}
-        </>}
-        
-          {preachersContext.state.preacher?.roles?.includes("can_have_assignment") && <>
-            <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("taskOrReading")}</Text>
-            {state.assignments?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
-              keyExtractor={(assignment) => assignment?._id}
-              data={state.assignments}
-              renderItem={({ item }) => <PreacherAssignment type={item.type} assignment={item} preacher={preachersContext.state.preacher!} />}
-              scrollEnabled={false}
-            />}
-          </>}
-          <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 19 + settingsContext.state.fontIncrement}]}>{meetingTranslate.t("cleaningLabel")}</Text>
-            {state.allMeetings?.length === 0 ? <NotFound title={meetingTranslate.t("noAssigmentsText")} /> : <FlatList
-              keyExtractor={(meeting) => meeting?._id}
-              data={state.allMeetings?.filter(meeting => meeting.cleaningGroup?.preachers.includes(preachersContext.state.preacher?._id.toString()!))}
-              renderItem={({ item }) => <CleaningAssignment meetingDate={new Date(item.date)} />}
-              scrollEnabled={false}
-          />}
-        
-      </View>}
-      
+            />
+          )}
+        </View>
+      )}
     </ScrollView>
   );
 };

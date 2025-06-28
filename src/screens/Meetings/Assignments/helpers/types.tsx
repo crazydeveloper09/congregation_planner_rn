@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ReactElement } from "react";
 
-export const chooseFontColorAndIcon = (type: string, fontIncrement: number): {icon: ReactElement, fontColor: string} => {
+export const chooseFontColorAndIcon = (type: string, fontIncrement: number = 0): {icon: ReactElement, fontColor: string} => {
     let fontColor: string;
     let icon: ReactElement;
     switch (type) {

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
 import { groupBy } from "../../helpers/arrays";
@@ -24,6 +24,11 @@ import { mainTranslations } from "../../../localization";
 import { attendantTranslations } from "./Attendants/translations";
 import { meetingsTranslations } from "../Meetings/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { buildAttendantsPDF, buildAudioVideoPDF } from "./helpers/pdf";
+import * as Sharing from 'expo-sharing';
+import * as Print from 'expo-print';
+import * as FileSystem from 'expo-file-system';
+import IconLink from "../../commonComponents/IconLink";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -54,6 +59,27 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
           setRefreshing(false);
         }, 2000);
       }, []);
+
+  const generatePDF = async (meetings: IMeeting[], month: string, type: string) => {
+          try {
+      
+            const html = type === "Audio-video" ? buildAudioVideoPDF(meetings, month) : buildAttendantsPDF(meetings, month);
+      
+            const { uri } = await Print.printToFileAsync({ html });
+      
+            const newPath = FileSystem.documentDirectory + `${ type === "Audio-video" ? type: attendantTranslate.t("sectionText")}_${month}.pdf`;
+            await FileSystem.copyAsync({
+              from: uri,
+              to: newPath,
+            });
+      
+            if (await Sharing.isAvailableAsync()) {
+              await Sharing.shareAsync(newPath);
+            }
+          } catch (error) {
+            Alert.alert("Error", mainTranslate.t("generatePDFError"));
+          }
+        }
 
   useEffect(() => {
     currentFilter === mainTranslate.t("all") ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
@@ -102,9 +128,10 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
             renderItem={({ item }) => type === "Audio-video" ? <AudioVideo meeting={item} audioVideo={item.audioVideo} /> : <Attendant meeting={item} attendant={item.ordinal} />}
             scrollEnabled={false}
           />
-          { authContext.state.whoIsLoggedIn === "admin" && <IconDescriptionValue 
+          { authContext.state.whoIsLoggedIn === "admin" && <IconLink
                 iconName="download"
-                value={mainTranslate.t("pdfInfo")}
+                description={`Generuj plik ${type}_${currentMonth}`}
+                onPress={() => generatePDF(meetingsGroup && meetingsGroup[currentMonth], currentMonth, type)}
               />}
           </>}
         </View>: <View style={styles.container}>

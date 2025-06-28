@@ -35,6 +35,9 @@ export interface IAuthContext {
   loadCongregationInfo: Function;
   loadCongregationActivities: Function;
   askAccess: Function;
+  registerCongregation: Function;
+  verifyNewUser: Function;
+  resendVerificationCode: Function;
 }
 
 interface ISignIn {
@@ -53,7 +56,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'signin': 
         return { ...state, errMessage: '', successMessage: action.payload.message, token: action.payload.token, isLoading: false, preacherID: action.payload?.preacherID, whoIsLoggedIn: action.payload?.whoIsLoggedIn}
     case 'signout': 
-        return {...state, token: '', userID: ''}
+        return {...state, token: '', userID: '', successMessage: ''}
     case 'add_cong_info': 
       return {...state, isLoading: false, congregation: action.payload, errMessage: '', successMessage: state.successMessage}
     case 'add_cong_activities': 
@@ -138,6 +141,45 @@ const verifyUser = (dispatch: Function) => {
             dispatch({ type: 'add_error', payload: (err as AxiosError).message })
         }
     }
+}
+
+const verifyNewUser = (dispatch: Function) => {
+    return async(body: ITwoFactor) => {
+        try {
+          dispatch({ type: 'turn_on_loading' })
+          const locale = Localization.getLocales()[0].languageCode!;
+            const response = await tmApi.post(`/congregations/${body?.userID}/verification?app=Congregation Planner&locale=${locale}`, body);
+            await AsyncStorage.setItem('token', response.data.token);
+            await AsyncStorage.setItem('whoIsLoggedIn', 'admin')
+            dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'admin' } });
+            mainNavNavigate('Meetings')
+            showMessage({
+              message: authTranslate.t("successfulRegisterMessage"),
+              type: "success"
+            })
+        } catch (err) {
+            dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+        }
+    }
+}
+
+const registerCongregation = (dispatch: Function) => {
+  return async(username: string, mainAdminEmail: string, secondAdminEmail: string, password: string) => {
+    try {
+          dispatch({ type: 'turn_on_loading' })
+          const locale = Localization.getLocales()[0].languageCode!;
+            const response = await tmApi.post(`/congregations?app=Congregation Planner&locale=${locale}`, {username, mainAdminEmail, secondAdminEmail, password});
+            await AsyncStorage.setItem('congregationID', response.data.userID)
+            dispatch({ type: 'add_success', payload: {message: authTranslate.t("emailVerificationMessage"), userID: response.data.userID} })
+            navigate("Verification");
+        } catch (err) {
+            dispatch({ type: 'add_error', payload: (err as AxiosError).message })
+        }
+  }
+}
+
+const resendVerificationCode = (dispatch: Function) => {
+
 }
 
 const tryLocalSignIn = (dispatch: Function) => {
@@ -228,6 +270,6 @@ const askAccess = (dispatch: Function) => {
 
 export const { Context, Provider } = createDataContext<IAuth, IAuthContext>(
   authReducer,
-  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, editCongregation, loadCongregationInfo, logInPreacher, askAccess },
+  { signIn, signOut, verifyUser, tryLocalSignIn, loadCongregationActivities, editCongregation, loadCongregationInfo, logInPreacher, askAccess, verifyNewUser, registerCongregation },
   { token: "", errMessage: "", successMessage: "" }
 );

@@ -8,6 +8,10 @@ import { authTranslations } from "../screens/Congregation/translations";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import { useContext } from "react";
 import CongregationAskAccessScreen from "../screens/Congregation/AskAccess";
+import CongregationRegisterScreen from "../screens/Congregation/New";
+import CongregationsVerificationScreen from "../screens/Congregation/Verification";
+import PoliciesScreen from "../screens/Settings/Policies";
+import PoliciesEnScreen from "../screens/Settings/PoliciesEn";
 
 const Stack = createStackNavigator();
 
@@ -31,12 +35,32 @@ const AuthNavigator = () => {
                     name="Ask access" 
                     component={CongregationAskAccessScreen} 
                     options={{ headerTitle: i18n.t('askAccessLabel') }}
+                /> 
+                <Stack.Screen 
+                    name="Register" 
+                    component={CongregationRegisterScreen} 
+                    options={{ headerTitle: i18n.t('registerLabel') }}
                 />  
+                <Stack.Screen 
+                    name="Verification" 
+                    component={CongregationsVerificationScreen} 
+                    options={{ headerTitle: i18n.t('verificationLabel') }}
+                />   
                 <Stack.Screen 
                     name="TwoFactor" 
                     component={CongregationsTwoFactorScreen} 
                     options={{ headerTitle: i18n.t('twoFactorHeaderText') }}
                 />
+                <Stack.Screen 
+                name="Policy_pl" 
+                component={PoliciesScreen} 
+                options={{ headerTitle: 'Polityka prywatności i RODO' }}
+            />  
+            <Stack.Screen 
+                name="Policy_en" 
+                component={PoliciesEnScreen} 
+                options={{ headerTitle: 'Privacy policy and GPDR' }}
+            />  
             </Stack.Navigator>
       
         
