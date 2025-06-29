@@ -1,4 +1,4 @@
-"NSCalendarsUsageDescription" = "This app needs access to your calendar to enable helpful features.";
+"NSCalendarsUsageDescription" = "This app needs access to your calendar to enable helpful features.";Add commentMore actions
 "NSRemindersUsageDescription" = "Allow $(PRODUCT_NAME) to access reminders.";
 "NSCalendarsFullAccessUsageDescription" = "This app needs access to your calendar to enable helpful features.";
 "NSRemindersFullAccessUsageDescription" = "Allow $(PRODUCT_NAME) to access reminders.";
