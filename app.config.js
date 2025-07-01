@@ -2,7 +2,7 @@ export default {
   "expo": {
     "name": "Congregation Planner",
     "slug": "congregation_planner",
-    "version": "3.20.1",
+    "version": "3.20.2",
     "owner": "miszki",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -24,7 +24,8 @@ export default {
         "NSRemindersUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
         "NSCalendarsFullAccessUsageDescription": "Ta aplikacja do przydatnych dla Ciebie funkcji potrzebuje dostępu do kalendarza",
         "NSRemindersFullAccessUsageDescription": "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
-        "NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID."
+        "NSFaceIDUsageDescription": "Pozwól $(PRODUCT_NAME) na używanie Face ID.",
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
