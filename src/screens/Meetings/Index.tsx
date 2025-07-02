@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity, Alert, Share } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { ScrollView } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -22,7 +22,6 @@ import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import CleaningAssignment from "./components/CleaningAssignment";
-import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { Platform } from 'react-native';
 import { buildMeetingsPDF } from "./helpers/pdf";
@@ -74,9 +73,11 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
         to: newPath,
       });
 
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(newPath);
-      }
+      await Share.share({
+        url: newPath,
+        title: `${type}_${month}.pdf`,
+        message: `PDF: ${type}_${month}.pdf`,
+      });
     } catch (error) {
       Alert.alert("Error", mainTranslate.t("generatePDFError"));
     }
