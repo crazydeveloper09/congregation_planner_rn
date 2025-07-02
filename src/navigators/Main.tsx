@@ -4,15 +4,7 @@ import MeetingsNavigator from "./Meetings";
 import MinistryMeetingNavigator from "./MinistryMeetings";
 import CartsScheduleNavigator from "./CartsSchedule";
 import AudioVideoNavigator from "./AudioVideo";
-import {
-  Button,
-  PaperProvider,
-  TouchableRipple,
-  useTheme,
-} from "react-native-paper";
 import { Context as PreachersContext } from "../contexts/PreachersContext";
-import { Context as AuthContext } from "../contexts/AuthContext";
-import PreachersNavigator from "./Preachers";
 import SettingsNavigator from "./Settings";
 import { useContext, useEffect, useState } from "react";
 import useLocaLization from "../hooks/useLocalization";
@@ -23,12 +15,12 @@ import { preachersTranslations } from "../screens/Preachers/translations";
 import { mainTranslations } from "../../localization";
 import { StatusBar, View } from "react-native";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
+import { Context as AuthContext } from "../contexts/AuthContext";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import territories from "../api/territories";
-import { buildTheme, hexToRGB } from "../helpers/colors";
-import tinycolor from "tinycolor2";
+import { hexToRGB } from "../helpers/colors";
 
 const Tab = createMaterialBottomTabNavigator();
 
