@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert, Share } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
 import { groupBy } from "../../helpers/arrays";
@@ -25,7 +25,6 @@ import { attendantTranslations } from "./Attendants/translations";
 import { meetingsTranslations } from "../Meetings/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { buildAttendantsPDF, buildAudioVideoPDF } from "./helpers/pdf";
-import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
@@ -66,16 +65,19 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
             const html = type === "Audio-video" ? buildAudioVideoPDF(meetings, month) : buildAttendantsPDF(meetings, month);
       
             const { uri } = await Print.printToFileAsync({ html });
+            const documentTitle = type === "Audio-video" ? type: `${attendantTranslate.t("sectionText")}_${month}`
       
-            const newPath = FileSystem.documentDirectory + `${ type === "Audio-video" ? type: attendantTranslate.t("sectionText")}_${month}.pdf`;
+            const newPath = FileSystem.documentDirectory + `${documentTitle}.pdf`;
             await FileSystem.copyAsync({
               from: uri,
               to: newPath,
             });
       
-            if (await Sharing.isAvailableAsync()) {
-              await Sharing.shareAsync(newPath);
-            }
+            await Share.share({
+                    url: newPath,
+                    title: `${documentTitle}.pdf`,
+                    message: `PDF: ${documentTitle}.pdf`,
+                  });
           } catch (error) {
             Alert.alert("Error", mainTranslate.t("generatePDFError"));
           }

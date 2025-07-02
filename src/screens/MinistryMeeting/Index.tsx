@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert, Share } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -18,11 +18,10 @@ import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { IMinistryMeeting } from "../../contexts/interfaces";
-import { buildMinistryMeetingsPDF } from "./helpers/pdf";
-import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
+import { buildMinistryMeetingsPDF } from "./helpers/pdf";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
@@ -60,9 +59,11 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
             to: newPath,
           });
     
-          if (await Sharing.isAvailableAsync()) {
-            await Sharing.shareAsync(newPath);
-          }
+          await Share.share({
+            url: newPath,
+            title: `${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`,
+            message: `PDF: ${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`,
+          });
         } catch (error) {
           Alert.alert("Error", mainTranslate.t("generatePDFError"));
         }
