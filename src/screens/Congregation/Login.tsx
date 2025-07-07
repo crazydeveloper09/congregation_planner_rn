@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Input, Text, Button } from '@rneui/themed';
 import ButtonC from '../../commonComponents/Button';
 import { Context as AuthContext } from '../../contexts/AuthContext';
@@ -25,7 +26,7 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
     const settingsContext = useContext(SettingsContext);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
             <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{i18n.t('loginHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
@@ -71,15 +72,13 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
             />
             </>}
             
-        </View>
+        </KeyboardAwareScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
-        flex: 1,
-        justifyContent: 'center'
+        padding: 15
     },
     header: {
         marginBottom: 15,

@@ -16,6 +16,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface MeetingEditScreenProps {
     route: {
@@ -124,7 +125,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <ChooseDate 
                 label={meetingTranslate.t("dateLabel")}
                 date={date}
@@ -245,7 +246,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
                     onPress={() => editMeeting(route.params.meeting._id, typeValue, cleaningGroupValue, leadValue, date, beginPrayerValue, beginSong, midSong, endSong, endPrayerValue, otherEndPrayer)}
                 />
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     )
 }
 

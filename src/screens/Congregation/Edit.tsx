@@ -6,6 +6,7 @@ import ButtonC from "../../commonComponents/Button";
 import MyInput from "../../commonComponents/MyInput";
 import useLocaLization from "../../hooks/useLocalization";
 import { authTranslations } from "./translations";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const CongregationEditScreen: React.FC = () => {
     const { editCongregation, state, loadCongregationInfo } = useContext(AuthContext);
@@ -31,7 +32,7 @@ const CongregationEditScreen: React.FC = () => {
         Alert.alert("Server error", state.errMessage)
     }
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
             <MyInput 
                 label={authTranslate.t("usernameLabel")}
                 placeholder={authTranslate.t("usernamePlaceholder")}
@@ -53,7 +54,7 @@ const CongregationEditScreen: React.FC = () => {
             />
 
             <ButtonC title={authTranslate.t("editCongText")} isLoading={state.isLoading} onPress={() => editCongregation(username, territoryServantEmail, ministryOverseerEmail, state.congregation?._id)} />
-        </View>
+        </KeyboardAwareScrollView>
     )
 }
 

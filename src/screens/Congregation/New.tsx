@@ -12,6 +12,7 @@ import { authTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Checkbox } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const CongregationRegisterScreen: React.FC = () => {
     const { registerCongregation, state } = useContext(AuthContext);
@@ -37,7 +38,7 @@ const CongregationRegisterScreen: React.FC = () => {
     });
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: "center", }}>
+        <KeyboardAwareScrollView enableOnAndroid style={styles.container} contentContainerStyle={{ justifyContent: "center", }}>
             <Formik
                 initialValues={{ congName: "", mainAdminEmail: "", secondAdminEmail: "", password: "", repeatPassword: "", termsAccepted: false }}
                 validationSchema={validationSchema}
@@ -103,6 +104,7 @@ const CongregationRegisterScreen: React.FC = () => {
                             <Checkbox
                                 status={values.termsAccepted ? 'checked' : 'unchecked'}
                                 onPress={() => setFieldValue('termsAccepted', !values.termsAccepted)}
+                                
                             />
                 
                                 <Pressable onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
@@ -121,13 +123,14 @@ const CongregationRegisterScreen: React.FC = () => {
                                     
                         <ButtonC
                             title={authTranslate.t("registerLabel")}
+                    
                             isLoading={state.isLoading}
                             onPress={handleSubmit as any}
                         />
                     </>
                 )}
             </Formik>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     );
 };
 

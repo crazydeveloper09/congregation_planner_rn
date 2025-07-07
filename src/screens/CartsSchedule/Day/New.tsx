@@ -10,6 +10,7 @@ import { Switch } from "react-native-paper";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import Label from "../../../commonComponents/Label";
 import { defaultSwitchStyles } from "../../defaultStyles";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface CartDayNewScreenProps {
     route: {
@@ -37,7 +38,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <ChooseDate 
                 label="Data"
                 date={date}
@@ -101,7 +102,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
                     onPress={() => addCartDay(place, startHour, date, finalHour, startMinute, finishMinute)}
                 />
             </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     )
 }
 
