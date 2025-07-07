@@ -17,6 +17,7 @@ import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface MinistryMeetingEditScreenProps {
     navigation: NavigationProp<any>;
@@ -85,7 +86,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     }, [date])
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <ChooseDate 
                 label={ministryMeetingTranslate.t("dateLabel")}
                 date={date}
@@ -149,7 +150,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
                 isLoading={state.isLoading}
                 onPress={() => editMinistryMeeting(route.params.meeting._id, place, leadValue, date, time, defaultPlaceValue, topic)}
             />
-        </View>
+        </KeyboardAwareScrollView>
     )
 }
 

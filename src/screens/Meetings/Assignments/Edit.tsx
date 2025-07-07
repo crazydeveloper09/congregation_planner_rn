@@ -20,6 +20,7 @@ import { mainTranslations } from "../../../../localization";
 import { attendantTranslations } from "../../AudioVideo/Attendants/translations";
 import { meetingsTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface MeetingAssignmentEditScreenProps {
     route: {
@@ -126,7 +127,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     }, [route.params.assignment])
 
     return (
-        <ScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")}  shouldAutomaticallyExpand={false} />
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement, marginTop: 15 }]}>Audio-video</Text>
@@ -242,7 +243,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 />
             </View>
             
-        </ScrollView>
+        </KeyboardAwareScrollView>
     )
 }
 

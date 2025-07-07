@@ -22,6 +22,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const MeetingNewScreen: React.FC = () => {
     const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -108,7 +109,7 @@ const MeetingNewScreen: React.FC = () => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
             <ChooseDate 
                 label={meetingTranslate.t("dateLabel")}
                 date={date}
@@ -230,7 +231,7 @@ const MeetingNewScreen: React.FC = () => {
                 />
             </View>
         
-        </ScrollView>
+        </KeyboardAwareScrollView>
     )
 }
 
