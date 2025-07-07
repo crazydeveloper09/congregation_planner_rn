@@ -4,6 +4,12 @@ import MeetingsNavigator from "./Meetings";
 import MinistryMeetingNavigator from "./MinistryMeetings";
 import CartsScheduleNavigator from "./CartsSchedule";
 import AudioVideoNavigator from "./AudioVideo";
+import {
+  Button,
+  PaperProvider,
+  TouchableRipple,
+  useTheme,
+} from "react-native-paper";
 import { Context as PreachersContext } from "../contexts/PreachersContext";
 import { Context as AuthContext } from "../contexts/AuthContext";
 import SettingsNavigator from "./Settings";
