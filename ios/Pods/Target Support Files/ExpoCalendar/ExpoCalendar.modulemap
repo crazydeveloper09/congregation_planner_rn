@@ -1,0 +1,6 @@
+module ExpoCalendar {
+  umbrella header "ExpoCalendar-umbrella.h"
+
+  export *
+  module * { export * }
+}

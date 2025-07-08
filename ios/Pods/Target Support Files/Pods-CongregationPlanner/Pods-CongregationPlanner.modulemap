@@ -1,0 +1,6 @@
+module Pods_CongregationPlanner {
+  umbrella header "Pods-CongregationPlanner-umbrella.h"
+
+  export *
+  module * { export * }
+}
