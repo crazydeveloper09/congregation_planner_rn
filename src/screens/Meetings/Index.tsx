@@ -22,7 +22,6 @@ import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import CleaningAssignment from "./components/CleaningAssignment";
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { Platform } from 'react-native';
