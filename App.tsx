@@ -40,9 +40,7 @@ function App() {
 
     if (status === 'granted' && remindersStatus === 'granted') {
       setPermissionStatus(status)
-    } else {
-      Alert.alert('Permission Denied', 'You need to grant calendar and reminders permissions to access this feature.');
-    }
+    } 
   }
 
   useEffect(() => {
