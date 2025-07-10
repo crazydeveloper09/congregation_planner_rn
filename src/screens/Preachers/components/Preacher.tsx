@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Text, StyleSheet, Share, Alert } from "react-na
 import { IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { isTablet } from "../../../helpers/devices";
+import { isTablet, isDesktop } from "../../../helpers/devices";
 import { FlatList } from "react-native-gesture-handler";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         width: isTablet ? '49%' : 'auto',
-        marginRight: isTablet ? 15 : 0
+        marginRight: isTablet || isDesktop ? 15 : 0
     },
     titleContainer: {
         flexDirection: 'row',

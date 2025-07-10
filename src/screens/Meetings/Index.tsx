@@ -28,6 +28,8 @@ import { Platform } from 'react-native';
 import { buildMeetingsPDF } from "./helpers/pdf";
 import ButtonC from "../../commonComponents/Button";
 import * as FileSystem from 'expo-file-system';
+// @ts-ignore
+import html2pdf from "html2pdf.js";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -65,18 +67,40 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
     try {
 
       const html = buildMeetingsPDF(meetings, type, month);
+if (Platform.OS === 'web') {
+            // Create a temporary container for the HTML
+            const element = document.createElement('div');
+            element.innerHTML = html;
+            document.body.appendChild(element);
 
-      const { uri } = await Print.printToFileAsync({ html });
+            // Use html2pdf to generate and save the PDF
+            await html2pdf()
+              .set({
+                margin: 0.5,
+                filename: `${type}_${month}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+              })
+              .from(element)
+              .save();
 
-      const newPath = FileSystem.documentDirectory + `${type}_${month}.pdf`;
-      await FileSystem.copyAsync({
-        from: uri,
-        to: newPath,
-      });
+            // Clean up the temporary element
+            document.body.removeChild(element);
+          } else {
+            // Native platforms (iOS/Android) - your original code
+            const { uri } = await Print.printToFileAsync({ html });
 
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(newPath);
-      }
+            const newPath = FileSystem.documentDirectory + `${type}_${month}.pdf`;
+            await FileSystem.copyAsync({
+              from: uri,
+              to: newPath,
+            });
+
+            if (await Sharing.isAvailableAsync()) {
+              await Sharing.shareAsync(newPath);
+            }
+          }
     } catch (error) {
       Alert.alert("Error", mainTranslate.t("generatePDFError"));
     }

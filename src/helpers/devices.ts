@@ -1,9 +1,19 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 const aspectRatio = height / width;
 
-export const isTablet = aspectRatio < 1.6;
+// Platform-aware width thresholds
+const isWeb = Platform.OS === "web";
 
-const determineNumOfColumns = () => isTablet ? 2 : 1;
+// Define breakpoints
+export const isTablet = !isWeb && aspectRatio < 1.6 && width >= 600;
+export const isDesktop = isWeb && width >= 1000;
+export const isMobile = !isTablet && !isDesktop;
+
+const determineNumOfColumns = () => {
+  if (isDesktop || isTablet) return 2;
+  return 1;
+};
+
 export const columnsNum = determineNumOfColumns();

@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import createDataContext from "./createDataContext"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
@@ -8,6 +7,7 @@ import { IAudioVideo, IAttendant } from "./interfaces"
 import useLocaLization from "../hooks/useLocalization";
 import { audioVideoTranslations } from "../screens/AudioVideo/translations";
 import * as Localization from 'expo-localization';
+import { storage } from "../helpers/storage"
 
 const audioVideoTranslate = useLocaLization(audioVideoTranslations)
 
@@ -45,7 +45,7 @@ const loadPreacherAudioVideoAssignments = (dispatch: Function) => {
   return async () => {
       try {
           dispatch({ type: 'turn_on_loading' })
-          const token = await AsyncStorage.getItem('token');
+          const token = await storage.getItem("token", "session");
           const response = await territories.get(`/meetings/preacher/audioVideo/assignments`, {
               headers: {
                   'Authorization': `bearer ${token}`
@@ -73,8 +73,8 @@ const addAudioVideo = (dispatch: Function) => {
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const token = await storage.getItem("token", "session");
+        const congregationID = await storage.getItem("congregationID");
         const locale = Localization.getLocales()[0].languageCode!;
         const response = await territories.post(
           `/meetings/${meetingID}/audioVideo?congregationID=${congregationID}&locale=${locale}`,
@@ -108,9 +108,9 @@ const addAudioVideo = (dispatch: Function) => {
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
+        const token = await storage.getItem("token", "session");
         const locale = Localization.getLocales()[0].languageCode!;
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const congregationID = await storage.getItem("congregationID");
         const response = await territories.put(
           `/meetings/${meetingID}/audioVideo/${meetingAudioVideoID}?congregationID=${congregationID}&locale=${locale}`,
           {audioVideo: { audioOperator, videoOperator, microphone1Operator, microphone2Operator }},
@@ -136,8 +136,8 @@ const addAudioVideo = (dispatch: Function) => {
     return async (meetingID: string, meetingAudioVideoID: string) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const token = await storage.getItem("token", "session");
+        const congregationID = await storage.getItem("congregationID");
         const response = await territories.delete(
           `/meetings/${meetingID}/audioVideo/${meetingAudioVideoID}?congregationID=${congregationID}`,
           {

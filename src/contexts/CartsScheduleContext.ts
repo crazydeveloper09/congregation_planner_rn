@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import createDataContext from "./createDataContext"
 import { ICartDay, ICartHour, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
@@ -7,6 +6,7 @@ import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message";
 import useLocaLization from "../hooks/useLocalization"
 import { cartScheduleTranslations } from "../screens/CartsSchedule/translations"
+import { storage } from "../helpers/storage"
 
 const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
 
@@ -48,8 +48,8 @@ const loadCartDayInfo = (dispatch: Function) => {
     return async (date: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
-            const congregationID = await AsyncStorage.getItem("congregationID");
+            const token = await storage.getItem('token', "session");
+            const congregationID = await storage.getItem("congregationID");
             const response = await territories.get(`/cartsSchedule?date=${date}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -69,7 +69,7 @@ const loadPreacherHours = (dispatch: Function) => {
     return async () => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.get(`/cartsSchedule/cartDay/cartHours/preacher`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -90,8 +90,8 @@ const addCartDay = (dispatch: Function) => {
     return async (place: string, startHour: string, date: Date, finalHour: string, startMinute: string, finishMinute: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
-            const congregationID = await AsyncStorage.getItem("congregationID");
+            const token = await storage.getItem('token', "session");
+            const congregationID = await storage.getItem("congregationID");
             const response = await territories.post(`/cartsSchedule/cartDay?congregationID=${congregationID}`, {place, startHour: +startHour, date, finalHour: +finalHour, startMinute, finishMinute}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -116,7 +116,7 @@ const editCartDay = (dispatch: Function) => {
     return async (cartDayID: string, place: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.put(`/cartsSchedule/cartDay/${cartDayID}`, {cartDay: {place}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -141,7 +141,7 @@ const deleteCartDay = (dispatch: Function) => {
     return async (cartDayID: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.delete(`/cartsSchedule/cartDay/${cartDayID}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -166,8 +166,8 @@ const assignPreachersToHours = (dispatch: Function) => {
     return async (cartHourID: string, preacher1: string, preacher2: string, otherPreacher1: string, otherPreacher2: string, day: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
-            const congregationID = await AsyncStorage.getItem("congregationID");
+            const token = await storage.getItem('token', "session");
+            const congregationID = await storage.getItem("congregationID");
             const response = await territories.post(`/cartsSchedule/cartDay/cartHour/${cartHourID}/assignPreachers?congregationID=${congregationID}`, { preacher1, preacher2, otherPreacher1, otherPreacher2 }, {
                 headers: {
                     'Authorization': `bearer ${token}`

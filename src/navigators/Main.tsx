@@ -1,18 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MeetingsNavigator from "./Meetings";
 import MinistryMeetingNavigator from "./MinistryMeetings";
 import CartsScheduleNavigator from "./CartsSchedule";
 import AudioVideoNavigator from "./AudioVideo";
-import {
-  Button,
-  PaperProvider,
-  TouchableRipple,
-  useTheme,
-} from "react-native-paper";
 import { Context as PreachersContext } from "../contexts/PreachersContext";
 import { Context as AuthContext } from "../contexts/AuthContext";
-import PreachersNavigator from "./Preachers";
 import SettingsNavigator from "./Settings";
 import { useContext, useEffect, useState } from "react";
 import useLocaLization from "../hooks/useLocalization";

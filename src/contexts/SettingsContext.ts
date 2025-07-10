@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import tmApi from "../api/territories";
 import { navigate } from "../RootNavigation";
@@ -6,6 +5,7 @@ import { showMessage } from "react-native-flash-message";
 import { AxiosError } from "axios";
 import useLocaLization from "../hooks/useLocalization";
 import { settingsTranslations } from "../screens/Settings/translations";
+import { storage } from "../helpers/storage";
 
 const settingsTranslate = useLocaLization(settingsTranslations)
 
@@ -62,9 +62,9 @@ const settingsReducer = (
 const loadColor = (dispatch: Function) => {
   return async () => {
     try {
-      const mainColor = await AsyncStorage.getItem("mainColor");
-      const fontIncrement = await AsyncStorage.getItem("fontIncrement");
-      const is12hFormat = await AsyncStorage.getItem("is12hFormat");
+      const mainColor = await storage.getItem("mainColor");
+      const fontIncrement = await storage.getItem("fontIncrement");
+      const is12hFormat = await storage.getItem("is12hFormat");
 
       if (mainColor) {
         dispatch({ type: "change_color", payload: mainColor });
@@ -88,7 +88,7 @@ const loadColor = (dispatch: Function) => {
 
 const changeMainColor = (dispatch: Function) => {
   return async (newColor: string) => {
-    await AsyncStorage.setItem("mainColor", newColor);
+    await storage.setItem("mainColor", newColor);
 
     dispatch({ type: "change_color", payload: newColor });
   };
@@ -96,7 +96,7 @@ const changeMainColor = (dispatch: Function) => {
 
 const incrementFont = (dispatch: Function) => {
   return async (newIncrement: number) => {
-    await AsyncStorage.setItem("fontIncrement", newIncrement.toString());
+    await storage.setItem("fontIncrement", newIncrement.toString());
 
     dispatch({ type: "change_increment", payload: newIncrement });
   };
@@ -104,7 +104,7 @@ const incrementFont = (dispatch: Function) => {
 
 const changeFormat = (dispatch: Function) => {
   return async (is12hFormat: boolean) => {
-    await AsyncStorage.setItem("is12hFormat", is12hFormat.toString());
+    await storage.setItem("is12hFormat", is12hFormat.toString());
 
     dispatch({ type: "change_format", payload: is12hFormat });
   };

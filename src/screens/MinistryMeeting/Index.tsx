@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert, Platform } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -23,6 +23,8 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
+// @ts-ignore
+import html2pdf from "html2pdf.js";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
@@ -49,19 +51,40 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
 
     const generateMinistryMeetingsPDF = async (meetings: IMinistryMeeting[], month: string) => {
         try {
-    
           const html = buildMinistryMeetingsPDF(meetings, month);
-    
-          const { uri } = await Print.printToFileAsync({ html });
-    
-          const newPath = FileSystem.documentDirectory + `${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`;
-          await FileSystem.copyAsync({
-            from: uri,
-            to: newPath,
-          });
-    
-          if (await Sharing.isAvailableAsync()) {
-            await Sharing.shareAsync(newPath);
+          if (Platform.OS === 'web') {
+            // Create a temporary container for the HTML
+            const element = document.createElement('div');
+            element.innerHTML = html;
+            document.body.appendChild(element);
+
+            // Use html2pdf to generate and save the PDF
+            await html2pdf()
+              .set({
+                margin: 0.5,
+                filename: `${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+              })
+              .from(element)
+              .save();
+
+            // Clean up the temporary element
+            document.body.removeChild(element);
+          } else {
+            // Native platforms (iOS/Android) - your original code
+            const { uri } = await Print.printToFileAsync({ html });
+
+            const newPath = FileSystem.documentDirectory + `${ministryMeetingTranslate.t("sectionText")}_${month}.pdf`;
+            await FileSystem.copyAsync({
+              from: uri,
+              to: newPath,
+            });
+
+            if (await Sharing.isAvailableAsync()) {
+              await Sharing.shareAsync(newPath);
+            }
           }
         } catch (error) {
           Alert.alert("Error", mainTranslate.t("generatePDFError"));
@@ -112,7 +135,6 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
                     data={ministryMeetingsGroup && ministryMeetingsGroup[currentMonth]}
                     renderItem={({ item }) => <MinistryMeeting meeting={item} navigate={navigation.navigate} />}
                     scrollEnabled={false}
-                    
                 />
                 {authContext.state.whoIsLoggedIn === "admin" && (
                     <IconLink

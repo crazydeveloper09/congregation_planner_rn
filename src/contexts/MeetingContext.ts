@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import { IMeeting, IMeetingAssignment, PaginateResult } from "./interfaces";
 import territories from "../api/territories";
@@ -9,6 +8,7 @@ import useLocaLization from "../hooks/useLocalization";
 import { meetingAssignmentTranslations } from "../screens/Meetings/Assignments/translations";
 import { meetingsTranslations } from "../screens/Meetings/translations";
 import * as Localization from 'expo-localization';
+import { storage } from "../helpers/storage";
 
 const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
 const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -68,8 +68,8 @@ const loadMeetings = (dispatch: Function) => {
   return async () => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const token = await storage.getItem("token", "session");
+      const congregationID = await storage.getItem("congregationID");
       const response = await territories.get(`/meetings?congregationID=${congregationID}`, {
         headers: {
           Authorization: `bearer ${token}`,
@@ -87,7 +87,7 @@ const loadPreacherMeetingAssignments = (dispatch: Function) => {
   return async () => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
+      const token = await storage.getItem("token", "session");
       const response = await territories.get(`/meetings/preacher/assignments`, {
         headers: {
           Authorization: `bearer ${token}`,
@@ -116,7 +116,7 @@ const addMeeting = (dispatch: Function) => {
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
+      const token = await storage.getItem("token", "session");
       const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
         `/meetings?locale=${locale}`,
@@ -166,9 +166,9 @@ const editMeeting = (dispatch: Function) => {
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
+      const token = await storage.getItem("token", "session");
       const locale = Localization.getLocales()[0].languageCode!;
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const congregationID = await storage.getItem("congregationID");
       const response = await territories.put(
         `/meetings/${meetingID}?congregationID=${congregationID}&locale=${locale}`,
         {
@@ -207,8 +207,8 @@ const deleteMeeting = (dispatch: Function) => {
   return async (meetingID: string) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const token = await storage.getItem("token", "session");
+      const congregationID = await storage.getItem("congregationID");
       const response = await territories.delete(`/meetings/${meetingID}?congregationID=${congregationID}`, {
         headers: {
           Authorization: `bearer ${token}`,
@@ -239,8 +239,8 @@ const addAssignment = (dispatch: Function) => {
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const token = await storage.getItem("token", "session");
+      const congregationID = await storage.getItem("congregationID");
       const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
         `/meetings/${meetingID}/assignments?congregationID=${congregationID}&locale=${locale}`,
@@ -276,8 +276,8 @@ const editAssignment = (dispatch: Function) => {
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const token = await storage.getItem("token", "session");
+      const congregationID = await storage.getItem("congregationID");
       const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.put(
         `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}&locale=${locale}`,
@@ -304,8 +304,8 @@ const deleteAssignment = (dispatch: Function) => {
   return async (meetingID: string, meetingAssignmentID: string) => {
     try {
       dispatch({ type: "turn_on_loading" });
-      const token = await AsyncStorage.getItem("token");
-      const congregationID = await AsyncStorage.getItem("congregationID");
+      const token = await storage.getItem("token", "session");
+      const congregationID = await storage.getItem("congregationID");
       const response = await territories.delete(
         `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}`,
         {

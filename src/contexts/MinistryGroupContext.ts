@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import createDataContext from "./createDataContext"
 import { IMinistryGroup, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
@@ -7,6 +6,7 @@ import { navigate } from "../RootNavigation"
 import { showMessage } from "react-native-flash-message";
 import useLocaLization from "../hooks/useLocalization"
 import { ministryGroupsTranslations } from "../screens/MinistryGroups/translations"
+import { storage } from "../helpers/storage"
 
 const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
@@ -41,8 +41,8 @@ const loadMinistryGroups = (dispatch: Function) => {
     return async () => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
-            const congregationID = await AsyncStorage.getItem('congregationID');
+            const token = await storage.getItem('token', "session");
+            const congregationID = await storage.getItem('congregationID');
             const response = await territories.get(`/congregations/${congregationID}/ministryGroups`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -62,7 +62,7 @@ const addMinistryGroup = (dispatch: Function) => {
     return async (congregationID: string, name: string, preachers: string[], overseer: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.post(`/congregations/${congregationID}/ministryGroups`, {name, preachers, overseer}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -87,7 +87,7 @@ const editMinistryGroup = (dispatch: Function) => {
     return async (congregationID: string, ministryGroupID: string, name: string, preachers: string[], overseer: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.put(`/congregations/${congregationID}/ministryGroups/${ministryGroupID}`, {ministryGroup: {name, preachers, overseer}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -112,7 +112,7 @@ const deleteMinistryGroup = (dispatch: Function) => {
     return async (congregationID: string, ministryGroupID: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.delete(`/congregations/${congregationID}/ministryGroups/${ministryGroupID}`, {
                 headers: {
                     'Authorization': `bearer ${token}`

@@ -1,7 +1,6 @@
 import createDataContext from "./createDataContext";
 import tmApi from "../api/territories";
 import { AxiosError } from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { mainNavNavigate, navigate } from "../RootNavigation";
 import { IActivity, ICongregation } from "./interfaces";
 import { showMessage } from "react-native-flash-message";
@@ -9,6 +8,7 @@ import { AffixAdornment } from "react-native-paper/lib/typescript/components/Tex
 import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "../screens/Congregation/translations";
 import * as Localization from 'expo-localization';
+import { storage } from "../helpers/storage";
 
 const authTranslate = useLocaLization(authTranslations);
 
@@ -83,7 +83,7 @@ const signIn = (dispatch: Function) => {
       if(response.data === 'Zła nazwa użytkownika lub hasło'){
         dispatch({ type: 'add_error', payload: response.data })
       } else {
-        await AsyncStorage.setItem('congregationID', response.data.userID)
+        await storage.setItem('congregationID', response.data.userID)
         dispatch({ type: 'add_success', payload: {message: response.data.message, userID: response.data.userID} })
         navigate("TwoFactor");
       }
@@ -95,9 +95,9 @@ const signIn = (dispatch: Function) => {
 
 const signOut = (dispatch: Function) => {
     return async () => {
-        await AsyncStorage.removeItem('token')
-        await AsyncStorage.removeItem('preacherID')
-        await AsyncStorage.removeItem('congregationID')
+        await storage.removeItem('token', "session")
+        await storage.removeItem('preacherID')
+        await storage.removeItem('congregationID')
         dispatch({ type: 'signout' })
         showMessage({
           message: authTranslate.t("logOutMessage"),
@@ -114,10 +114,10 @@ const logInPreacher = (dispatch: Function) => {
       if(response.data === authTranslate.t("noUserFound")){
         dispatch({ type: 'add_error', payload: response.data })
       } else {
-        await AsyncStorage.setItem('token', response.data.token)
-        await AsyncStorage.setItem('whoIsLoggedIn', 'preacher')
-        await AsyncStorage.setItem('preacherID', JSON.stringify(response.data.preacher._id))
-        await AsyncStorage.setItem('congregationID', JSON.stringify(response.data.preacher.congregation))
+        await storage.setItem('token', response.data.token, "session")
+        await storage.setItem('whoIsLoggedIn', 'preacher')
+        await storage.setItem('preacherID', JSON.stringify(response.data.preacher._id))
+        await storage.setItem('congregationID', JSON.stringify(response.data.preacher.congregation))
         dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'preacher', preacherID: response.data.preacher._id  } })
         mainNavNavigate('Meetings')
       }
@@ -133,8 +133,8 @@ const verifyUser = (dispatch: Function) => {
           dispatch({ type: 'turn_on_loading' })
           const locale = Localization.getLocales()[0].languageCode!;
             const response = await tmApi.post(`/congregations/${body?.userID}/two-factor?app=Congregation Planner&locale=${locale}`, body);
-            await AsyncStorage.setItem('token', response.data.token);
-            await AsyncStorage.setItem('whoIsLoggedIn', 'admin')
+            await storage.setItem('token', response.data.token, "session");
+            await storage.setItem('whoIsLoggedIn', 'admin')
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'admin' } });
             mainNavNavigate('Meetings')
         } catch (err) {
@@ -149,8 +149,8 @@ const verifyNewUser = (dispatch: Function) => {
           dispatch({ type: 'turn_on_loading' })
           const locale = Localization.getLocales()[0].languageCode!;
             const response = await tmApi.post(`/congregations/${body?.userID}/verification?app=Congregation Planner&locale=${locale}`, body);
-            await AsyncStorage.setItem('token', response.data.token);
-            await AsyncStorage.setItem('whoIsLoggedIn', 'admin')
+            await storage.setItem('token', response.data.token, "session");
+            await storage.setItem('whoIsLoggedIn', 'admin')
             dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'admin' } });
             mainNavNavigate('Meetings')
             showMessage({
@@ -169,7 +169,7 @@ const registerCongregation = (dispatch: Function) => {
           dispatch({ type: 'turn_on_loading' })
           const locale = Localization.getLocales()[0].languageCode!;
             const response = await tmApi.post(`/congregations?app=Congregation Planner&locale=${locale}`, {username, mainAdminEmail, secondAdminEmail, password});
-            await AsyncStorage.setItem('congregationID', response.data.userID)
+            await storage.setItem('congregationID', response.data.userID)
             dispatch({ type: 'add_success', payload: {message: authTranslate.t("emailVerificationMessage"), userID: response.data.userID} })
             navigate("Verification");
         } catch (err) {
@@ -184,9 +184,9 @@ const resendVerificationCode = (dispatch: Function) => {
 
 const tryLocalSignIn = (dispatch: Function) => {
   return async () => {
-    const token = await AsyncStorage.getItem('token')
-    const preacherID = await AsyncStorage.getItem('preacherID')
-    const whoIsLoggedIn = await AsyncStorage.getItem('whoIsLoggedIn')
+    const token = await storage.getItem('token', "session")
+    const preacherID = await storage.getItem('preacherID')
+    const whoIsLoggedIn = await storage.getItem('whoIsLoggedIn')
     dispatch({ type: 'signin', payload: { token: token, successMessage: 'Automatycznie zalogowano do aplikacji', preacherID, whoIsLoggedIn } })
     showMessage({
       message: authTranslate.t("automaticLoginMessage"),
@@ -199,7 +199,7 @@ const loadCongregationInfo = (dispatch: Function) => {
   return async () => {
     try {
       dispatch({ type: 'turn_on_loading' })
-      const token = await AsyncStorage.getItem('token');
+      const token = await storage.getItem('token', "session");
       const response = await tmApi.get(`/congregations`, {
         headers: {
           'Authorization': `bearer ${token}`
@@ -216,7 +216,7 @@ const loadCongregationActivities = (dispatch: Function) => {
   return async (congregationID: string) => {
     try {
       dispatch({ type: 'turn_on_loading' })
-      const token = await AsyncStorage.getItem('token');
+      const token = await storage.getItem('token', "session");
       const response = await tmApi.get(`/congregations/${congregationID}/activities?app=Congregation Planner`, {
         headers: {
           'Authorization': `bearer ${token}`
@@ -233,7 +233,7 @@ const editCongregation = (dispatch: Function) => {
   return async (username: string, territoryServantEmail: string, ministryOverseerEmail: string, congregationID: string) => {
     try {
         dispatch({ type: 'turn_on_loading' })
-        const token = await AsyncStorage.getItem('token');
+        const token = await storage.getItem('token', "session");
         const response = await tmApi.put(`/congregations/${congregationID}`, {congregation: {username, territoryServantEmail, ministryOverseerEmail}}, {
             headers: {
                 'Authorization': `bearer ${token}`

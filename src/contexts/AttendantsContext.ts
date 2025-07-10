@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import createDataContext from "./createDataContext"
 import territories from "../api/territories"
 import { AxiosError } from "axios"
@@ -7,6 +6,7 @@ import { showMessage } from "react-native-flash-message";
 import useLocaLization from "../hooks/useLocalization";
 import * as Localization from 'expo-localization';
 import { attendantTranslations } from "../screens/AudioVideo/Attendants/translations";
+import { storage } from "../helpers/storage";
 
 const attendantTranslate = useLocaLization(attendantTranslations)
 
@@ -46,9 +46,9 @@ const addAttendant = (dispatch: Function) => {
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
+        const token = await storage.getItem("token", "session");
         const locale = Localization.getLocales()[0].languageCode!;
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const congregationID = await storage.getItem("congregationID");
         const response = await territories.post(
           `/meetings/${meetingID}/attendants?congregationID=${congregationID}&locale=${locale}`,
           { hallway1, hallway2, auditorium, parking, meetingDate },
@@ -81,9 +81,9 @@ const addAttendant = (dispatch: Function) => {
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
+        const token = await storage.getItem("token", "session");
         const locale = Localization.getLocales()[0].languageCode!;
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const congregationID = await storage.getItem("congregationID");
         const response = await territories.put(
           `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}&locale=${locale}`,
           {attendant: { hallway1, hallway2, auditorium, parking }},
@@ -109,8 +109,8 @@ const addAttendant = (dispatch: Function) => {
     return async (meetingID: string, meetingAttendantID: string) => {
       try {
         dispatch({ type: "turn_on_loading" });
-        const token = await AsyncStorage.getItem("token");
-        const congregationID = await AsyncStorage.getItem("congregationID");
+        const token = await storage.getItem("token", "session");
+        const congregationID = await storage.getItem("congregationID");
         const response = await territories.delete(
           `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}`,
           {

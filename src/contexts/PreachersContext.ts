@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import createDataContext from "./createDataContext"
 import { IPreacher, PaginateResult } from "./interfaces"
 import territories from "../api/territories"
@@ -8,6 +7,7 @@ import { showMessage } from "react-native-flash-message"
 import { isLoaded } from "expo-font";
 import useLocaLization from "../hooks/useLocalization"
 import { preachersTranslations } from "../screens/Preachers/translations"
+import { storage } from "../helpers/storage"
 
 const preacherTranslate = useLocaLization(preachersTranslations)
 
@@ -58,7 +58,7 @@ const loadPreachers = (dispatch: Function) => {
     return async (page: number, limit: number) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.get(`/preachers?page=${page}&limit=${limit}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -78,7 +78,7 @@ const loadAllPreachers = (dispatch: Function) => {
     return async () => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.get(`/preachers/all`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -99,7 +99,7 @@ const loadPreacherInfo = (dispatch: Function) => {
     return async (preacherID: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.get(`/preachers/${preacherID}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -119,7 +119,7 @@ const generateLink = (dispatch: Function) => {
     return async (preacherID: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.post(`/preachers/${preacherID}/generateLink`, {}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -142,7 +142,7 @@ const addPreacher = (dispatch: Function) => {
     return async (name: string, roles: string[], privileges: string[]) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.post('/preachers', {name, roles, privileges}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -164,7 +164,7 @@ const editPreacher = (dispatch: Function) => {
     return async (name: string, preacherID: string, roles: string[], privileges: string[]) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.put(`/preachers/${preacherID}`, {preacher: {name, roles, privileges}}, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -186,7 +186,7 @@ const searchPreacher = (dispatch: Function) => {
     return async (param: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.get(`/preachers/search?search=${param}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
@@ -206,7 +206,7 @@ const deletePreacher = (dispatch: Function) => {
     return async (preacherID: string) => {
         try {
             dispatch({ type: 'turn_on_loading' })
-            const token = await AsyncStorage.getItem('token');
+            const token = await storage.getItem('token', "session");
             const response = await territories.delete(`/preachers/${preacherID}`, {
                 headers: {
                     'Authorization': `bearer ${token}`
