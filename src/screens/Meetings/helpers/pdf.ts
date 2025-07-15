@@ -73,7 +73,7 @@ export function buildMeetingsPDF(meetings: IMeeting[], type: string, month: stri
     const assignmentsByType = groupBy(meeting.assignments, 'type');
 
     return `
-      <div class="meeting" style="margin-bottom: 40px;">
+      <div class="meeting" style="margin-bottom: 80px;">
         <h3 style="font-size: 18px;">${new Date(meeting.date).toLocaleString('pl-PL', {
           year: 'numeric', month: '2-digit', day: '2-digit',
           hour: '2-digit', minute: '2-digit', hour12: false
