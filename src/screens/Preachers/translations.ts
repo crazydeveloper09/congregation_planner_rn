@@ -78,7 +78,7 @@ export const preachersTranslations = {
         can_be_ordinal: "Attendant",
         can_edit_audio_video: "Can edit audio-video and ordinals plan",
         "Treasures From God's Word":"Treasures from Gods Word participant",
-        "Apply Yourself To Field Ministry":"Apply Yourself To Field Ministry participant",
+        "Apply Yourself To The Field Ministry":"Apply Yourself To Field Ministry participant",
         "Living As Christians":"Living as Christians participant",
         "Bible Talk":"Public speaker",
         "Watchtower Study":"Watchtower chairman",
