@@ -29,8 +29,6 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
-// @ts-ignore
-import html2pdf from "html2pdf.js";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -66,7 +64,8 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
           try {
       
             const html = type === "Audio-video" ? buildAudioVideoPDF(meetings, month) : buildAttendantsPDF(meetings, month);
-      
+            let html2pdf: any;
+          html2pdf = require("html2pdf.js");
            if (Platform.OS === 'web') {
             // Create a temporary container for the HTML
             const element = document.createElement('div');

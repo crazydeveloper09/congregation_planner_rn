@@ -78,7 +78,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
 
 
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (type: string) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -90,7 +90,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
+            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(type)).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
@@ -105,15 +105,15 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 })
                 return { label: meetingAssignmentsTranslate.t('readingCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
-            setParticipantItems([...participantItems, ...selectParticipantItems])
+            setParticipantItems([ { label: meetingAssignmentsTranslate.t('otherCongPreacherChoose'), value: '' }, ...selectParticipantItems])
             setReaderItems(readerItems)
         })
         .catch((err) => console.log(err))
     }
 
     useEffect(() => {
-        loadPreachers()
-    }, [])
+        loadPreachers(typeValue)
+    }, [typeValue])
 
     return (
         <KeyboardAwareScrollView style={styles.container}>

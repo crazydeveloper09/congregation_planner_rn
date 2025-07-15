@@ -13,6 +13,7 @@ import { defaultDropdownStyles } from '../defaultStyles';
 import useLocaLization from '../../hooks/useLocalization';
 import { preachersTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { meetingAssignmentTranslations } from '../Meetings/Assignments/translations';
 
 interface PreachersEditScreenProps {
     navigation: NavigationProp<any>;
@@ -30,11 +31,17 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
     const [rolesValue, setRolesValue] = useState<string[]>(['can_see_meetings', 'can_see_minimeetings'])
     const [rolesOpen, setRolesOpen] = useState<boolean>(false);
     const preacherTranslate = useLocaLization(preachersTranslations);
+        const meetingAssigmentTranslate = useLocaLization(meetingAssignmentTranslations);
     const [rolesItems, setRolesItems] = useState([
         {label: preacherTranslate.t("can_see_meetings"), value: 'can_see_meetings'},
         {label: preacherTranslate.t("can_lead_meetings"), value: 'can_lead_meetings'},
         {label: preacherTranslate.t("can_have_assignment"), value: 'can_have_assignment'},
         {label: preacherTranslate.t("can_edit_meetings"), value: 'can_edit_meetings'},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("bibleTalk")), value: meetingAssigmentTranslate.t("bibleTalk")},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("watchtowerStudy")), value: meetingAssigmentTranslate.t("watchtowerStudy")},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("treasuresFromGodsWord")), value: meetingAssigmentTranslate.t("treasuresFromGodsWord")},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("applyYourselfToMinistry")), value: meetingAssigmentTranslate.t("applyYourselfToMinistry")},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("livingAsChristians")), value: meetingAssigmentTranslate.t("livingAsChristians")},
         {label: preacherTranslate.t("can_say_prayer"), value: 'can_say_prayer'},
         {label: preacherTranslate.t("can_be_reader"), value: 'can_be_reader'},
         {label: preacherTranslate.t("can_lead_minimeetings"), value: 'can_lead_minimeetings'},

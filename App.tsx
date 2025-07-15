@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as AuthProvider } from './src/contexts/AuthContext';
 import { Provider as MeetingProvider } from './src/contexts/MeetingContext';

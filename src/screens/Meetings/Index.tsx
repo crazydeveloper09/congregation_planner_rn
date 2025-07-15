@@ -28,8 +28,6 @@ import { Platform } from 'react-native';
 import { buildMeetingsPDF } from "./helpers/pdf";
 import ButtonC from "../../commonComponents/Button";
 import * as FileSystem from 'expo-file-system';
-// @ts-ignore
-import html2pdf from "html2pdf.js";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -68,6 +66,8 @@ const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
 
       const html = buildMeetingsPDF(meetings, type, month);
 if (Platform.OS === 'web') {
+      let html2pdf: any;
+          html2pdf = require("html2pdf.js");
             // Create a temporary container for the HTML
             const element = document.createElement('div');
             element.innerHTML = html;

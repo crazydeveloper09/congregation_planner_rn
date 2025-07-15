@@ -77,7 +77,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     const settingsContext = useContext(SettingsContext);
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
-    const loadPreachers = async () => {
+    const loadPreachers = async (type: string) => {
         const token = await AsyncStorage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
@@ -89,7 +89,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment")).map((preacher) => {
+            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(type)).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
@@ -104,14 +104,14 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 })
                 return { label: meetingAssignmentsTranslate.t('readingCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
-            setParticipantItems([...participantItems, ...selectParticipantItems])
+            setParticipantItems([ { label: meetingAssignmentsTranslate.t('otherCongPreacherChoose'), value: ''}, ...selectParticipantItems])
             setReaderItems(readerItems)
         })
         .catch((err) => console.log(err))
     }
 
     useEffect(() => {
-        loadPreachers()
+        loadPreachers(typeValue)
         setParticipantValue(route.params.assignment.participant?._id)
         setTypeValue(route.params.assignment.type)
         setDefaultTopicValue(route.params.assignment?.defaultTopic || '')
@@ -124,7 +124,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             setIsOtherParticipant(true);
             setOtherParticipant(route.params.assignment.otherParticipant)
         }
-    }, [route.params.assignment])
+    }, [route.params.assignment, typeValue])
 
     return (
         <KeyboardAwareScrollView style={styles.container}>
