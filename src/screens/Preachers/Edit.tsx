@@ -31,31 +31,36 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
     const [rolesValue, setRolesValue] = useState<string[]>(['can_see_meetings', 'can_see_minimeetings'])
     const [rolesOpen, setRolesOpen] = useState<boolean>(false);
     const preacherTranslate = useLocaLization(preachersTranslations);
-        const meetingAssigmentTranslate = useLocaLization(meetingAssignmentTranslations);
+    const meetingAssigmentTranslate = useLocaLization(meetingAssignmentTranslations);
     const [rolesItems, setRolesItems] = useState([
-        {label: preacherTranslate.t("can_see_meetings"), value: 'can_see_meetings'},
-        {label: preacherTranslate.t("can_lead_meetings"), value: 'can_lead_meetings'},
-        {label: preacherTranslate.t("can_have_assignment"), value: 'can_have_assignment'},
-        {label: preacherTranslate.t("can_edit_meetings"), value: 'can_edit_meetings'},
-        {label: preacherTranslate.t(meetingAssigmentTranslate.t("bibleTalk")), value: meetingAssigmentTranslate.t("bibleTalk")},
-        {label: preacherTranslate.t(meetingAssigmentTranslate.t("watchtowerStudy")), value: meetingAssigmentTranslate.t("watchtowerStudy")},
-        {label: preacherTranslate.t(meetingAssigmentTranslate.t("treasuresFromGodsWord")), value: meetingAssigmentTranslate.t("treasuresFromGodsWord")},
-        {label: preacherTranslate.t(meetingAssigmentTranslate.t("applyYourselfToMinistry")), value: meetingAssigmentTranslate.t("applyYourselfToMinistry")},
-        {label: preacherTranslate.t(meetingAssigmentTranslate.t("livingAsChristians")), value: meetingAssigmentTranslate.t("livingAsChristians")},
-        {label: preacherTranslate.t("can_say_prayer"), value: 'can_say_prayer'},
-        {label: preacherTranslate.t("can_be_reader"), value: 'can_be_reader'},
-        {label: preacherTranslate.t("can_lead_minimeetings"), value: 'can_lead_minimeetings'},
-        {label: preacherTranslate.t("can_see_minimeetings"), value: 'can_see_minimeetings'},
-        {label: preacherTranslate.t("can_edit_minimeetings"), value: 'can_edit_minimeetings'},
-        {label: preacherTranslate.t("can_see_cartSchedule"), value: 'can_see_cartSchedule'},
-        {label: preacherTranslate.t("can_self-assign_cartHour"), value: 'can_self-assign_cartHour'},
-        {label: preacherTranslate.t("can_edit_cartSchedule"), value: 'can_edit_cartSchedule'},
-        {label: preacherTranslate.t("can_see_audio_video"), value: 'can_see_audio_video'},
-        {label: preacherTranslate.t("can_be_video"), value: 'can_be_video'},
-        {label: preacherTranslate.t("can_be_audio"), value: 'can_be_audio'},
-        {label: preacherTranslate.t("can_take_mic"), value: 'can_take_mic'},
-        {label: preacherTranslate.t("can_be_ordinal"), value: 'can_be_ordinal'},
-        {label: preacherTranslate.t("can_edit_audio_video"), value: 'can_edit_audio_video'}
+        {label: preacherTranslate.t("ui"), value: "ui"},
+        {label: preacherTranslate.t("can_see_meetings"), value: 'can_see_meetings', parent: "ui"},
+        {label: preacherTranslate.t("can_edit_meetings"), value: 'can_edit_meetings', parent: "ui"},
+        {label: preacherTranslate.t("can_see_minimeetings"), value: 'can_see_minimeetings', parent: "ui"},
+        {label: preacherTranslate.t("can_edit_minimeetings"), value: 'can_edit_minimeetings', parent: "ui"},
+        {label: preacherTranslate.t("can_see_cartSchedule"), value: 'can_see_cartSchedule', parent: "ui"},
+        {label: preacherTranslate.t("can_self-assign_cartHour"), value: 'can_self-assign_cartHour', parent: "ui"},
+        {label: preacherTranslate.t("can_edit_cartSchedule"), value: 'can_edit_cartSchedule', parent: "ui"},
+        {label: preacherTranslate.t("can_see_audio_video"), value: 'can_see_audio_video', parent: "ui"},
+        {label: preacherTranslate.t("can_edit_audio_video"), value: 'can_edit_audio_video', parent: "ui"},
+
+        {label: preacherTranslate.t("uiForms"), value: "uiForms"},
+        {label: preacherTranslate.t("can_have_assignment"), value: 'can_have_assignment', parent: "uiForms"},
+        {label: preacherTranslate.t("can_lead_meetings"), value: 'can_lead_meetings', parent: "uiForms"},
+        {label: preacherTranslate.t("can_say_prayer"), value: 'can_say_prayer', parent: "uiForms"},
+        {label: preacherTranslate.t("can_lead_minimeetings"), value: 'can_lead_minimeetings', parent: "uiForms"},
+
+        {label: preacherTranslate.t("forms"), value: "forms"},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("bibleTalk")), value: meetingAssigmentTranslate.t("bibleTalk"), parent: "forms"},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("watchtowerStudy")), value: meetingAssigmentTranslate.t("watchtowerStudy"), parent: "forms"},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("treasuresFromGodsWord")), value: meetingAssigmentTranslate.t("treasuresFromGodsWord"), parent: "forms"},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("applyYourselfToMinistry")), value: meetingAssigmentTranslate.t("applyYourselfToMinistry"), parent: "forms"},
+        {label: preacherTranslate.t(meetingAssigmentTranslate.t("livingAsChristians")), value: meetingAssigmentTranslate.t("livingAsChristians"), parent: "forms"},
+        {label: preacherTranslate.t("can_be_reader"), value: 'can_be_reader', parent: "forms"},
+        {label: preacherTranslate.t("can_be_video"), value: 'can_be_video', parent: "forms"},
+        {label: preacherTranslate.t("can_be_audio"), value: 'can_be_audio', parent: "forms"},
+        {label: preacherTranslate.t("can_take_mic"), value: 'can_take_mic', parent: "forms"},
+        {label: preacherTranslate.t("can_be_ordinal"), value: 'can_be_ordinal', parent: "forms"},
     ]);
     const [privilegesValue, setPrivilegesValue] = useState<string[]>([])
     const [privilegesOpen, setPrivilegesOpen] = useState<boolean>(false);
