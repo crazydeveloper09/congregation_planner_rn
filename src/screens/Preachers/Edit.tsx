@@ -117,6 +117,9 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
                 containerStyle={{
                     marginVertical: 8
                 }}
+                listParentLabelStyle={{
+                    fontWeight: "bold"
+                }}
                 placeholder={preacherTranslate.t("rolesPlaceholder")}
             />
             <Label text={preacherTranslate.t("privilegesLabel")} />
