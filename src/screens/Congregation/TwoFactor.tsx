@@ -7,6 +7,7 @@ import MyInput from '../../commonComponents/MyInput';
 import useLocaLization from '../../hooks/useLocalization';
 import { authTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CongregationsTwoFactorScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
@@ -15,7 +16,7 @@ const CongregationsTwoFactorScreen: React.FC = () => {
     const settingsContext = useContext(SettingsContext);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
             <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{i18n.t('twoFactorHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
@@ -30,15 +31,13 @@ const CongregationsTwoFactorScreen: React.FC = () => {
                 onPress={() => verifyUser({ code, userID: state.userID })}
                 isLoading={state.isLoading}
             />
-        </View>
+        </KeyboardAwareScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        flex: 1,
-        justifyContent: 'center'
     },
     header: {
         marginBottom: 15,

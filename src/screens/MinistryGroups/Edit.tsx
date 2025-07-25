@@ -50,10 +50,19 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
         })
         .then((response) => {
             const selectItems = response.data.map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
-            })
-            setPreachersItems(selectItems)
-            setOverseerItems(selectItems)
+          return { label: preacher.name, value: preacher._id } as never;
+        });
+        const selectOverseerItems = response.data
+          .filter(
+            (preacher) =>
+              preacher.privileges.includes('elder') ||
+              preacher.privileges.includes('mini_servant')
+          )
+          .map((preacher) => {
+            return { label: preacher.name, value: preacher._id } as never;
+          });
+        setPreachersItems(selectItems);
+        setOverseerItems(selectOverseerItems);
         })
         .catch((err) => console.log(err))
     }

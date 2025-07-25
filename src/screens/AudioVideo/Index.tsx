@@ -64,9 +64,10 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
           try {
       
             const html = type === "Audio-video" ? buildAudioVideoPDF(meetings, month) : buildAttendantsPDF(meetings, month);
+          
+           if (Platform.OS === 'web') {
             let html2pdf: any;
           html2pdf = require("html2pdf.js");
-           if (Platform.OS === 'web') {
             // Create a temporary container for the HTML
             const element = document.createElement('div');
             element.innerHTML = html;

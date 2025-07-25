@@ -235,6 +235,7 @@ const addAssignment = (dispatch: Function) => {
     reader: string,
     otherParticipant: string,
     defaultTopic: string,
+    helper: string,
     meetingDate: Date,
   ) => {
     try {
@@ -244,7 +245,7 @@ const addAssignment = (dispatch: Function) => {
       const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.post(
         `/meetings/${meetingID}/assignments?congregationID=${congregationID}&locale=${locale}`,
-        { topic, type, participant, reader, otherParticipant, defaultTopic, meetingDate },
+        { topic, type, participant, reader, otherParticipant, defaultTopic, helper, meetingDate },
         {
           headers: {
             Authorization: `bearer ${token}`,
@@ -273,6 +274,7 @@ const editAssignment = (dispatch: Function) => {
     reader: string,
     otherParticipant: string,
     defaultTopic: string,
+    helper: string,
   ) => {
     try {
       dispatch({ type: "turn_on_loading" });
@@ -281,7 +283,7 @@ const editAssignment = (dispatch: Function) => {
       const locale = Localization.getLocales()[0].languageCode!;
       const response = await territories.put(
         `/meetings/${meetingID}/assignments/${meetingAssignmentID}?congregationID=${congregationID}&locale=${locale}`,
-        {assignment: { topic, type, participant, reader, otherParticipant, defaultTopic }},
+        {assignment: { topic, type, participant, reader, otherParticipant, defaultTopic, helper }},
         {
           headers: {
             Authorization: `bearer ${token}`,

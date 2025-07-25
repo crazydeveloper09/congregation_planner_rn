@@ -78,8 +78,8 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
 
     useEffect(() => {
         loadPreachers()
-        setHallway1Value(route.params.attendant.hallway1._id)
-        setAuditoriumValue(route.params.attendant.auditorium._id)
+        setHallway1Value(route.params.attendant.hallway1?._id || "")
+        setAuditoriumValue(route.params.attendant.auditorium?._id || "")
         if(route.params.attendant.hallway2){
             setIsHallway2(true);
             setHallway2Value(route.params.attendant.hallway2._id)

@@ -7,6 +7,7 @@ import MyInput from '../../commonComponents/MyInput';
 import useLocaLization from '../../hooks/useLocalization';
 import { authTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CongregationsVerificationScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
@@ -15,7 +16,7 @@ const CongregationsVerificationScreen: React.FC = () => {
     const settingsContext = useContext(SettingsContext);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             <MyInput 
@@ -29,15 +30,13 @@ const CongregationsVerificationScreen: React.FC = () => {
                 onPress={() => verifyNewUser({ code, userID: state.userID })}
                 isLoading={state.isLoading}
             />
-        </View>
+        </KeyboardAwareScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
-        flex: 1,
-        justifyContent: 'center'
+        padding: 15
     },
     header: {
         marginBottom: 15,

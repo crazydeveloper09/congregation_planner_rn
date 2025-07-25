@@ -50,7 +50,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
       )}
       <Text style={[styles.title, { backgroundColor: fontColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>
         {icon}
-        <Text>{type}</Text>
+        <Text>{meetingAssignmentsTranslate.t(type)}</Text>
       </Text>
       <FlatList
         keyExtractor={(assignment) => assignment._id}
@@ -69,6 +69,14 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
                 iconName="account-tie-voice"
                 description={meetingAssignmentsTranslate.t("readerLabel")}
                 value={assignment.item.reader.name}
+              />
+          
+            )}
+            {assignment.item.helper && (
+              <IconDescriptionValue 
+                iconName="handshake"
+                description={meetingAssignmentsTranslate.t("helperLabel")}
+                value={assignment.item.helper.name}
               />
           
             )}

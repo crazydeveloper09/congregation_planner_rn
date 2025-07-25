@@ -36,24 +36,24 @@ const AudioVideoDeleteConfirmScreen: React.FC<AudioVideoDeleteConfirmScreenProps
                     <IconDescriptionValue 
                         iconName="laptop"
                         description={audioVideoTranslate.t("videoOperatorLabel")}
-                        value={route.params.audioVideo.videoOperator.name}
+                        value={route.params.audioVideo.videoOperator?.name}
                     />
                     
                     {route.params.audioVideo.audioOperator && <IconDescriptionValue 
                         iconName="audio-video"
                         description={audioVideoTranslate.t("audioOperatorLabel")}
-                        value={route.params.audioVideo.audioOperator.name}
+                        value={route.params.audioVideo.audioOperator?.name}
                     />}
                     <IconDescriptionValue 
                         iconName="microphone"
                         description={audioVideoTranslate.t("mic1Label")}
-                        value={route.params.audioVideo.microphone1Operator.name}
+                        value={route.params.audioVideo.microphone1Operator?.name}
                     />
         
                     {route.params.audioVideo.microphone2Operator && <IconDescriptionValue 
                         iconName="microphone-outline"
                         description={audioVideoTranslate.t("mic2Label")}
-                        value={route.params.audioVideo.microphone2Operator.name}
+                        value={route.params.audioVideo.microphone2Operator?.name}
                     />}
                 </View>
                 

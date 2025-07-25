@@ -92,6 +92,7 @@ export function buildMeetingsPDF(meetings: IMeeting[], type: string, month: stri
               <p class="assignment_topic" style="color: ${color};">${a.topic || a.defaultTopic}</p>
               <div class="info"><strong>${a.participant?.name || a.otherParticipant}</strong></div>
               ${a.reader ? `<div class="info">${assignmentsTranslate.t('readerLabel')}: <strong>${a.reader?.name}</strong></div>` : ''}
+               ${a.helper ? `<div class="info">${assignmentsTranslate.t('helperLabel')}: <strong>${a.helper?.name}</strong></div>` : ''}
             `).join('');
             return `
               <div class="assignment">

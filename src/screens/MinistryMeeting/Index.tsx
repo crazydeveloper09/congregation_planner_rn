@@ -50,9 +50,10 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
     const generateMinistryMeetingsPDF = async (meetings: IMinistryMeeting[], month: string) => {
         try {
           const html = buildMinistryMeetingsPDF(meetings, month);
-          let html2pdf: any;
-          html2pdf = require("html2pdf.js");
+
           if (Platform.OS === 'web') {
+                  let html2pdf: any;
+          html2pdf = require("html2pdf.js");
             // Create a temporary container for the HTML
             const element = document.createElement('div');
             element.innerHTML = html;

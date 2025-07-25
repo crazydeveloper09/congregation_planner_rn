@@ -87,6 +87,7 @@ export interface IMeetingAssignment {
     topic: string,
     participant: IPreacher,
     reader?: IPreacher,
+    helper?: IPreacher,
     type: string,
     defaultTopic?: string,
     otherParticipant: string,

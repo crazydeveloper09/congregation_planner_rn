@@ -14,115 +14,146 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import Label from "../../commonComponents/Label";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryGroupsTranslations } from "./translations";
+import { preachersTranslations } from "../Preachers/translations";
 
 interface MinistryGroupNewScreenProps {
-    route: {
-        params: {
-            congregationID: string
+  route: {
+    params: {
+      congregationID: string;
+    };
+  };
+}
+
+const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({
+  route,
+}) => {
+  const ministryGroup = useContext(MinistryGroupContext);
+  const preachers = useContext(PreachersContext);
+  const [name, setName] = useState("");
+  const [preachersValue, setPreachersValue] = useState([]);
+  const [preachersOpen, setPreachersOpen] = useState(false);
+  const [preachersItems, setPreachersItems] = useState([]);
+  const [overseerOpen, setOverseerOpen] = useState(false);
+  const [overseerValue, setOverseerValue] = useState(null);
+  const [overseerItems, setOverseerItems] = useState([]);
+  const settingsContext = useContext(SettingsContext);
+  const dropdownStyles = defaultDropdownStyles(
+    settingsContext.state.fontIncrement
+  );
+
+  const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
+  const preacherTranslate = useLocaLization(preachersTranslations);
+
+  const loadPreachers = async () => {
+    const token = await AsyncStorage.getItem("token");
+    territories
+      .get<IPreacher[]>("/preachers/all", {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const selectItems = response.data.map((preacher) => {
+          return { label: preacher.name, value: preacher._id } as never;
+        });
+        const selectOverseerItems = response.data
+          .filter(
+            (preacher) =>
+              preacher.privileges.includes('elder') ||
+              preacher.privileges.includes('mini_servant')
+          )
+          .map((preacher) => {
+            return { label: preacher.name, value: preacher._id } as never;
+          });
+        setPreachersItems(selectItems);
+        setOverseerItems(selectOverseerItems);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    loadPreachers();
+  }, []);
+
+  if (preachers.state.isLoading) {
+    return <Loading />;
+  }
+
+  if (preachers.state.errMessage || ministryGroup.state.errMessage) {
+    Alert.alert(
+      "Server error",
+      preachers.state.errMessage || ministryGroup.state.errMessage
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <MyInput
+        label={ministryGroupTranslate.t("nameLabel")}
+        placeholder={ministryGroupTranslate.t("namePlaceholder")}
+        value={name}
+        onChangeText={setName}
+      />
+      <Label text={ministryGroupTranslate.t("preacherLabel")} />
+      <DropDownPicker
+        multiple={true}
+        open={preachersOpen}
+        value={preachersValue}
+        items={preachersItems}
+        setOpen={setPreachersOpen}
+        setValue={setPreachersValue}
+        searchable={true}
+        listMode="MODAL"
+        placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
+        modalTitleStyle={dropdownStyles.text}
+        labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+        placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+      />
+
+      {!preachersOpen && (
+        <>
+          <Label text={ministryGroupTranslate.t("overseerLabel")} />
+          <DropDownPicker
+            open={overseerOpen}
+            value={overseerValue}
+            items={overseerItems}
+            setOpen={setOverseerOpen}
+            setValue={setOverseerValue}
+            modalTitleStyle={dropdownStyles.text}
+            labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+            placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+            searchable={true}
+            listMode="MODAL"
+            containerStyle={{
+              marginBottom: 20,
+            }}
+            placeholder={ministryGroupTranslate.t("overseerPlaceholder")}
+          />
+        </>
+      )}
+
+      <ButtonC
+        title={ministryGroupTranslate.t("addText")}
+        isLoading={ministryGroup.state.isLoading}
+        onPress={() =>
+          ministryGroup.addMinistryGroup(
+            route.params.congregationID,
+            name,
+            preachersValue,
+            overseerValue
+          )
         }
-    }
-}
-
-const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({ route }) => {
-    const ministryGroup = useContext(MinistryGroupContext);
-    const preachers = useContext(PreachersContext);
-    const [name, setName] = useState('')
-    const [preachersValue, setPreachersValue] = useState([]);
-    const [preachersOpen, setPreachersOpen] = useState(false);
-    const [preachersItems, setPreachersItems] = useState([]);
-    const [overseerOpen, setOverseerOpen] = useState(false);
-    const [overseerValue, setOverseerValue] = useState(null);
-    const [overseerItems, setOverseerItems] = useState([]);
-    const settingsContext = useContext(SettingsContext);
-    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
-
-    const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
-
-    const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
-            const selectItems = response.data.map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
-            })
-            setPreachersItems(selectItems)
-            setOverseerItems(selectItems)
-        })
-        .catch((err) => console.log(err))
-    }
-
-    useEffect(() => {
-        loadPreachers()
-    }, [])
-
-    if(preachers.state.isLoading){
-        return <Loading />
-    }
-
-    
-    if(preachers.state.errMessage || ministryGroup.state.errMessage){
-        Alert.alert("Server error", preachers.state.errMessage || ministryGroup.state.errMessage)
-    }
-
-    return (
-        <View style={styles.container}>
-            <MyInput 
-                label={ministryGroupTranslate.t("nameLabel")}
-                placeholder={ministryGroupTranslate.t("namePlaceholder")}
-                value={name}
-                onChangeText={setName}
-            />
-            <Label text={ministryGroupTranslate.t("preacherLabel")} />
-            <DropDownPicker
-                multiple={true}
-                open={preachersOpen}
-                value={preachersValue}
-                items={preachersItems}
-                setOpen={setPreachersOpen}
-                setValue={setPreachersValue}
-                searchable={true}
-                listMode="MODAL"
-                placeholder={ministryGroupTranslate.t("preacherPlaceholder")}
-                modalTitleStyle={dropdownStyles.text}
-                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
-                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
-            />
-
-            {!preachersOpen && <>
-                <Label text={ministryGroupTranslate.t("overseerLabel")} />
-                <DropDownPicker
-                    open={overseerOpen}
-                    value={overseerValue}
-                    items={overseerItems}
-                    setOpen={setOverseerOpen}
-                    setValue={setOverseerValue}
-                    modalTitleStyle={dropdownStyles.text}
-                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
-                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
-                    searchable={true}
-                    listMode="MODAL"
-                    containerStyle={{
-                        marginBottom: 20
-                    }}
-                    placeholder={ministryGroupTranslate.t("overseerPlaceholder")}
-                />
-            </>}
-
-            <ButtonC title={ministryGroupTranslate.t("addText")} isLoading={ministryGroup.state.isLoading} onPress={() => ministryGroup.addMinistryGroup(route.params.congregationID, name, preachersValue, overseerValue)} />
-        </View>
-    )
-}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 15,
-        flex: 1,
-        justifyContent: 'center'
-    }
-})
+  container: {
+    padding: 15,
+    flex: 1,
+    justifyContent: "center",
+  },
+});
 
 export default MinistryGroupNewScreen;
