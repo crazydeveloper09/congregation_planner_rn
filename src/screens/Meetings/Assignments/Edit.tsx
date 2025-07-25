@@ -22,6 +22,7 @@ import { meetingsTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { chooseFontColorAndIcon } from "./helpers/types";
+import { storage } from "../../../helpers/storage";
 
 interface MeetingAssignmentEditScreenProps {
     route: {
@@ -83,7 +84,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
 
     const loadPreachers = async (type: string) => {
         const { role } = chooseFontColorAndIcon(type);
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`

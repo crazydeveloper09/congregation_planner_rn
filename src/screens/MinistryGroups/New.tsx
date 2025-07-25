@@ -15,6 +15,7 @@ import Label from "../../commonComponents/Label";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryGroupsTranslations } from "./translations";
 import { preachersTranslations } from "../Preachers/translations";
+import { storage } from "../../helpers/storage";
 
 interface MinistryGroupNewScreenProps {
   route: {
@@ -45,7 +46,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({
   const preacherTranslate = useLocaLization(preachersTranslations);
 
   const loadPreachers = async () => {
-    const token = await AsyncStorage.getItem("token");
+    const token = await storage.getItem("token");
     territories
       .get<IPreacher[]>("/preachers/all", {
         headers: {

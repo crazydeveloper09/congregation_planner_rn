@@ -17,6 +17,7 @@ import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { storage } from "../../helpers/storage";
 
 interface MeetingEditScreenProps {
     route: {
@@ -56,7 +57,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token')
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -84,8 +85,8 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     }
 
     const loadMinistryGroups = async () => {
-        const token = await AsyncStorage.getItem('token')
-        const congregationID = await AsyncStorage.getItem('congregationID')
+        const token = await storage.getItem('token')
+        const congregationID = await storage.getItem('congregationID')
         territories.get<IMinistryGroup[]>(`/congregations/${congregationID}/ministryGroups`, {
             headers: {
                 'Authorization': `bearer ${token}`
