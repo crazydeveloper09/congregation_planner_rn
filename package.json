@@ -1,6 +1,6 @@
 {
-  "names": "congregation_planner",
-  "version": "3.20.3",
+  "name": "congregation_planner",
+  "version": "4.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

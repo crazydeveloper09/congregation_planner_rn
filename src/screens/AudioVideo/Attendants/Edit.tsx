@@ -19,6 +19,7 @@ import { mainTranslations } from "../../../../localization";
 import { meetingAssignmentTranslations } from "../../Meetings/Assignments/translations";
 import { attendantTranslations } from "./translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { storage } from "../../../helpers/storage";
 
 interface AttendantEditScreenProps {
     route: {
@@ -53,7 +54,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -78,8 +79,8 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
 
     useEffect(() => {
         loadPreachers()
-        setHallway1Value(route.params.attendant.hallway1._id)
-        setAuditoriumValue(route.params.attendant.auditorium._id)
+        setHallway1Value(route.params.attendant.hallway1?._id || "")
+        setAuditoriumValue(route.params.attendant.auditorium?._id || "")
         if(route.params.attendant.hallway2){
             setIsHallway2(true);
             setHallway2Value(route.params.attendant.hallway2._id)

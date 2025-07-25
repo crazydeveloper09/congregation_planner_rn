@@ -23,6 +23,7 @@ import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { storage } from "../../helpers/storage";
 
 const MeetingNewScreen: React.FC = () => {
     const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -36,11 +37,6 @@ const MeetingNewScreen: React.FC = () => {
     const [cleaningGroupOpen, setCleaningGroupOpen] = useState<boolean>(false);
     const [cleaningGroupItems, setCleaningGroupItems] = useState([]);
     const [typeValue, setTypeValue] = useState<string>('')
-    const [typeOpen, setTypeOpen] = useState<boolean>(false);
-    const [typeItems, setTypeItems] = useState([
-        {label: meetingTranslate.t("weekend"), value: meetingTranslate.t("weekend")},
-        {label: meetingTranslate.t("midWeek"), value: meetingTranslate.t("midWeek")}
-    ]);
     const [beginSong, setBeginSong] = useState<string>('')
     const [midSong, setMidSong] = useState<string>('')
     const [endSong, setEndSong] = useState<string>('')
@@ -59,7 +55,7 @@ const MeetingNewScreen: React.FC = () => {
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -86,8 +82,8 @@ const MeetingNewScreen: React.FC = () => {
         .catch((err) => console.log(err))
     }
     const loadMinistryGroups = async () => {
-        const token = await AsyncStorage.getItem('token')
-        const congregationID = await AsyncStorage.getItem('congregationID')
+        const token = await storage.getItem('token', "session")
+        const congregationID = await storage.getItem('congregationID')
         territories.get<IMinistryGroup[]>(`/congregations/${congregationID}/ministryGroups`, {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -105,8 +101,8 @@ const MeetingNewScreen: React.FC = () => {
     useEffect(() => {
         loadPreachers(date)
         loadMinistryGroups()
+        setTypeValue(date.getDay() === 0 || date.getDay() === 6 ? meetingTranslate.t("weekend") : meetingTranslate.t("midWeek"))
     }, [date])
-
 
     return (
         <KeyboardAwareScrollView style={styles.container}>
@@ -118,20 +114,7 @@ const MeetingNewScreen: React.FC = () => {
                 setDateOpen={setDateOpen}
                 mode="datetime"
             />
-            <Label text={meetingTranslate.t("typeLabel")} />
-            <DropDownPicker 
-                value={typeValue}
-                setValue={setTypeValue}
-                open={typeOpen}
-                setOpen={setTypeOpen}
-                items={typeItems}
-                modalTitleStyle={dropdownStyles.text}
-                labelStyle={[dropdownStyles.container, dropdownStyles.text]}
-                placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
-                listMode="MODAL"
-                modalTitle={meetingTranslate.t("typeLabel")}
-                placeholder={meetingTranslate.t("typePlaceholder")}
-            />
+            
             <Label text={meetingTranslate.t("cleaningGroupLabel")} />
             <DropDownPicker 
                 value={cleaningGroupValue}
@@ -147,12 +130,12 @@ const MeetingNewScreen: React.FC = () => {
                 placeholder={meetingTranslate.t("cleaningGroupPlaceholder")}
             />
         
-            <MyInput 
+            {typeValue === meetingTranslate.t("weekend") && <MyInput 
                 value={beginSong}
                 onChangeText={setBeginSong}
                 label={meetingTranslate.t("beginSongLabel")}
                 placeholder={meetingTranslate.t("beginSongPlaceholder")}
-            />
+            />}
             <Label text={meetingTranslate.t("leadLabel")} />
             <DropDownPicker 
                 value={leadValue}
@@ -181,18 +164,7 @@ const MeetingNewScreen: React.FC = () => {
                 modalTitle={meetingTranslate.t("beginPrayerLabel")}
                 placeholder={meetingTranslate.t("beginPrayerPlaceholder")}
             />
-            <MyInput 
-                value={midSong}
-                onChangeText={setMidSong}
-                label={meetingTranslate.t("midSongLabel")}
-                placeholder={meetingTranslate.t("midSongPlaceholder")}
-            />
-            <MyInput 
-                value={endSong}
-                onChangeText={setEndSong}
-                label={meetingTranslate.t("endSongLabel")}
-                placeholder={meetingTranslate.t("endSongPlaceholder")}
-            />
+            
             <Label text={meetingTranslate.t("endPrayerLabel")} />
             <DropDownPicker 
                 value={endPrayerValue}
@@ -207,23 +179,25 @@ const MeetingNewScreen: React.FC = () => {
                 modalTitle={meetingTranslate.t("endPrayerLabel")}
                 placeholder={meetingTranslate.t("endPrayerPlaceholder")}
             />
-            <Label text={meetingTranslate.t("isOtherEndPrayerSwitch")} />
-            <Switch  
-                value={isOtherEndPrayer}
-                onValueChange={(value) => setIsOtherEndPrayer(value)}
-                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherEndPrayer, 'left').container}
-                color={settingsContext.state.mainColor}
-            />
-            {isOtherEndPrayer && <>
-                <MyInput 
-                    value={otherEndPrayer}
-                    onChangeText={setOtherEndPrayer}
-                    label={meetingTranslate.t("otherEndPrayerLabel")}
-                    placeholder={meetingTranslate.t("otherEndPrayerPlaceholder")}
+            {typeValue === meetingTranslate.t("weekend") && <>
+                <Label text={meetingTranslate.t("isOtherEndPrayerSwitch")} />
+                <Switch  
+                    value={isOtherEndPrayer}
+                    onValueChange={(value) => setIsOtherEndPrayer(value)}
+                    style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherEndPrayer, 'left').container}
+                    color={settingsContext.state.mainColor}
                 />
+                {isOtherEndPrayer && <>
+                    <MyInput 
+                        value={otherEndPrayer}
+                        onChangeText={setOtherEndPrayer}
+                        label={meetingTranslate.t("otherEndPrayerLabel")}
+                        placeholder={meetingTranslate.t("otherEndPrayerPlaceholder")}
+                    />
 
+                </>}
             </>}
-            <View style={{ marginBottom: 40 }}>
+            <View style={{ marginBottom: 40, marginTop: 20 }}>
                 <ButtonC 
                     title={meetingTranslate.t("addText")}
                     isLoading={state.isLoading}

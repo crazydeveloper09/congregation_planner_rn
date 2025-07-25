@@ -103,38 +103,18 @@ export function buildMeetingsPDF(
         meeting.beginPrayer?.name || ""
       }</strong></div>
         <div class="assignments">
-          ${Object.keys(assignmentsByType)
-            .map((type) => {
-              const color = chooseFontColorAndIcon(type).fontColor;
-              const songs =
-                type === assignmentsTranslate.t("watchtowerStudy") ||
-                type === assignmentsTranslate.t("livingAsChristians")
-                  ? `
-              <div class="info">${meetingTranslate.t("songLabel")}: <strong>${
-                      meeting.midSong
-                    }</strong></div>
-            `
-                  : "";
-              const assignmentItems = assignmentsByType[type]
-                .map(
-                  (a) => `
-              <p class="assignment_topic" style="color: ${color};">${
-                    a.topic || a.defaultTopic
-                  }</p>
-              <div class="info"><strong>${
-                a.participant?.name || a.otherParticipant
-              }</strong></div>
-              ${
-                a.reader
-                  ? `<div class="info">${assignmentsTranslate.t(
-                      "readerLabel"
-                    )}: <strong>${a.reader?.name}</strong></div>`
-                  : ""
-              }
-            `
-                )
-                .join("");
-              return `
+          ${Object.keys(assignmentsByType).map(type => {
+            const color = chooseFontColorAndIcon(type).fontColor;
+            const songs = (type === assignmentsTranslate.t('watchtowerStudy') || type === assignmentsTranslate.t('livingAsChristians')) ? `
+              <div class="info">${meetingTranslate.t('songLabel')}: <strong>${meeting.midSong}</strong></div>
+            ` : '';
+            const assignmentItems = assignmentsByType[type].map(a => `
+              <p class="assignment_topic" style="color: ${color};">${a.topic || a.defaultTopic}</p>
+              <div class="info"><strong>${a.participant?.name || a.otherParticipant}</strong></div>
+              ${a.reader ? `<div class="info">${assignmentsTranslate.t('readerLabel')}: <strong>${a.reader?.name}</strong></div>` : ''}
+               ${a.helper ? `<div class="info">${assignmentsTranslate.t('helperLabel')}: <strong>${a.helper?.name}</strong></div>` : ''}
+            `).join('');
+            return `
               <div class="assignment">
                 ${songs}
                 <div class="assignment_type" style="background: ${color};">${type}</div>

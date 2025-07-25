@@ -21,6 +21,8 @@ import { attendantTranslations } from "../../AudioVideo/Attendants/translations"
 import { meetingsTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { chooseFontColorAndIcon } from "./helpers/types";
+import { storage } from "../../../helpers/storage";
 
 interface MeetingAssignmentEditScreenProps {
     route: {
@@ -44,12 +46,12 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     const [typeValue, setTypeValue] = useState<string>('')
     const [typeOpen, setTypeOpen] = useState<boolean>(false);
     const [typeItems, setTypeItems] = useState(route.params.meeting.type === meetingTranslate.t("weekend") ? [
-        {label: meetingAssignmentsTranslate.t('bibleTalk'), value: meetingAssignmentsTranslate.t('bibleTalk')},
-        {label: meetingAssignmentsTranslate.t('watchtowerStudy'), value: meetingAssignmentsTranslate.t('watchtowerStudy')}
+        {label: meetingAssignmentsTranslate.t('bibleTalk'), value: 'bibleTalk'},
+        {label: meetingAssignmentsTranslate.t('watchtowerStudy'), value: 'watchtowerStudy'}
     ] : [
-        {label: meetingAssignmentsTranslate.t('treasuresFromGodsWord'), value: meetingAssignmentsTranslate.t('treasuresFromGodsWord')},
-        {label: meetingAssignmentsTranslate.t('applyYourselfToMinistry'), value: meetingAssignmentsTranslate.t('applyYourselfToMinistry')},
-        {label: meetingAssignmentsTranslate.t('livingAsChristians'), value: meetingAssignmentsTranslate.t('livingAsChristians')},
+        {label: meetingAssignmentsTranslate.t('treasuresFromGodsWord'), value: 'treasuresFromGodsWord'},
+        {label: meetingAssignmentsTranslate.t('applyYourselfToMinistry'), value: 'applyYourselfToMinistry'},
+        {label: meetingAssignmentsTranslate.t('livingAsChristians'), value: 'livingAsChristians'},
     ]);
     const [defaultTopicValue, setDefaultTopicValue] = useState<string>('')
     const [defaultTopicOpen, setDefaultTopicOpen] = useState<boolean>(false);
@@ -66,7 +68,10 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
         { label: meetingAssignmentsTranslate.t('orgAchievements'), value: meetingAssignmentsTranslate.t('orgAchievements') },
         { label: meetingAssignmentsTranslate.t('congregationStudy'), value: meetingAssignmentsTranslate.t('congregationStudy') },
     ]);
-    const [isReader, setIsReader] = useState(false)
+    const [isHelper, setIsHelper] = useState(false)
+    const [helperValue, setHelperValue] = useState("");
+    const [helperOpen, setHelperOpen] = useState(false);
+    const [helperItems, setHelperItems] = useState([]);
     const [readerValue, setReaderValue] = useState<string>('')
     const [readerOpen, setReaderOpen] = useState<boolean>(false);
     const [readerItems, setReaderItems] = useState([]);
@@ -78,7 +83,8 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (type: string) => {
-        const token = await AsyncStorage.getItem('token')
+        const { role } = chooseFontColorAndIcon(type);
+        const token = await storage.getItem('token', "session");
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -89,7 +95,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(type)).map((preacher) => {
+            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(role)).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
@@ -104,8 +110,13 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 })
                 return { label: meetingAssignmentsTranslate.t('readingCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
+            const helperItems = response.data.filter((preacher) => preacher.roles.includes("can_do_exercise")).map((preacher) => {
+
+                return { label: preacher.name, value: preacher._id } as never
+            })
             setParticipantItems([ { label: meetingAssignmentsTranslate.t('otherCongPreacherChoose'), value: ''}, ...selectParticipantItems])
             setReaderItems(readerItems)
+            setHelperItems(helperItems)
         })
         .catch((err) => console.log(err))
     }
@@ -117,8 +128,11 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
         setDefaultTopicValue(route.params.assignment?.defaultTopic || '')
         setTopic(route.params.assignment.topic)
         if(route.params.assignment.reader){
-            setIsReader(true);
             setReaderValue(route.params.assignment.reader._id)
+        }
+        if(route.params.assignment.helper){
+            setIsHelper(true);
+            setHelperValue(route.params.assignment.helper._id)
         }
         if(route.params.assignment.otherParticipant){
             setIsOtherParticipant(true);
@@ -189,18 +203,8 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
                 placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
             />
-            <Label text={meetingAssignmentsTranslate.t("isReaderSwitchLabel")} />
-            <Switch  
-                value={isReader}
-                onValueChange={(value) => {
-                    setIsReader(value)
-                    value === false && setReaderValue('')
-                }}
-                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isReader, 'left').container}
-                color={settingsContext.state.mainColor}
-            />
 
-            { isReader && <>
+            { (typeValue === "watchtower" || typeValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
                 <Label text={meetingAssignmentsTranslate.t("readerLabel")} />
                 <DropDownPicker 
                     value={readerValue}
@@ -216,30 +220,60 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                     placeholder={meetingAssignmentsTranslate.t("readerPlaceholder")}
                 />
             </>}
-            <Label text={meetingAssignmentsTranslate.t("isOtherParticipantSwitchLabel")} />
-            <Switch  
-                value={isOtherParticipant}
-                onValueChange={(value) => {
-                    setIsOtherParticipant(value)
-                    value === true && setOtherParticipant('')
-                }}
-                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherParticipant, 'left').container}
-                color={settingsContext.state.mainColor}
-            />
-            {isOtherParticipant && <>
-                <MyInput 
-                    value={otherParticipant}
-                    onChangeText={setOtherParticipant}
-                    label={meetingAssignmentsTranslate.t("otherParticipantLabel")}
-                    placeholder={meetingAssignmentsTranslate.t("otherParticipantPlaceholder")}
+            {typeValue === "applyYourselfToMinistry" && <>
+                <Label text={meetingAssignmentsTranslate.t("isHelperSwitchLabel")} />
+                <Switch  
+                    value={isHelper}
+                    onValueChange={(value) => {
+                        setIsHelper(value)
+                    }}
+                    style={defaultSwitchStyles(settingsContext.state.fontIncrement, isHelper, 'left').container}
+                    color={settingsContext.state.mainColor}
                 />
+                {isHelper && <>
+                    <Label text={meetingAssignmentsTranslate.t("helperLabel")} />
+                    <DropDownPicker 
+                        value={helperValue}
+                        setValue={setHelperValue}
+                        open={helperOpen}
+                        setOpen={setHelperOpen}
+                        items={helperItems}
+                        modalTitleStyle={dropdownStyles.text}
+                        labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                        placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+                        listMode="MODAL"
+                        modalTitle={meetingAssignmentsTranslate.t("helperLabel")}
+                        placeholder={meetingAssignmentsTranslate.t("helperPlaceholder")}
+                    />
 
+                </>}
             </>}
-            <View style={{ marginBottom: 40 }}>
+            {typeValue === "bibleTalk" &&<>
+                <Label text={meetingAssignmentsTranslate.t("isOtherParticipantSwitchLabel")} />
+                <Switch  
+                    value={isOtherParticipant}
+                    onValueChange={(value) => {
+                        setIsOtherParticipant(value)
+                        value === true && setOtherParticipant('')
+                    }}
+                    style={defaultSwitchStyles(settingsContext.state.fontIncrement, isOtherParticipant, 'left').container}
+                    color={settingsContext.state.mainColor}
+                />
+                {isOtherParticipant && <>
+                    <MyInput 
+                        value={otherParticipant}
+                        onChangeText={setOtherParticipant}
+                        label={meetingAssignmentsTranslate.t("otherParticipantLabel")}
+                        placeholder={meetingAssignmentsTranslate.t("otherParticipantPlaceholder")}
+                    />
+
+                </>}
+            </>}
+            <View style={{ marginBottom: 40, marginTop: 20 }}>
                 <ButtonC 
                     title={meetingAssignmentsTranslate.t("editText")}
                     isLoading={state.isLoading}
-                    onPress={() => editAssignment(route.params.meeting?._id, route.params.assignment?._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue)}
+                    onPress={() => editAssignment(route.params.meeting?._id, route.params.assignment?._id, topic, typeValue, participantValue, readerValue, otherParticipant, defaultTopicValue, helperValue)}
                 />
             </View>
             

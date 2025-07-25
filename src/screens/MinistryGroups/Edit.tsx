@@ -14,6 +14,7 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import Label from "../../commonComponents/Label";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryGroupsTranslations } from "./translations";
+import { storage } from "../../helpers/storage";
 
 interface MinistryGroupEditScreenProps {
     route: {
@@ -42,7 +43,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
     const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -50,10 +51,19 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
         })
         .then((response) => {
             const selectItems = response.data.map((preacher) => {
-                return { label: preacher.name, value: preacher._id } as never
-            })
-            setPreachersItems(selectItems)
-            setOverseerItems(selectItems)
+          return { label: preacher.name, value: preacher._id } as never;
+        });
+        const selectOverseerItems = response.data
+          .filter(
+            (preacher) =>
+              preacher.privileges.includes('elder') ||
+              preacher.privileges.includes('mini_servant')
+          )
+          .map((preacher) => {
+            return { label: preacher.name, value: preacher._id } as never;
+          });
+        setPreachersItems(selectItems);
+        setOverseerItems(selectOverseerItems);
         })
         .catch((err) => console.log(err))
     }

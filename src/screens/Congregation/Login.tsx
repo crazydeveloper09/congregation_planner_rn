@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Input, Text, Button } from '@rneui/themed';
 import ButtonC from '../../commonComponents/Button';
@@ -54,6 +54,17 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
                 onPress={() => signIn({ username, password })}
                 isLoading={state.isLoading}
             />
+            <View style={{ marginTop: 10 }}>
+                <ButtonC 
+                    title={i18n.t('forgotPasswordButtonText')}
+                    onPress={() => Linking.openURL("https://www.congregationplanner.pl/forgot")}
+                    isLoading={state.isLoading}
+                    color="rgba(0, 0, 0, 0.0)"
+                    fontColor={settingsContext.state.mainColor}
+                    isTransparent
+                />
+            </View>
+        
             </> : <>
             <MyInput 
                 label={i18n.t('specialLinkLabel')}

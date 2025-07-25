@@ -42,6 +42,7 @@ const ButtonC: React.FC<ButtonProps> = ({
         }}
         onPress={onPress}
         loading={isLoading}
+        disabled={isLoading}
       />
     </>
   );

@@ -35,24 +35,24 @@ const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> 
                     <IconDescriptionValue 
                         iconName="account-supervisor"
                         description={attendantTranslate.t("hallwayLabel")}
-                        value={route.params.attendant.hallway1.name}
+                        value={route.params.attendant.hallway1?.name}
                     />
 
                     {route.params.attendant.hallway2 && <IconDescriptionValue 
                         iconName="account-supervisor-outline"
                         description={attendantTranslate.t("hallway2Label")}
-                        value={route.params.attendant.hallway2.name}
+                        value={route.params.attendant.hallway2?.name}
                     />}
                     <IconDescriptionValue 
                         iconName="account-eye"
                         description={attendantTranslate.t("auditoriumLabel")}
-                        value={route.params.attendant.auditorium.name}
+                        value={route.params.attendant.auditorium?.name}
                     />
             
                     {route.params.attendant.parking && <IconDescriptionValue 
                         iconName="parking"
                         description={attendantTranslate.t("parkingLabel")}
-                        value={route.params.attendant.parking.name}
+                        value={route.params.attendant.parking?.name}
                     />}
                 </View>
                 

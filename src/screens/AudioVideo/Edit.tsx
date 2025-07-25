@@ -20,6 +20,7 @@ import { mainTranslations } from "../../../localization";
 import { meetingAssignmentTranslations } from "../Meetings/Assignments/translations";
 import { attendantTranslations } from "./Attendants/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { storage } from "../../helpers/storage";
 
 interface AudioVideoEditScreenProps {
     route: {
@@ -55,7 +56,7 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async () => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
@@ -90,8 +91,8 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
 
     useEffect(() => {
         loadPreachers()
-        setVideoOperatorValue(route.params.audioVideo.videoOperator?._id!)
-        setMicrophone1Value(route.params.audioVideo.microphone1Operator?._id!)
+        setVideoOperatorValue(route.params.audioVideo.videoOperator?._id! || "")
+        setMicrophone1Value(route.params.audioVideo.microphone1Operator?._id! || "")
         if(route.params.audioVideo.audioOperator){
             setIsAudioOperator(true);
             setAudioOperatorValue(route.params.audioVideo.audioOperator._id)

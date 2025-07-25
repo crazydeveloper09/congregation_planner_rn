@@ -18,6 +18,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { storage } from "../../helpers/storage";
 
 const MinistryMeetingNewScreen: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date())
@@ -45,7 +46,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async (date: Date) => {
-        const token = await AsyncStorage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
