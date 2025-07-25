@@ -43,7 +43,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
 
     const loadPreachers = async () => {
-        const token = await storage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`

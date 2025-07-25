@@ -46,7 +46,7 @@ const MinistryGroupNewScreen: React.FC<MinistryGroupNewScreenProps> = ({
   const preacherTranslate = useLocaLization(preachersTranslations);
 
   const loadPreachers = async () => {
-    const token = await storage.getItem("token");
+    const token = await storage.getItem("token", "session");
     territories
       .get<IPreacher[]>("/preachers/all", {
         headers: {

@@ -84,7 +84,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
 
     const loadPreachers = async (type: string) => {
         const { role } = chooseFontColorAndIcon(type);
-        const token = await storage.getItem('token')
+        const token = await storage.getItem('token', "session");
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`

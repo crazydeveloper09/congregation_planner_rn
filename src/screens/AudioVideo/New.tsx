@@ -56,7 +56,7 @@ const AudioVideoNewScreen: React.FC<AudioVideoNewScreenProps> = ({ route }) => {
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
     const loadPreachers = async () => {
-        const token = await storage.getItem('token')
+        const token = await storage.getItem('token', "session")
         territories.get<IPreacher[]>('/preachers/all', {
             headers: {
                 'Authorization': `bearer ${token}`
