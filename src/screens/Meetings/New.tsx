@@ -82,8 +82,8 @@ const MeetingNewScreen: React.FC = () => {
         .catch((err) => console.log(err))
     }
     const loadMinistryGroups = async () => {
-        const token = await AsyncStorage.getItem('token')
-        const congregationID = await AsyncStorage.getItem('congregationID')
+        const token = await storage.getItem('token', "session")
+        const congregationID = await storage.getItem('congregationID')
         territories.get<IMinistryGroup[]>(`/congregations/${congregationID}/ministryGroups`, {
             headers: {
                 'Authorization': `bearer ${token}`

@@ -85,7 +85,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     }
 
     const loadMinistryGroups = async () => {
-        const token = await storage.getItem('token')
+        const token = await storage.getItem('token', "session")
         const congregationID = await storage.getItem('congregationID')
         territories.get<IMinistryGroup[]>(`/congregations/${congregationID}/ministryGroups`, {
             headers: {
