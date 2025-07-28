@@ -40,7 +40,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
 
   return (
     <View style={styles.container}>
-      {(type === meetingAssignmentsTranslate.t("watchtowerStudy")) && (
+      {(type === "watchtowerStudy") && (
         <IconDescriptionValue 
           iconName="music"
           description={meetingTranslate.t("songLabel")}
@@ -100,7 +100,7 @@ const MeetingAssignment: React.FC<MeetingAssignmentProps> = ({
         scrollEnabled={false}
       />
       
-      {(type === meetingAssignmentsTranslate.t("applyYourselfToMinistry")) && (
+      {(type === "applyYourselfToMinistry") && (
         <IconDescriptionValue 
           iconName="music"
           description={meetingTranslate.t("songLabel")}

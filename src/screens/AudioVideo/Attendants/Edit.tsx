@@ -45,6 +45,10 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     const [parkingValue, setParkingValue] = useState<string>('')
     const [parkingOpen, setParkingOpen] = useState<boolean>(false);
     const [parkingItems, setParkingItems] = useState([]);
+        const [isZoom, setIsZoom] = useState(false)
+        const [zoomValue, setZoomValue] = useState<string>('')
+        const [zoomOpen, setZoomOpen] = useState<boolean>(false);
+        const [zoomItems, setZoomItems] = useState([]);
     const mainTranslate = useLocaLization(mainTranslations);
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const attendantTranslate = useLocaLization(attendantTranslations)
@@ -73,6 +77,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
             setAuditoriumItems(selectItems)
             setHallway2Items(selectItems)
             setParkingItems(selectItems)
+            setZoomItems(selectItems);
         })
         .catch((err) => console.log(err))
     }
@@ -88,6 +93,10 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
         if(route.params.attendant.parking){
             setIsParking(true);
             setParkingValue(route.params.attendant.parking._id)
+        }
+        if(route.params.attendant.zoom){
+            setIsZoom(true);
+            setZoomValue(route.params.attendant.zoom._id)
         }
     }, [])
 
@@ -178,11 +187,37 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
                 />
 
             </>}
+            <Label text={attendantTranslate.t("isZoomSwitchText")} />
+            <Switch  
+                value={isZoom}
+                onValueChange={(value) => setIsZoom(value)}
+                style={defaultSwitchStyles(settingsContext.state.fontIncrement, isZoom, 'left').container}
+                color={settingsContext.state.mainColor}
+            />
+            {isZoom && <>
+                <DropDownPicker 
+                    value={zoomValue}
+                    setValue={setZoomValue}
+                    open={zoomOpen}
+                    setOpen={setZoomOpen}
+                    items={zoomItems}
+                    containerStyle={{
+                        marginVertical: 10
+                    }}
+                    modalTitleStyle={dropdownStyles.text}
+                    labelStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
+                    listMode="MODAL"
+                    modalTitle={attendantTranslate.t("zoomLabel")}
+                    placeholder={attendantTranslate.t("zoomPlaceholder")}
+                />
+
+            </>}
             <View style={{ marginBottom: 40 }}>
                 <ButtonC 
                     title={attendantTranslate.t("editHeaderText")}
                     isLoading={state.isLoading}
-                    onPress={() => editAttendant(route.params.meeting._id, route.params.attendant._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue)}
+                    onPress={() => editAttendant(route.params.meeting._id, route.params.attendant._id, hallway1Value, hallway2Value, auditoriumValue, parkingValue, zoomValue, route.params.meeting.date)}
                 />
             </View>
         </ScrollView>

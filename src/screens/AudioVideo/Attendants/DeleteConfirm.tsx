@@ -54,6 +54,11 @@ const AttendantDeleteConfirmScreen: React.FC<AttendantDeleteConfirmScreenProps> 
                         description={attendantTranslate.t("parkingLabel")}
                         value={route.params.attendant.parking?.name}
                     />}
+                    {route.params.attendant.zoom && <IconDescriptionValue 
+                        iconName="video-box"
+                        description={attendantTranslate.t("zoomLabel")}
+                        value={route.params.attendant.zoom?.name}
+                    />}
                 </View>
                 
             

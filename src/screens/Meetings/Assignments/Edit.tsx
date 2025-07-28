@@ -204,7 +204,7 @@ const MeetingAssignmentEditScreen: React.FC<MeetingAssignmentEditScreenProps> = 
                 placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
             />
 
-            { (typeValue === "watchtower" || typeValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
+            { (typeValue === "watchtowerStudy" || typeValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
                 <Label text={meetingAssignmentsTranslate.t("readerLabel")} />
                 <DropDownPicker 
                     value={readerValue}

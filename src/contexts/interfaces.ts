@@ -126,6 +126,7 @@ export interface IAttendant {
     hallway2?: IPreacher;
     parking?: IPreacher;
     auditorium: IPreacher;
+    zoom: IPreacher;
     meeting: IMeeting;
 }
 
