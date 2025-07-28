@@ -190,7 +190,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
                 placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
             />
-             { (typeValue === "watchtower" || defaultTopicValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
+             { (typeValue === "watchtowerStudy" || defaultTopicValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
                 <Label text={meetingAssignmentsTranslate.t("readerLabel")} />
                 <DropDownPicker 
                     value={readerValue}

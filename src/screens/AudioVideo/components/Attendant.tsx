@@ -98,6 +98,13 @@ const Attendant: React.FC<AttendantProps> = ({ attendant, meeting, shouldAutomat
                 value={attendant.parking?.name}
               />
             )}
+            {attendant.zoom && (
+              <IconDescriptionValue
+                iconName="video-box"
+                description={attendantTranslate.t("zoomLabel")}
+                value={attendant.zoom?.name}
+              />
+            )}
             {((state.preacher &&
               state.preacher.roles?.includes("can_edit_audio_video")) ||
               authContext.state.whoIsLoggedIn === "admin") && (

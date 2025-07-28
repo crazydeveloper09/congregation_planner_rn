@@ -127,6 +127,31 @@ const AttendantAssignment: React.FC<AttendantAssignmentProps> = ({
           />
         </View>
       )}
+      {preacher && preacher._id === assignment.zoom?._id && (
+        <View>
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {dateToDisplay} - {""}
+            {attendantTranslate.t("zoomLabel")}
+          </Text>
+          <IconLink
+            onPress={() =>
+              addAudioVideoAssignmentToCalendar(
+                new Date(assignment.meeting?.date),
+                attendantTranslate.t("zoomLabel"),
+                meetingTranslate.t("kingdomHallText")
+              )
+            }
+            iconName="calendar-month-outline"
+            description={mainTranslate.t("addToCalendar")}
+            isCentered={true}
+          />
+        </View>
+      )}
     </View>
   );
 };

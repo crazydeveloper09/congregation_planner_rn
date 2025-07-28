@@ -55,6 +55,14 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
                     />
                 
                     )}
+                    {route.params.assignment.helper && (
+                    <IconDescriptionValue 
+                        iconName="handshake"
+                        description={meetingAssignmentsTranslate.t('helperLabel')}
+                        value={route.params.assignment.helper.name}
+                    />
+                
+                    )}
                 </View>
                 
             

@@ -42,6 +42,7 @@ const addAttendant = (dispatch: Function) => {
       hallway2: string,
       auditorium: string,
       parking: string,
+      zoom: string,
       meetingDate: Date,
     ) => {
       try {
@@ -51,7 +52,7 @@ const addAttendant = (dispatch: Function) => {
         const congregationID = await storage.getItem("congregationID");
         const response = await territories.post(
           `/meetings/${meetingID}/attendants?congregationID=${congregationID}&locale=${locale}`,
-          { hallway1, hallway2, auditorium, parking, meetingDate },
+          { hallway1, hallway2, auditorium, parking, zoom, meetingDate },
           {
             headers: {
               Authorization: `bearer ${token}`,
@@ -77,7 +78,9 @@ const addAttendant = (dispatch: Function) => {
       hallway1: string,
       hallway2: string,
       auditorium: string,
-      parking: string
+      parking: string,
+      zoom: string,
+      meetingDate: Date,
     ) => {
       try {
         dispatch({ type: "turn_on_loading" });
@@ -86,7 +89,7 @@ const addAttendant = (dispatch: Function) => {
         const congregationID = await storage.getItem("congregationID");
         const response = await territories.put(
           `/meetings/${meetingID}/attendants/${meetingAttendantID}?congregationID=${congregationID}&locale=${locale}`,
-          {attendant: { hallway1, hallway2, auditorium, parking }},
+          {attendant: { hallway1, hallway2, auditorium, parking, zoom }, meetingDate},
           {
             headers: {
               Authorization: `bearer ${token}`,
