@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>3.20.3</string>
+    <string>4.0.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -44,7 +44,7 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
-    <key>NSCalendarsFullAccessUsageDescription</key>
+     <key>NSCalendarsFullAccessUsageDescription</key>
     <string>This app requires access to your calendar to schedule events.</string>
     <key>NSCalendarsFullAccessUsageDescription</key>
     <string>This app requires full access to your calendar to manage events.</string>
