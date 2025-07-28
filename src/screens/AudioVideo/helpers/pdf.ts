@@ -91,6 +91,7 @@ export function buildAttendantsPDF(meetings: IMeeting[], month: string) {
                                     <td>${meeting.ordinal?.hallway2?.name || audioVideoTranslate.t("noAssignmentText")}</td>
                                     <td>${meeting.ordinal?.auditorium?.name}</td>
                                     <td>${meeting.ordinal?.parking?.name || audioVideoTranslate.t("noAssignmentText")}</td>
+                                    <td>${meeting.ordinal?.zoom?.name || audioVideoTranslate.t("noAssignmentText")}</td>
                                 </tr>
                                 `
     )
@@ -113,6 +114,7 @@ export function buildAttendantsPDF(meetings: IMeeting[], month: string) {
                                 <th>${attendantTranslate.t("hallway2Label")}</th>
                                 <th>${attendantTranslate.t("auditoriumLabel")}</th>
                                 <th>${attendantTranslate.t("parkingLabel")}</th>
+                                <th>${attendantTranslate.t("zoomLabel")}</th>
                             </tr>
                     </thead>
                     <tbody>
