@@ -16,6 +16,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { storage } from "../../helpers/storage";
 
@@ -54,25 +55,22 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
     const [otherEndPrayer, setOtherEndPrayer] = useState<string>('')
     const { state, editMeeting } = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
-    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement);
+    const preachersContext = useContext(PreacherContext)
+    
 
     const loadPreachers = async (date: Date) => {
-        const token = await storage.getItem('token', "session")
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
+        const allPreachers = preachersContext.state.allPreachers!;
+    
             const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectPrayerItems = response.data.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
+            const selectPrayerItems = allPreachers.filter((preacher) => preacher.roles.includes("can_say_prayer")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.beginPrayer?.name === preacher.name || meeting.endPrayer?.name === preacher.name).length
 
                 return { label: meetingTranslate.t("prayerCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
-            const selectLeadItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_meetings")).map((preacher) => {
+            const selectLeadItems = allPreachers.filter((preacher) => preacher.roles.includes("can_lead_meetings")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
 
                 return { label: meetingTranslate.t("leadCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
@@ -80,8 +78,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
             setLeadItems(selectLeadItems)
             setBeginPrayerItems(selectPrayerItems)
             setEndPrayerItems([{ label: meetingAssignmentsTranslate.t("otherCongPreacherChoose"), value: ''}, ...selectPrayerItems])
-        })
-        .catch((err) => console.log(err))
+       
     }
 
     const loadMinistryGroups = async () => {

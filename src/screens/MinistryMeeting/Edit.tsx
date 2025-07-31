@@ -17,6 +17,7 @@ import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { storage } from "../../helpers/storage";
 
@@ -52,26 +53,20 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     const [topic, setTopic] = useState<string>('')
     const settingsContext = useContext(SettingsContext);
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+    const preachersContext = useContext(PreachersContext)
+    
 
     const loadPreachers = async (date: Date) => {
-        const token = await storage.getItem('token', "session")
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
+        const allPreachers = preachersContext.state.allPreachers!;
             const meetingDate = new Date(date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.ministryMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
+            const selectItems = allPreachers.filter((preacher) => preacher.roles.includes("can_lead_minimeetings")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.lead?.name === preacher.name).length
 
                 return { label: ministryMeetingTranslate.t("leadCounter", { name: preacher.name, currentMonth, alreadyAssigned }), value: preacher._id } as never
             })
             setLeadItems(selectItems)
-        })
-        .catch((err) => console.log(err))
     }
 
     useEffect(() => {

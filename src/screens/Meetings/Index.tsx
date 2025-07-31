@@ -108,6 +108,7 @@ if (Platform.OS === 'web') {
 
   useEffect(() => {
     currentFilter === mainTranslate.t("all") ? loadMeetings() : loadPreacherMeetingAssignments();
+    preachersContext.loadAllPreachers()
     if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_meetings")) || authContext.state.whoIsLoggedIn === "admin")) {
       navigation.setOptions({
         headerRight: () => <HeaderRight>

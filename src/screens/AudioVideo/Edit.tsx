@@ -20,6 +20,7 @@ import { mainTranslations } from "../../../localization";
 import { meetingAssignmentTranslations } from "../Meetings/Assignments/translations";
 import { attendantTranslations } from "./Attendants/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { storage } from "../../helpers/storage";
 
 interface AudioVideoEditScreenProps {
@@ -54,29 +55,25 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     const meetingContext = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+    const preachersContext = useContext(PreacherContext)
+    
 
     const loadPreachers = async () => {
-        const token = await storage.getItem('token', "session")
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
+        const allPreachers = preachersContext.state.allPreachers!;
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = meetingContext.state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectVideoItems = response.data.filter((preacher) => preacher.roles.includes("can_be_video")).map((preacher) => {
+            const selectVideoItems = allPreachers.filter((preacher) => preacher.roles.includes("can_be_video")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.videoOperator?.name === preacher.name).length
 
                 return { label: audioVideoTranslate.t("videoOperatorCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
-            const selectAudioItems = response.data.filter((preacher) => preacher.roles.includes("can_be_audio")).map((preacher) => {
+            const selectAudioItems = allPreachers.filter((preacher) => preacher.roles.includes("can_be_audio")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.audioOperator?.name === preacher.name).length
 
                 return { label: audioVideoTranslate.t("audioOperatorCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
-            const selectMicItems = response.data.filter((preacher) => preacher.roles.includes("can_take_mic")).map((preacher) => {
+            const selectMicItems = allPreachers.filter((preacher) => preacher.roles.includes("can_take_mic")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.audioVideo?.microphone1Operator?.name === preacher.name || meeting.audioVideo?.microphone2Operator?.name === preacher.name).length
 
                 return { label: audioVideoTranslate.t("micsCounter", {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
@@ -85,8 +82,6 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
             setMicrophone1Items(selectMicItems)
             setAudioOperatorItems(selectAudioItems)
             setMicrophone2Items(selectMicItems)
-        })
-        .catch((err) => console.log(err))
     }
 
     useEffect(() => {

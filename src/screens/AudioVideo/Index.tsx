@@ -108,6 +108,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
 
   useEffect(() => {
     currentFilter === mainTranslate.t("all") ? loadMeetings() : audioVideoContext.loadPreacherAudioVideoAssignments();
+    preachersContext.loadAllPreachers();
     navigation.setOptions({
       headerRight: () => (
         <HeaderRight>

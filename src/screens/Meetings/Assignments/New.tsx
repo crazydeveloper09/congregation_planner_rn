@@ -20,6 +20,7 @@ import { mainTranslations } from "../../../../localization";
 import { attendantTranslations } from "../../AudioVideo/Attendants/translations";
 import { meetingsTranslations } from "../translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { Context as PreacherContext } from "../../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { chooseFontColorAndIcon } from "./helpers/types";
 import { storage } from "../../../helpers/storage";
@@ -80,31 +81,24 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
     const { state, addAssignment } = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
-
+    const preachersContext = useContext(PreacherContext)
+    
 
 
     const loadPreachers = async (type: string) => {
         const { role } = chooseFontColorAndIcon(type);
-        const token = await storage.getItem('token', "session");
-        console.log("token");
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
-            
+        const allPreachers = preachersContext.state.allPreachers!;
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectParticipantItems = response.data.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(role)).map((preacher) => {
+            const selectParticipantItems = allPreachers.filter((preacher) => preacher.roles.includes("can_have_assignment") && preacher.roles.includes(role)).map((preacher) => {
                 let alreadyAssigned = 0;
                 currentMonthMeetings?.forEach((meeting) => {
                     alreadyAssigned += meeting.assignments?.filter((assignment) => assignment.participant?.name === preacher.name).length
                 })
                 return { label: meetingAssignmentsTranslate.t('assignmentsCounter', {name: preacher.name, currentMonth, alreadyAssigned}), value: preacher._id } as never
             })
-            const readerItems = response.data.filter((preacher) => preacher.roles.includes("can_be_reader")).map((preacher) => {
+            const readerItems = allPreachers.filter((preacher) => preacher.roles.includes("can_be_reader")).map((preacher) => {
 
                 let alreadyRead = 0;
                 currentMonthMeetings?.forEach((meeting) => {
@@ -112,15 +106,13 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 })
                 return { label: meetingAssignmentsTranslate.t('readingCounter', {name: preacher.name, currentMonth, alreadyRead}), value: preacher._id } as never
             })
-            const helperItems = response.data.filter((preacher) => preacher.roles.includes("can_do_exercise")).map((preacher) => {
+            const helperItems = allPreachers.filter((preacher) => preacher.roles.includes("can_do_exercise")).map((preacher) => {
 
                 return { label: preacher.name, value: preacher._id } as never
             })
             setParticipantItems([ { label: meetingAssignmentsTranslate.t('otherCongPreacherChoose'), value: ''}, ...selectParticipantItems])
             setReaderItems(readerItems)
             setHelperItems(helperItems)
-        })
-        .catch((err) => console.log(err))
     }
 
     useEffect(() => {
