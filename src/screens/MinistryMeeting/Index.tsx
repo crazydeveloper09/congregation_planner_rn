@@ -94,6 +94,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
 
     useEffect(() => {
         currentFilter === mainTranslate.t("all") ? loadMinistryMeetings() : loadMinistryMeetingsOfPreacher();
+        preachersContext.loadAllPreachers();
         if(((preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_edit_minimeetings")) || authContext.state.whoIsLoggedIn === "admin")) {
             navigation.setOptions({
                 headerRight: () => <HeaderRight>

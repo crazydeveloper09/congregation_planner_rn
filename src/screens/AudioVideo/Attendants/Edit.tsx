@@ -19,6 +19,7 @@ import { mainTranslations } from "../../../../localization";
 import { meetingAssignmentTranslations } from "../../Meetings/Assignments/translations";
 import { attendantTranslations } from "./translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
+import { Context as PreacherContext } from "../../../contexts/PreachersContext";
 import { storage } from "../../../helpers/storage";
 
 interface AttendantEditScreenProps {
@@ -55,20 +56,16 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     const { state, editAttendant } = useContext(AttendantContext);
     const meetingContext = useContext(MeetingContext)
     const settingsContext = useContext(SettingsContext);
-    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
+    const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement);
+    const preachersContext = useContext(PreacherContext)
 
     const loadPreachers = async () => {
-        const token = await storage.getItem('token', "session")
-        territories.get<IPreacher[]>('/preachers/all', {
-            headers: {
-                'Authorization': `bearer ${token}`
-            }
-        })
-        .then((response) => {
+        const allPreachers = preachersContext.state.allPreachers!;
+
             const meetingDate = new Date(route.params.meeting.date)
             const currentMonth = `${months[meetingDate.getMonth()]} ${meetingDate.getFullYear()}`;
             const currentMonthMeetings = meetingContext.state.allMeetings?.filter((meeting) => meeting.month === currentMonth);
-            const selectItems = response.data.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
+            const selectItems = allPreachers.filter((preacher) => preacher.roles.includes("can_be_ordinal")).map((preacher) => {
                 let alreadyAssigned = currentMonthMeetings?.filter((meeting) => meeting.ordinal?.hallway1?.name === preacher.name || meeting.ordinal?.hallway2?.name === preacher.name || meeting.ordinal?.auditorium?.name === preacher.name || meeting.ordinal?.parking?.name === preacher.name).length
 
                 return { label: attendantTranslate.t("counter", { name: preacher.name, currentMonth, alreadyAssigned }), value: preacher._id } as never
@@ -78,8 +75,6 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
             setHallway2Items(selectItems)
             setParkingItems(selectItems)
             setZoomItems(selectItems);
-        })
-        .catch((err) => console.log(err))
     }
 
     useEffect(() => {
