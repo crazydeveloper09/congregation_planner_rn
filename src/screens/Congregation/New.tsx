@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -101,20 +101,29 @@ const CongregationRegisterScreen: React.FC = () => {
                             error={touched.repeatPassword && errors.repeatPassword ? errors.repeatPassword : undefined}
                         />
                         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-                            <Checkbox
-                                status={values.termsAccepted ? 'checked' : 'unchecked'}
-                                onPress={() => setFieldValue('termsAccepted', !values.termsAccepted)}
-                            />
-                
-                                <Pressable onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
-                                    <Text>
-                                        {authTranslate.t("privacyAccept")}
-                                        <Text style={{ color: settingsContext.state.mainColor, }}>
-                                            {authTranslate.t("privacyPolicy")}
-                                        </Text>
+                            <View
+                                style={[
+                                styles.checkboxWrapper,
+                                Platform.OS === 'ios' && styles.iosBorder,
+                                ]}
+                            >
+                                <Checkbox
+                                    status={values.termsAccepted ? 'checked' : 'unchecked'}
+                                    onPress={() => setFieldValue('termsAccepted', !values.termsAccepted)}
+                                    color={settingsContext.state.mainColor} // tick color
+                                    uncheckedColor={settingsContext.state.mainColor} // outline color when unchecked
+                                  
+                                />
+                            </View>
+
+                            <Pressable onPress={() => navigation.navigate(`Policy_${mainTranslate.locale}`)}>
+                                <Text>
+                                    {authTranslate.t("privacyAccept")}
+                                    <Text style={{ color: settingsContext.state.mainColor }}>
+                                        {authTranslate.t("privacyPolicy")}
                                     </Text>
-                                </Pressable>
-                           
+                                </Text>
+                            </Pressable>
                         </View>
                         {touched.termsAccepted && errors.termsAccepted && (
                         <Text style={{ color: '#d00' }}>{errors.termsAccepted}</Text>
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
         padding: 15,
         flex: 1
     },
-     errMessage: {
+    errMessage: {
         color: 'red',
         fontSize: 20,
         textAlign: 'center',
@@ -150,7 +159,17 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         marginBottom: 15
-    }
+    },
+    checkboxWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    iosBorder: {
+        borderWidth: 1,
+        borderColor: 'black', // or settingsContext.state.mainColor
+        borderRadius: 2,
+        marginRight: 10
+    },
 });
 
 export default CongregationRegisterScreen;
