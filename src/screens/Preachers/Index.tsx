@@ -13,11 +13,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationProp } from "@react-navigation/native";
 import Loading from "../../commonComponents/Loading";
 import Pagination from "../../commonComponents/Pagination";
-import { columnsNum } from "../../helpers/devices";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import NotFound from "../../commonComponents/NotFound";
 import useLocaLization from "../../hooks/useLocalization";
 import { preachersTranslations } from "./translations";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface PreachersIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -26,6 +26,7 @@ interface PreachersIndexScreenProps {
 const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({
   navigation,
 }) => {
+   const { isDesktop } = useResponsive()
   const { state, loadPreachers } = useContext(PreachersContext);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -69,7 +70,7 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container]} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
       {state.preachers?.docs?.length !== 0 ? (
         <>
           <FlatList
@@ -77,7 +78,6 @@ const PreachersIndexScreen: React.FC<PreachersIndexScreenProps> = ({
             data={state.preachers?.docs}
             renderItem={({ item }) => <Preacher preacher={item} />}
             scrollEnabled={false}
-            numColumns={columnsNum}
           />
           <Pagination
             activePage={state.preachers?.page!}

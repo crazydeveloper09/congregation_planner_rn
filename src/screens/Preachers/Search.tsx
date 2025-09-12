@@ -1,5 +1,5 @@
 import { Input } from "@rneui/themed";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
 import ButtonC from "../../commonComponents/Button";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
@@ -7,11 +7,12 @@ import Loading from "../../commonComponents/Loading";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Preacher from "./components/Preacher";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
-import { columnsNum } from "../../helpers/devices";
 import useLocaLization from "../../hooks/useLocalization";
 import { preachersTranslations } from "./translations";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const PreachersSearchScreen: React.FC = () => {
+   const { isDesktop } = useResponsive()
   const [param, setParam] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const { searchPreacher, state } = useContext(PreachersContext);
@@ -23,7 +24,7 @@ const PreachersSearchScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container]} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
       <Input
         placeholder={preacherTranslate.t("nameLabel")}
         value={param}
@@ -61,7 +62,6 @@ const PreachersSearchScreen: React.FC = () => {
             data={state.searchResults}
             renderItem={({ item }) => <Preacher preacher={item} />}
             scrollEnabled={false}
-            numColumns={columnsNum}
           />
     
         </View>

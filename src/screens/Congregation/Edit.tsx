@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { Context as AuthContext } from "../../contexts/AuthContext";
 import Loading from "../../commonComponents/Loading";
 import ButtonC from "../../commonComponents/Button";
@@ -7,6 +7,7 @@ import MyInput from "../../commonComponents/MyInput";
 import useLocaLization from "../../hooks/useLocalization";
 import { authTranslations } from "./translations";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const CongregationEditScreen: React.FC = () => {
     const { editCongregation, state, loadCongregationInfo } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const CongregationEditScreen: React.FC = () => {
     const [territoryServantEmail, setTerritoryServantEmail] = useState('')
     const [mainCity, setMainCity] = useState('');
     const authTranslate = useLocaLization(authTranslations)
+    const { isDesktop } = useResponsive();
 
     useEffect(() => {
         loadCongregationInfo();
@@ -32,7 +34,7 @@ const CongregationEditScreen: React.FC = () => {
         Alert.alert("Server error", state.errMessage)
     }
     return (
-        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={[{ flex: 1, justifyContent: 'center' }, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <MyInput 
                 label={authTranslate.t("usernameLabel")}
                 placeholder={authTranslate.t("usernamePlaceholder")}

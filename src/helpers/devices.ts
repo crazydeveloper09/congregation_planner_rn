@@ -8,7 +8,7 @@ const isWeb = Platform.OS === "web";
 
 // Define breakpoints
 export const isTablet = !isWeb && aspectRatio < 1.6 && width >= 600;
-export const isDesktop = isWeb && width >= 1000;
+export const isDesktop = width >= 1000;
 export const isMobile = !isTablet && !isDesktop;
 
 const determineNumOfColumns = () => {

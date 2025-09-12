@@ -3,7 +3,6 @@ import { TouchableOpacity, View, Text, StyleSheet, Share, Alert } from "react-na
 import { IPreacher } from "../../../contexts/interfaces";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { isTablet, isDesktop } from "../../../helpers/devices";
 import { FlatList } from "react-native-gesture-handler";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";
@@ -69,6 +68,7 @@ const Preacher: React.FC<PreacherProps> = ({ preacher, displayAdditionalInfo = t
                     data={preacher.roles}
                     renderItem={({ item }) => <Text style={{ marginBottom: 10, fontSize: 15 + settingsContext.state.fontIncrement }}>• {preacherTranslate.t(item)}</Text>}
                     scrollEnabled={false}
+                    contentContainerStyle={{ marginTop: 10 }}
                 />
                 {preacher.privileges?.length > 0 && <>
                     <Label text={preacherTranslate.t('privilegesLabel')} />
@@ -101,8 +101,6 @@ const styles = StyleSheet.create({
         marginTop: 15,
         borderWidth: 1,
         borderRadius: 10,
-        width: isTablet ? '49%' : 'auto',
-        marginRight: isTablet || isDesktop ? 15 : 0
     },
     titleContainer: {
         flexDirection: 'row',

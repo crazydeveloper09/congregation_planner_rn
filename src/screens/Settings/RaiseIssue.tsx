@@ -10,8 +10,10 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const RaiseIssueScreen: React.FC = () => {
+    const { isDesktop } = useResponsive();
     const authTranslate = useLocaLization(authTranslations);
     const settingsTranslate = useLocaLization(settingsTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
@@ -27,7 +29,7 @@ const RaiseIssueScreen: React.FC = () => {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <Formik
                 initialValues={{
                     name: '',

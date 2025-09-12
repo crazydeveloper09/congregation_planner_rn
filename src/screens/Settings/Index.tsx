@@ -15,6 +15,7 @@ import { preachersTranslations } from "../Preachers/translations";
 import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
 import { defaultSwitchStyles } from "../defaultStyles";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const SettingsScreen: React.FC = () => {
   const auth = useContext(AuthContext);
@@ -28,6 +29,7 @@ const SettingsScreen: React.FC = () => {
     state.fontIncrement || 0
   );
   const [format12h, setFormat12h] = useState(state.format12h || false);
+  const { isDesktop } = useResponsive();
 
   useEffect(() => {
     loadColor();
@@ -62,7 +64,7 @@ const SettingsScreen: React.FC = () => {
       paddingVertical: 10,
     },
     color: {
-      width: "48%",
+      width: "49%",
       height: 100,
       marginRight: 10,
       borderRadius: 10,
@@ -77,7 +79,7 @@ const SettingsScreen: React.FC = () => {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ justifyContent: "center", paddingBottom: 40 }}
+      contentContainerStyle={[{ justifyContent: "center", paddingBottom: 40 }, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}
     >
       <SectionTitle
         iconName="account-group-outline"

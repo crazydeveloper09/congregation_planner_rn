@@ -6,6 +6,7 @@ import { ICartDay } from "../../../contexts/interfaces";
 import MyInput from "../../../commonComponents/MyInput";
 import useLocaLization from "../../../hooks/useLocalization";
 import { cartScheduleTranslations } from "../translations";
+import { useResponsive } from "../../../hooks/useResponsive";
 
 interface CartDayEditScreenProps {
     route: {
@@ -19,13 +20,14 @@ const CartDayEditScreen: React.FC<CartDayEditScreenProps> = ({ route }) => {
     const [place, setPlace] = useState<string>('')
     const { state, editCartDay } = useContext(CartsScheduleContext)
     const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
+    const { isDesktop } = useResponsive();
 
     useEffect(() => {
         setPlace(route.params.cartDay.place)
     }, [])
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <MyInput 
                 value={place}
                 onChangeText={setPlace}

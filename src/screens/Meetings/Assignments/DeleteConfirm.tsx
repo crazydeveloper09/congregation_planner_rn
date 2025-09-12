@@ -38,7 +38,7 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
                 <View>
                     <Text style={[{ backgroundColor: fontColor, fontSize: 21 + settingsContext.state.fontIncrement }, styles.title]}>
                         {icon}
-                        <Text>{route.params.assignment.type}</Text>
+                        <Text>{meetingAssignmentsTranslate.t(route.params.assignment.type)}</Text>
                     </Text>
                     <Text style={[{ color: fontColor, fontSize: 18 + settingsContext.state.fontIncrement }, styles.assignmentTitle]}>
                         {route.params.assignment.topic || route.params.assignment.defaultTopic}
@@ -68,7 +68,7 @@ const MeetingAssignmentDeleteConfirmScreen: React.FC<MeetingAssignmentDeleteConf
             
             </ListItem>
             <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t('deleteConfirmText')}</Text>
-            <View style={{ flexDirection: 'row', gap: 8 }}>
+            <View style={{ flexDirection: 'row', flex: 1, gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t('yes')} onPress={() => deleteAssignment(route.params.meeting._id, route.params.assignment._id)} isLoading={state.isLoading} color="#AD371F" />
                 </View>

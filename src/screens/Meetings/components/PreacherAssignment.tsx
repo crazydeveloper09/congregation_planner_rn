@@ -1,4 +1,4 @@
-                   import React, { useContext } from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet } from "react-native";
 import { IMeetingAssignment, IPreacher } from "../../../contexts/interfaces";
 import { addMeetingAssignmentToCalendar } from "../helpers/calendar";

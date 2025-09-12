@@ -25,7 +25,7 @@ export const AppContent = () => {
   return (
     <PaperProvider theme={theme}>
         <NavigationContainer ref={navigationRef}>
-            <SwitchNavigator />
+          <SwitchNavigator />
         </NavigationContainer>
     </PaperProvider>
   );

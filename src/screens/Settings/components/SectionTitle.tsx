@@ -1,7 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext } from "react";
 import { Text, StyleSheet, Platform } from "react-native";
-import { IconProps } from "react-native-vector-icons/Icon";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 
 interface SectionTitleProps {

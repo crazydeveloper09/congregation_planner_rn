@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
 import ButtonC from "../../../commonComponents/Button";
 import MyInput from "../../../commonComponents/MyInput";
@@ -11,6 +11,7 @@ import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import Label from "../../../commonComponents/Label";
 import { defaultSwitchStyles } from "../../defaultStyles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useResponsive } from "../../../hooks/useResponsive";
 
 interface CartDayNewScreenProps {
     route: {
@@ -29,6 +30,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     const [place, setPlace] = useState<string>('')
     const [startHour, setStartHour] = useState<string>('');
     const [finalHour, setFinalHour] = useState<string>('')
+     const { isDesktop } = useResponsive();
     const { state, addCartDay } = useContext(CartsScheduleContext);
     const cartScheduleTranslate = useLocaLization(cartScheduleTranslations);
     const settingsContext = useContext(SettingsContext)
@@ -38,7 +40,7 @@ const CartDayNewScreen: React.FC<CartDayNewScreenProps> = ({ route }) => {
     }, [])
 
     return (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <ChooseDate 
                 label="Data"
                 date={date}

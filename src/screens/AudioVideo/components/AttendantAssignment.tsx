@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import { IAttendant, IPreacher } from "../../../contexts/interfaces";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addAudioVideoAssignmentToCalendar } from "../helpers/calendar";
 import IconLink from "../../../commonComponents/IconLink";
 import useLocaLization from "../../../hooks/useLocalization";

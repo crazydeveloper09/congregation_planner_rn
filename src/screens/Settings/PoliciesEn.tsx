@@ -6,9 +6,12 @@ import numeric from '@jsamr/counter-style/presets/decimal';
 import point from '@jsamr/counter-style/presets/circle';
 import square from '@jsamr/counter-style/presets/square';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const PoliciesEnScreen: React.FC = () => {
     const settingsContext = useContext(SettingsContext);
+    const { isDesktop } = useResponsive()
+    
 
     const styles = StyleSheet.create({
         container: {
@@ -32,7 +35,7 @@ const PoliciesEnScreen: React.FC = () => {
     })
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <Text style={[styles.sectionHeader, { color: settingsContext.state.mainColor }]}>Privacy policy</Text>
             <MarkedList counterRenderer={numeric}>
                 <View style={{ flexShrink: 1 }}>

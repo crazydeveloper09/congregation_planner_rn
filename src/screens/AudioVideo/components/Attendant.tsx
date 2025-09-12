@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { IMeeting, IAttendant } from "../../../contexts/interfaces";
 import { ListItem } from "@rneui/themed";
 import NotFound from "../../../commonComponents/NotFound";

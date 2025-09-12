@@ -1,9 +1,8 @@
 import { NavigationProp } from '@react-navigation/native';
 import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet, Alert, Text} from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../commonComponents/Button';
-import { Input } from '@rneui/themed';
 import Loading from '../../commonComponents/Loading';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { IPreacher } from '../../contexts/interfaces';
@@ -14,6 +13,7 @@ import useLocaLization from '../../hooks/useLocalization';
 import { preachersTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { meetingAssignmentTranslations } from '../Meetings/Assignments/translations';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface PreachersEditScreenProps {
     navigation: NavigationProp<any>;
@@ -25,6 +25,7 @@ interface PreachersEditScreenProps {
 }
 
 const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, route }) => {
+     const { isDesktop } = useResponsive()
     const { preacher } = route.params;
     const { state, loadPreacherInfo, editPreacher} = useContext(PreachersContext)
     const [name, setName] = useState(preacher.name);
@@ -94,7 +95,7 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <MyInput 
                 label={preacherTranslate.t("nameLabel")}
                 placeholder={preacherTranslate.t("namePlaceholder")}

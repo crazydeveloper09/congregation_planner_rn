@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="gradMain" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#b415ff"/>
+      <stop offset="45%" stop-color="#7e1fb3"/>
+      <stop offset="100%" stop-color="#3e2b8e"/>
+    </linearGradient>
+    <linearGradient id="gradGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#23d880"/>
+      <stop offset="100%" stop-color="#15b06d"/>
+    </linearGradient>
+    <style>
+      .headline { font-family: Arial, Helvetica, sans-serif; font-weight:800; fill:#ffffff; font-size:92px; }
+      .feature  { font-family: Arial, Helvetica, sans-serif; font-weight:600; fill:#ffffff; font-size:44px; }
+      .cta      { font-family: Arial, Helvetica, sans-serif; font-weight:800; fill:#0e0e0e; font-size:68px; }
+      .small    { font-family: Arial, Helvetica, sans-serif; fill:#24324a; font-size:26px; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#gradMain)"/>
+  <!-- Right green curved shape -->
+  <path d="M795,0 L1080,0 L1080,1080 L855,1080 C1000,820 1040,600 1040,450 C1040,260 965,150 795,110 Z" fill="url(#gradGreen)"/>
+
+  <!-- Yellow band and purple notch -->
+  <rect x="0" y="784" width="720" height="196" fill="#f3b022"/>
+  <path d="M720,980 L850,1080 L0,1080 L0,980 Z" fill="#58238c"/>
+
+  <!-- Headline (editable text elements) -->
+  <text x="76"  y="150" class="headline">SZUKAM TESTERÓW</text>
+  <text x="76"  y="252" class="headline">APLIKACJI NA</text>
+  <text x="76"  y="354" class="headline">ANDROID!</text>
+
+  <!-- Features (editable) -->
+  <text x="76"  y="480" class="feature">• Automatyczna generacja planu zebrań</text>
+  <text x="76"  y="560" class="feature">• Możliwość szybkiego podejrzenia przydziałów,</text>
+  <text x="76"  y="612" class="feature">  dodania ich do kalendarza</text>
+
+  <!-- CTA on yellow -->
+  <text x="76"  y="858" class="cta">Zgłoś się na IG:</text>
+  <text x="76"  y="940" class="cta">@congregationplanner</text>
+
+  <!-- Phone mockup with embedded image placeholder (screenshot.jpg must be in same folder) -->
+  <g transform="translate(770,230)">
+    <!-- outer phone frame -->
+    <rect x="-6" y="-26" width="314" height="600" rx="52" ry="52" fill="#073b58"/>
+    <!-- inner screen background -->
+    <rect x="12" y="-8" width="280" height="566" rx="46" ry="46" fill="#eaf3fb"/>
+    <!-- embedded screenshot: replace 'screenshot.jpg' with your filename if different -->
+    <image x="20" y="8" width="264" height="540" preserveAspectRatio="xMidYMid slice"
+           xlink:href="screenshot.jpg" />
+    <!-- top speaker -->
+    <rect x="108" y="18" width="120" height="20" rx="10" fill="#183b61" opacity="0.9" />
+    <!-- decorative dots -->
+    <g transform="translate(86,490)" opacity="0.72">
+      <circle cx="0" cy="0" r="10" fill="#d1deee"/>
+      <circle cx="56" cy="0" r="10" fill="#d1deee"/>
+      <circle cx="112" cy="0" r="10" fill="#d1deee"/>
+    </g>
+  </g>
+
+</svg>

@@ -7,7 +7,6 @@ import { Context as AuthContext } from "../../../contexts/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../../commonComponents/Button";
-import { Input } from "react-native-elements";
 import { Switch } from "@rneui/base";
 import Label from "../../../commonComponents/Label";
 import MyInput from "../../../commonComponents/MyInput";

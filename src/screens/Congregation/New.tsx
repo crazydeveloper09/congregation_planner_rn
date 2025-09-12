@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -13,6 +13,7 @@ import { mainTranslations } from "../../../localization";
 import { Checkbox } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const CongregationRegisterScreen: React.FC = () => {
     const { registerCongregation, state } = useContext(AuthContext);
@@ -20,6 +21,7 @@ const CongregationRegisterScreen: React.FC = () => {
     const authTranslate = useLocaLization(authTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
     const navigation = useNavigation()
+    const { isDesktop } = useResponsive();
 
     const validationSchema = Yup.object().shape({
         congName: Yup.string().required(mainTranslate.t("emptyField")),
@@ -38,7 +40,7 @@ const CongregationRegisterScreen: React.FC = () => {
     });
 
     return (
-        <KeyboardAwareScrollView enableOnAndroid style={styles.container} contentContainerStyle={{ justifyContent: "center", }}>
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={isDesktop} enableOnAndroid style={styles.container} contentContainerStyle={[{ justifyContent: "center" },  isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <Formik
                 initialValues={{ congName: "", mainAdminEmail: "", secondAdminEmail: "", password: "", repeatPassword: "", termsAccepted: false }}
                 validationSchema={validationSchema}
@@ -146,7 +148,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#ece9e9",
         padding: 15,
-        flex: 1
     },
     errMessage: {
         color: 'red',

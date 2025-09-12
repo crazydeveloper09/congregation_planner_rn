@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
 import ButtonC from "../../commonComponents/Button";
-import territories from "../../api/territories";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IMinistryMeeting, IPreacher } from "../../contexts/interfaces";
+import { IMinistryMeeting } from "../../contexts/interfaces";
 import { Switch } from "@rneui/base";
 import { NavigationProp } from "@react-navigation/native";
 import MyInput from "../../commonComponents/MyInput";
@@ -17,9 +15,8 @@ import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
-import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { storage } from "../../helpers/storage";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface MinistryMeetingEditScreenProps {
     navigation: NavigationProp<any>;
@@ -31,6 +28,7 @@ interface MinistryMeetingEditScreenProps {
 }
 
 const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ navigation, route }) => {
+     const { isDesktop } = useResponsive()
     const { state, editMinistryMeeting } = useContext(MinistryMeetingContext)
     const [date, setDate] = useState<Date>(new Date(route.params.meeting.date))
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
@@ -82,7 +80,7 @@ const MinistryMeetingEditScreen: React.FC<MinistryMeetingEditScreenProps> = ({ n
     }, [date])
 
     return (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <ChooseDate 
                 label={ministryMeetingTranslate.t("dateLabel")}
                 date={date}

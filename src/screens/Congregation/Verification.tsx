@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
 import { Context as AuthContext } from '../../contexts/AuthContext';
 import ButtonC from '../../commonComponents/Button';
@@ -8,15 +8,17 @@ import useLocaLization from '../../hooks/useLocalization';
 import { authTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useResponsive } from '../../hooks/useResponsive';
 
 const CongregationsVerificationScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
     const { state, verifyNewUser } = useContext(AuthContext)
     const authTranslate = useLocaLization(authTranslations);
     const settingsContext = useContext(SettingsContext);
+    const { isDesktop } = useResponsive();
 
     return (
-        <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
+        <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={[{ flex: 1, justifyContent: 'center' }, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             <MyInput 

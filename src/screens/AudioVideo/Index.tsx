@@ -16,7 +16,6 @@ import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import AudioVideoAssignment from "./components/AudioVideoAssignment";
 import AttendantAssignment from "./components/AttendantAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
-import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import HeaderRight from "../../commonComponents/HeaderRight";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useLocaLization from "../../hooks/useLocalization";
@@ -29,6 +28,7 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface AudioVideoIndexScreenProps {
   navigation: NavigationProp<any>
@@ -45,6 +45,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
   const [currentMonth, setCurrentMonth] = useState<string>(
     `${months[new Date().getMonth()] + " " + new Date().getFullYear()}`
   );
+  const { isDesktop, columnsNum } = useResponsive();
   const {state, loadMeetings} = useContext(MeetingContext)
   const authContext = useContext(AuthContext)
   const audioVideoContext = useContext(AudioVideoContext)
@@ -128,6 +129,8 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
     return unsubscribe;
   }, [currentFilter, refreshing]);
 
+  console.log(columnsNum)
+
 
   if (state.isLoading || audioVideoContext.state.isLoading) {
     return <Loading />;
@@ -145,7 +148,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
      
       {authContext.state.whoIsLoggedIn !== "admin" && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
 
-        {currentFilter === mainTranslate.t("all") ? <View style={styles.container}>
+        {currentFilter === mainTranslate.t("all") ? <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
           {state?.allMeetings?.length === 0 ? <NotFound title={meetingsTranslate.t("noEntryText")} /> : <>
           {!isMonth && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}
           <FlatList
@@ -160,7 +163,7 @@ const AudioVideoIndexScreen: React.FC<AudioVideoIndexScreenProps> = ({ navigatio
                 onPress={() => generatePDF(meetingsGroup && meetingsGroup[currentMonth], currentMonth, type)}
               />}
           </>}
-        </View>: <View style={styles.container}>
+        </View>: <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
           <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 19 + settingsContext.state.fontIncrement }]}>Audio-video</Text>
           {audioVideoContext.state.audioVideos?.filter((audioVideo) => new Date(audioVideo.meeting?.date).toString() !== "Invalid Date").length === 0 ? <NotFound title={meetingsTranslate.t("noAssigmentsText")} /> : <FlatList
               keyExtractor={(audioVideo) => audioVideo._id}

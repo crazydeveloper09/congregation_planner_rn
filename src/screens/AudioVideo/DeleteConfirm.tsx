@@ -2,7 +2,6 @@ import { NavigationProp } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { IAudioVideo, IMeeting } from "../../contexts/interfaces";
-import AudioVideo from "./components/AudioVideo";
 import ButtonC from "../../commonComponents/Button";
 import { Context as AudioVideoContext } from "../../contexts/AudioVideoContext";
 import { ListItem } from "@rneui/base";

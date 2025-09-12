@@ -1,6 +1,5 @@
-import { Input } from '@rneui/themed';
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import ButtonC from '../../commonComponents/Button';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -11,8 +10,10 @@ import useLocaLization from '../../hooks/useLocalization';
 import { preachersTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { meetingAssignmentTranslations } from '../Meetings/Assignments/translations';
+import { useResponsive } from '../../hooks/useResponsive';
 
 const PreachersNewScreen: React.FC = () => {
+     const { isDesktop } = useResponsive()
     const [name, setName] = useState('');
     const {addPreacher, state} = useContext(PreachersContext)
     const preacherTranslate = useLocaLization(preachersTranslations);
@@ -68,7 +69,7 @@ const PreachersNewScreen: React.FC = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <MyInput 
                 label={preacherTranslate.t("nameLabel")}
                 placeholder={preacherTranslate.t("namePlaceholder")}
