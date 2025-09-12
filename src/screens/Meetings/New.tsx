@@ -1,18 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
-import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupContext";
-import { Input } from "@rneui/base";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import ButtonC from "../../commonComponents/Button";
-import Loading from "../../commonComponents/Loading";
 import territories from "../../api/territories";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IMinistryGroup, IPreacher } from "../../contexts/interfaces";
+import { IMinistryGroup } from "../../contexts/interfaces";
 import { Switch } from "@rneui/base";
-import { ScrollView } from "react-native-gesture-handler";
 import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
 import Label from "../../commonComponents/Label";
@@ -22,9 +16,9 @@ import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { meetingAssignmentTranslations } from "./Assignments/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
-import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { storage } from "../../helpers/storage";
+import { isDesktop } from "../../helpers/devices";
 
 const MeetingNewScreen: React.FC = () => {
     const meetingTranslate = useLocaLization(meetingsTranslations);
@@ -101,7 +95,7 @@ const MeetingNewScreen: React.FC = () => {
     }, [date])
 
     return (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <ChooseDate 
                 label={meetingTranslate.t("dateLabel")}
                 date={date}

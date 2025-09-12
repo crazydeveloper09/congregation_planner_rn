@@ -1,4 +1,3 @@
-import { Button } from '@rneui/themed';
 import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { Context as AuthContext } from '../../contexts/AuthContext';
@@ -12,8 +11,8 @@ import { Context as PreacherContext } from '../../contexts/PreachersContext';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { FlatList } from 'react-native-gesture-handler';
 import Preacher from '../Preachers/components/Preacher';
-import { columnsNum } from '../../helpers/devices';
 import { authTranslations } from './translations';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface CongregationsInfoScreenProps {
     navigation: NavigationProp<any>
@@ -25,6 +24,7 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
     const settingsContext = useContext(SettingsContext);
     const ministryGroupTranslate = useLocaLization(ministryGroupsTranslations);
     const congregationTranslate = useLocaLization(authTranslations);
+     const { isDesktop } = useResponsive();
 
     useEffect(() => {
         loadCongregationInfo();
@@ -60,14 +60,14 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
     })
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={[styles.container]} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             { state.whoIsLoggedIn === "admin" ? <>
                 <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("mainInfo")}</Text>
                 <View style={[styles.congregationInfo, {borderColor: settingsContext.state.mainColor}]}>
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("adminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.territoryServantEmail}</Text>
                 </View>
-                {state.congregation?.ministryOverseerEmail && <View style={styles.congregationInfo}>
+                {state.congregation?.ministryOverseerEmail && <View style={[styles.congregationInfo, {borderColor: settingsContext.state.mainColor}]}>
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("secondAdminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.ministryOverseerEmail}</Text>
                 </View>}
@@ -78,7 +78,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                     data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('admin'))}
                     renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                     scrollEnabled={false}
-                    numColumns={columnsNum}
                 />
             </> }
     
@@ -89,7 +88,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('elder'))}
                 renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
-                numColumns={columnsNum}
             />
             <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("minSer")}</Text>
             <FlatList 
@@ -97,7 +95,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('mini_servant'))}
                 renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
-                numColumns={columnsNum}
             />
             <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("pioneer")}</Text>
             <FlatList 
@@ -105,7 +102,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('pioneer'))}
                 renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
-                numColumns={columnsNum}
             />
             <Text style={[styles.header, { fontSize: 21 + settingsContext.state.fontIncrement } ]}>{congregationTranslate.t("auxPioneer")}</Text>
             <FlatList 
@@ -113,7 +109,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                 data={preacherContext.state.allPreachers?.filter(preacher => preacher.privileges?.includes('aux_pioneer'))}
                 renderItem={({ item }) => <Preacher preacher={item} displayAdditionalInfo={false} isOnlyInfoCard={true} />}
                 scrollEnabled={false}
-                numColumns={columnsNum}
             />
 
             <View style={styles.ministryGroupTitleContainer}>
@@ -132,7 +127,6 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ece9e9',
         padding: 15,
         flex: 1,
     },
@@ -145,7 +139,7 @@ const styles = StyleSheet.create({
     header: {
         fontFamily: 'InterSemiBold',
         fontSize: 21,
-        marginTop: 10
+        marginVertical: 10
     },
     congregationInfo: {
         padding: 13,

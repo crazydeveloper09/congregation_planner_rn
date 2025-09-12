@@ -1,11 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
-import territories from "../../../api/territories";
-import { IMeeting, IAttendant, IPreacher } from "../../../contexts/interfaces";
+import { IMeeting, IAttendant } from "../../../contexts/interfaces";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -20,7 +18,7 @@ import { meetingAssignmentTranslations } from "../../Meetings/Assignments/transl
 import { attendantTranslations } from "./translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { Context as PreacherContext } from "../../../contexts/PreachersContext";
-import { storage } from "../../../helpers/storage";
+import { useResponsive } from "../../../hooks/useResponsive";
 
 interface AttendantEditScreenProps {
     route: {
@@ -58,6 +56,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     const settingsContext = useContext(SettingsContext);
     const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement);
     const preachersContext = useContext(PreacherContext)
+     const { isDesktop } = useResponsive();
 
     const loadPreachers = async () => {
         const allPreachers = preachersContext.state.allPreachers!;
@@ -96,7 +95,7 @@ const AttendantEditScreen: React.FC<AttendantEditScreenProps> = ({ route }) => {
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} shouldAutomaticallyExpand={false} />
 

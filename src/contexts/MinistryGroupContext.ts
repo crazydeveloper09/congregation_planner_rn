@@ -69,7 +69,7 @@ const addMinistryGroup = (dispatch: Function) => {
                 }
             });
             dispatch({ type: 'turn_off_loading' })
-            navigate('PreachersList')
+            navigate('CongInfo')
             showMessage({
                 message: `${ministryGroupTranslate.t("successfulAddedMessage")}: ${name}`,
                 type: 'success',
@@ -93,7 +93,7 @@ const editMinistryGroup = (dispatch: Function) => {
                     'Authorization': `bearer ${token}`
                 }
             });
-            navigate('PreachersList')
+            navigate('CongInfo')
             dispatch({ type: 'turn_off_loading' })
             showMessage({
                 message: `${ministryGroupTranslate.t("successfulEditedMessage")}: ${name}`,

@@ -10,12 +10,14 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const ShareIdeaScreen: React.FC = () => {
     const authTranslate = useLocaLization(authTranslations);
     const settingsTranslate = useLocaLization(settingsTranslations);
     const mainTranslate = useLocaLization(mainTranslations);
     const { state, shareIdea } = useContext(SettingsContext);
+    const { isDesktop } = useResponsive();
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(mainTranslate.t("emptyField")),
@@ -27,7 +29,7 @@ const ShareIdeaScreen: React.FC = () => {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <Formik
                 initialValues={{
                     name: '',

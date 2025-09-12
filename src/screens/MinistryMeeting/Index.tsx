@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert, Platform } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, Alert, Platform } from "react-native";
 import { groupBy } from "../../helpers/arrays";
 import { FlatList } from "react-native-gesture-handler";
 import { months } from "../../../defaultData";
@@ -13,7 +13,6 @@ import { NavigationProp } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HeaderRight from "../../commonComponents/HeaderRight";
 import TopMenu from "../../commonComponents/TopMenu";
-import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
@@ -23,12 +22,14 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import * as FileSystem from 'expo-file-system';
 import IconLink from "../../commonComponents/IconLink";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface MinistryMeetingIndexScreenProps {
     navigation: NavigationProp<any>
 }
 
 const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({ navigation }) => {
+   const { isDesktop } = useResponsive()
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
     const mainTranslate = useLocaLization(mainTranslations)
     const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")]
@@ -128,7 +129,7 @@ const MinistryMeetingIndexScreen: React.FC<MinistryMeetingIndexScreenProps> = ({
             </> }
             {(preachersContext.state.preacher && preachersContext.state.preacher.roles?.includes("can_lead_minimeetings")) && <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />}
             
-            <View style={styles.container}>
+            <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
            
                 { state.ministryMeetings?.length === 0 ? <NotFound title={ministryMeetingTranslate.t("noEntryText")} /> : <>
                 {ministryMeetingsGroup && !Object.keys(ministryMeetingsGroup).includes(currentMonth) && <NotFound title={mainTranslate.t("chooseMonth")} icon="calendar-month-outline" />}

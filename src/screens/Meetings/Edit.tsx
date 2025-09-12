@@ -1,11 +1,10 @@
 import { Switch } from "@rneui/base";
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import ButtonC from "../../commonComponents/Button";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IMeeting, IMinistryGroup, IPreacher } from "../../contexts/interfaces";
+import { IMeeting, IMinistryGroup } from "../../contexts/interfaces";
 import territories from "../../api/territories";
 import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
@@ -19,6 +18,7 @@ import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { storage } from "../../helpers/storage";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface MeetingEditScreenProps {
     route: {
@@ -29,6 +29,7 @@ interface MeetingEditScreenProps {
 }
 
 const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
+    const { isDesktop } = useResponsive()
     const meetingTranslate = useLocaLization(meetingsTranslations);
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const [date, setDate] = useState<Date>(new Date(route.params.meeting.date))
@@ -118,7 +119,7 @@ const MeetingEditScreen: React.FC<MeetingEditScreenProps> = ({ route }) => {
 
 
     return (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <ChooseDate 
                 label={meetingTranslate.t("dateLabel")}
                 date={date}

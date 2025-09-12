@@ -16,7 +16,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PreacherAssignment from "./components/PreacherAssignment";
 import TopMenu from "../../commonComponents/TopMenu";
 import IconLink from "../../commonComponents/IconLink";
-import IconDescriptionValue from "../../commonComponents/IconDescriptionValue";
 import useLocaLization from "../../hooks/useLocalization";
 import { meetingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
@@ -26,8 +25,8 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { Platform } from 'react-native';
 import { buildMeetingsPDF } from "./helpers/pdf";
-import ButtonC from "../../commonComponents/Button";
 import * as FileSystem from 'expo-file-system';
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface MeetingsIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -36,6 +35,7 @@ interface MeetingsIndexScreenProps {
 const MeetingsIndexScreen: React.FC<MeetingsIndexScreenProps> = ({
   navigation,
 }) => {
+  const { isDesktop } = useResponsive()
   const meetingTranslate = useLocaLization(meetingsTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
   const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")]
@@ -176,7 +176,7 @@ if (Platform.OS === 'web') {
           />
         )}
       {currentFilter === mainTranslate.t("all") ? (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
           {state.allMeetings?.length === 0 ? (
             <NotFound title={meetingTranslate.t("noEntryText")} />
           ) : (
@@ -234,7 +234,7 @@ if (Platform.OS === 'web') {
           )}
         </View>
       ) : (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
           {(preachersContext.state.preacher?.roles?.includes(
             "can_lead_meetings"
           ) ||

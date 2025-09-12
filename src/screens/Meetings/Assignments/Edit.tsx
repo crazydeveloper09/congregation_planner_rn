@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import ButtonC from "../../../commonComponents/Button";
-import { Input, Switch } from "@rneui/base";
+import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
-import territories from "../../../api/territories";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
 import {
   IMeeting,
   IMeetingAssignment,
-  IPreacher,
 } from "../../../contexts/interfaces";
 import Meeting from "../components/Meeting";
 import AudioVideo from "../../AudioVideo/components/AudioVideo";
@@ -30,7 +27,7 @@ import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { Context as PreacherContext } from "../../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { chooseFontColorAndIcon } from "./helpers/types";
-import { storage } from "../../../helpers/storage";
+import { useResponsive } from "../../../hooks/useResponsive";
 
 interface MeetingAssignmentEditScreenProps {
   route: {
@@ -44,6 +41,7 @@ interface MeetingAssignmentEditScreenProps {
 const MeetingAssignmentEditScreen: React.FC<
   MeetingAssignmentEditScreenProps
 > = ({ route }) => {
+  const { isDesktop } = useResponsive()
   const meetingAssignmentsTranslate = useLocaLization(
     meetingAssignmentTranslations
   );
@@ -220,7 +218,11 @@ const MeetingAssignmentEditScreen: React.FC<
   };
 
   useEffect(() => {
-    loadPreachers(typeValue);
+      loadPreachers(typeValue);
+      setTypeValue(typeValue);
+  }, [typeValue])
+
+  useEffect(() => {
     setParticipantValue(route.params.assignment.participant?._id);
     setTypeValue(route.params.assignment.type);
     setDefaultTopicValue(route.params.assignment?.defaultTopic || "");
@@ -236,10 +238,10 @@ const MeetingAssignmentEditScreen: React.FC<
       setIsOtherParticipant(true);
       setOtherParticipant(route.params.assignment.otherParticipant);
     }
-  }, [route.params.assignment, typeValue]);
+  }, [route.params.assignment]);
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
       <Text
         style={[
           styles.meeting,

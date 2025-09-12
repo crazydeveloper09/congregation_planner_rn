@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import { Context as MinistryMeetingContext } from "../../contexts/MinistryMeetingContext";
 import ButtonC from "../../commonComponents/Button";
 import Loading from "../../commonComponents/Loading";
-import territories from "../../api/territories";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IPreacher } from "../../contexts/interfaces";
 import { Switch } from "@rneui/base";
 import MyInput from "../../commonComponents/MyInput";
 import ChooseDate from "../../commonComponents/ChooseDate";
@@ -17,11 +14,11 @@ import { defaultDropdownStyles, defaultSwitchStyles } from "../defaultStyles";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryMeetingsTranslations } from "./translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
-import { Context as PreacherContext } from "../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { storage } from "../../helpers/storage";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const MinistryMeetingNewScreen: React.FC = () => {
+     const { isDesktop } = useResponsive()
     const [date, setDate] = useState<Date>(new Date())
     const [dateOpen, setDateOpen] = useState<boolean>(false)
     const ministryMeetingTranslate = useLocaLization(ministryMeetingsTranslations)
@@ -70,7 +67,7 @@ const MinistryMeetingNewScreen: React.FC = () => {
         return <Loading />
     }
     return (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <ChooseDate 
                 label={ministryMeetingTranslate.t("dateLabel")}
                 date={date}

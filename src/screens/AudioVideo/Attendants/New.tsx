@@ -1,11 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native";
 import { Context as AttendantContext } from "../../../contexts/AttendantsContext";
 import { Context as MeetingContext } from "../../../contexts/MeetingContext";
-import territories from "../../../api/territories";
-import { IMeeting, IPreacher } from "../../../contexts/interfaces";
+import { IMeeting } from "../../../contexts/interfaces";
 import ButtonC from "../../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -20,7 +18,7 @@ import { meetingAssignmentTranslations } from "../../Meetings/Assignments/transl
 import { attendantTranslations } from "./translations";
 import { Context as SettingsContext } from "../../../contexts/SettingsContext";
 import { Context as PreacherContext } from "../../../contexts/PreachersContext";
-import { storage } from "../../../helpers/storage";
+import { useResponsive } from "../../../hooks/useResponsive";
 
 interface AttendantNewScreenProps {
     route: {
@@ -31,6 +29,7 @@ interface AttendantNewScreenProps {
 }
 
 const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
+     const { isDesktop } = useResponsive();
     const [hallway1Value, setHallway1Value] = useState("");
     const [hallway1Open, setHallway1Open] = useState(false);
     const [hallway1Items, setHallway1Items] = useState([]);
@@ -81,7 +80,7 @@ const AttendantNewScreen: React.FC<AttendantNewScreenProps> = ({ route }) => {
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} shouldAutomaticallyExpand={false} />
 

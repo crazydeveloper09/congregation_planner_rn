@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Dimensions,
   Platform,
 } from "react-native";
 import logo_transparent from "../images/logo_transparent.png";
@@ -14,9 +13,9 @@ import useLocaLization from "../hooks/useLocalization";
 import { authTranslations } from "./Congregation/translations";
 import { Context as SettingsContext } from "../contexts/SettingsContext";
 import ButtonC from "../commonComponents/Button";
-import { isTablet, isDesktop } from "../helpers/devices";
 import { mainTranslations } from "../../localization";
 import useOrientation from "../hooks/useOrientation";
+import { useResponsive } from "../hooks/useResponsive";
 
 interface WelcomeScreenProps {
   navigation: NavigationProp<any>;
@@ -28,6 +27,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   const mainTranslate = useLocaLization(mainTranslations);
   const orientation = useOrientation();
   const isWeb = Platform.OS === "web";
+  const { isDesktop, isTablet } = useResponsive()
+  
 
   return (
     <ScrollView
@@ -36,14 +37,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         styles.container,
         { backgroundColor: settingsContext.state.mainColor, ...(Platform.OS === 'web' ? { height: '100vh' } : {}) },
       ]}
-      contentContainerStyle={{
+      contentContainerStyle={[{
         alignItems: "center",
+        justifyContent: "center",
         flexGrow: 1,
         marginTop: orientation === "portrait" && !isTablet ? 50 : 0,
-      }}
+      }, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}
     >
       {isTablet || isDesktop ? (
-        <Image source={logo_transparent} style={{ width: 250, height: 250 }} />
+        <Image source={logo_transparent} style={{ width: 350, height: 350 }} />
       ) : (
         <Image source={logo_transparent} style={styles.image} />
       )}
@@ -52,7 +54,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
           styles.title,
           {
             fontSize:
-              (isTablet ? 30 : 25) + settingsContext.state.fontIncrement,
+              (isTablet || isDesktop ? 30 : 25) + settingsContext.state.fontIncrement,
           },
         ]}
       >

@@ -5,7 +5,6 @@ import { Context as MinistryGroupContext } from "../../contexts/MinistryGroupCon
 import DropDownPicker from "react-native-dropdown-picker";
 import Loading from "../../commonComponents/Loading";
 import ButtonC from "../../commonComponents/Button";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import territories from "../../api/territories";
 import { IPreacher } from "../../contexts/interfaces";
 import MyInput from "../../commonComponents/MyInput";
@@ -15,6 +14,7 @@ import Label from "../../commonComponents/Label";
 import useLocaLization from "../../hooks/useLocalization";
 import { ministryGroupsTranslations } from "./translations";
 import { storage } from "../../helpers/storage";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface MinistryGroupEditScreenProps {
     route: {
@@ -26,6 +26,7 @@ interface MinistryGroupEditScreenProps {
 }
 
 const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route }) => {
+     const { isDesktop } = useResponsive()
     const ministryGroup = useContext(MinistryGroupContext);
     const preachers = useContext(PreachersContext);
     const [name, setName] = useState('')
@@ -89,7 +90,7 @@ const MinistryGroupEditScreen: React.FC<MinistryGroupEditScreenProps> = ({ route
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <MyInput 
                 label={ministryGroupTranslate.t("nameLabel")}
                 placeholder={ministryGroupTranslate.t("namePlaceholder")}

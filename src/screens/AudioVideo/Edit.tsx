@@ -1,11 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Context as AudioVideoContext } from "../../contexts/AudioVideoContext";
 import { Context as MeetingContext } from "../../contexts/MeetingContext";
-import territories from "../../api/territories";
-import { IAudioVideo, IMeeting, IPreacher } from "../../contexts/interfaces";
+import { IAudioVideo, IMeeting } from "../../contexts/interfaces";
 import ButtonC from "../../commonComponents/Button";
 import { Switch } from "@rneui/base";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -21,7 +19,7 @@ import { meetingAssignmentTranslations } from "../Meetings/Assignments/translati
 import { attendantTranslations } from "./Attendants/translations";
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { Context as PreacherContext } from "../../contexts/PreachersContext";
-import { storage } from "../../helpers/storage";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface AudioVideoEditScreenProps {
     route: {
@@ -51,6 +49,7 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     const mainTranslate = useLocaLization(mainTranslations);
     const meetingAssignmentsTranslate = useLocaLization(meetingAssignmentTranslations);
     const attendantTranslate = useLocaLization(attendantTranslations)
+    const { isDesktop } = useResponsive();
     const { state, editAudioVideo } = useContext(AudioVideoContext);
     const meetingContext = useContext(MeetingContext);
     const settingsContext = useContext(SettingsContext);
@@ -99,7 +98,7 @@ const AudioVideoEditScreen: React.FC<AudioVideoEditScreenProps> = ({ route }) =>
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
             <Text style={[styles.meeting, { color: settingsContext.state.mainColor }, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{meetingAssignmentsTranslate.t("seeOtherAssignmentsLabel")}</Text>
             <Meeting meeting={route.params.meeting} filter={mainTranslate.t("all")} shouldAutomaticallyExpand={false} />
 

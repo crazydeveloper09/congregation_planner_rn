@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ import useLocaLization from "../../hooks/useLocalization";
 import { cartScheduleTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { convertTo12HourRange } from "./helpers/time";
+import { useResponsive } from "../../hooks/useResponsive";
 
 interface CartsScheduleIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -53,6 +54,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   const startDate = selectedStartDate
     ? selectedStartDate.toLocaleDateString("pl-Pl")
     : "";
+  const { isDesktop } = useResponsive();
   const preachersContext = useContext(PreachersContext);
   const authContext = useContext(AuthContext);
   const settingsContext = useContext(SettingsContext);
@@ -150,7 +152,7 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
       {authContext.state.whoIsLoggedIn !== "admin" && (
        <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />
       )}
-      <View style={styles.container}>
+      <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
         {currentFilter === mainTranslate.t("all") ? (
           <>
             <CalendarPicker

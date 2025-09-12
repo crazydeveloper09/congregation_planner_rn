@@ -1,8 +1,6 @@
-import React, { ReactElement, useContext } from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IMeeting, IMeetingAssignment } from "../../../contexts/interfaces";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";

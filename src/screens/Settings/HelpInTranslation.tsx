@@ -13,8 +13,10 @@ import { defaultDropdownStyles } from "../defaultStyles";
 import DropDownPicker from "react-native-dropdown-picker";
 import Label from "../../commonComponents/Label";
 import { mainTranslations } from "../../../localization";
+import { useResponsive } from "../../hooks/useResponsive";
 
 const HelpInTranslationScreen: React.FC = () => {
+     const { isDesktop } = useResponsive()
     const [primaryLanguageOpen, setPrimaryLanguageOpen] = useState(false);
     const [primaryLanguageItems] = useState([
         { label: 'Polski', value: 'Polski' },
@@ -37,7 +39,7 @@ const HelpInTranslationScreen: React.FC = () => {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
             <Formik
                 initialValues={{
                     name: '',
