@@ -24,7 +24,9 @@ export const settingsTranslations = {
         contributionLabel: "Twój wkład",
         translateLabel: "Tłumaczenie",
         feedbackLabel: "Podziel się sugestią",
-        issueLabel: "Zgłoś błąd"
+        issueLabel: "Zgłoś błąd",
+        rateAppLabel: "Oceń aplikację",
+        donateLabel: "Złóż datek"
     },
     en: {
         sectionLabel: "Settings",
@@ -54,6 +56,8 @@ export const settingsTranslations = {
         successFeedbackLabel: "Successfully shared an idea",
         successRaiseIssueLabel: "Successfully raised an issue",
         feedbackLabel: "Share suggestion",
-        issueLabel: "Raise issue"
+        issueLabel: "Raise issue",
+        rateAppLabel: "Rate the app",
+        donateLabel: "Donate"
     }
 }

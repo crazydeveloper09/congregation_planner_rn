@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, Linking, Platform, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { Context as AuthContext } from "../../contexts/AuthContext";
 import packageJson from "../../../package.json";
@@ -16,6 +16,7 @@ import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
 import { defaultSwitchStyles } from "../defaultStyles";
 import { useResponsive } from "../../hooks/useResponsive";
+import { requestAppReview } from "../../helpers/review";
 
 const SettingsScreen: React.FC = () => {
   const auth = useContext(AuthContext);
@@ -180,6 +181,16 @@ const SettingsScreen: React.FC = () => {
           iconName="bug"
           description={settingsTranslate.t("issueLabel")}
         />
+         {Platform.OS !== "web" && <SectionButton
+            onPress={() => requestAppReview()}
+            iconName="star-outline"
+            description={settingsTranslate.t("rateAppLabel")}
+          />}
+          <SectionButton
+            onPress={() => Linking.openURL("https://ko-fi.com/congregationplanner")}
+            iconName="coffee-outline"
+            description={settingsTranslate.t("donateLabel")}
+          />
       </View>
 
       <SectionTitle
