@@ -10,7 +10,7 @@
     "postinstall": "rm -f node_modules/expo-modules-core/ios/Core/Views/SwiftUI/AutoSizingStack.swift"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~5.0.4",
+    "@expo/metro-runtime": "~5.0.5",
     "@expo/vector-icons": "^14.1.0",
     "@jsamr/counter-style": "^2.0.2",
     "@jsamr/react-native-li": "^2.3.1",
@@ -22,7 +22,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
-    "expo": "53.0.22",
+    "expo": "~53.0.23",
     "expo-calendar": "~14.1.4",
     "expo-constants": "~17.1.6",
     "expo-file-system": "~18.1.10",
@@ -34,6 +34,7 @@
     "expo-screen-orientation": "~8.1.7",
     "expo-sharing": "~13.1.5",
     "expo-status-bar": "~2.2.3",
+    "expo-store-review": "~8.1.5",
     "expo-updates": "~0.28.17",
     "formik": "^2.4.6",
     "html2pdf.js": "^0.10.3",
@@ -55,8 +56,7 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "^0.20.0",
     "tinycolor2": "^1.6.0",
-    "yup": "^1.6.1",
-    "expo-store-review": "~8.1.5"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

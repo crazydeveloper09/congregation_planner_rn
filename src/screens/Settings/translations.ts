@@ -26,7 +26,7 @@ export const settingsTranslations = {
         feedbackLabel: "Podziel się sugestią",
         issueLabel: "Zgłoś błąd",
         rateAppLabel: "Oceń aplikację",
-        donateLabel: "Złóż datek"
+        donateLabel: "Złóż datek",
     },
     en: {
         sectionLabel: "Settings",
