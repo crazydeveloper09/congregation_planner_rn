@@ -44,7 +44,8 @@ export const mainTranslations = {
         reminderIOSPermission: "Pozwól $(PRODUCT_NAME) na dostęp do przypomnień",
         faceIDPermission: "Pozwól $(PRODUCT_NAME) na używanie Face ID.",
         generatePDFError: "Nie udało się wygenerować pliku PDF.",
-        dateLabel: "Data"
+        dateLabel: "Data",
+        dataInfo: "Dane osobiste wykorzystywane tylko do korespodencji mailowej i nie są przechowywane na żadnym serwerze"
     },
     en: {
         greeting: "Welcome to Congregation Planner",
@@ -89,6 +90,7 @@ export const mainTranslations = {
         reminderIOSPermission: "Let $(PRODUCT_NAME) for accessing reminders",
         faceIDPermission: "Let $(PRODUCT_NAME) for using Face ID.",
         generatePDFError: "We could not generate PDF.",
-        dateLabel: "Date"
+        dateLabel: "Date",
+        dataInfo: "Personal data used only for email conversation and not stored on any server"
     }
 }

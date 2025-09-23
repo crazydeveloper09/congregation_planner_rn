@@ -14,6 +14,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Label from "../../commonComponents/Label";
 import { mainTranslations } from "../../../localization";
 import { useResponsive } from "../../hooks/useResponsive";
+import EmailDataInfo from "../../commonComponents/EmailDataInfo";
 
 const HelpInTranslationScreen: React.FC = () => {
      const { isDesktop } = useResponsive()
@@ -120,6 +121,7 @@ const HelpInTranslationScreen: React.FC = () => {
                             isLoading={state.isLoading}
                             onPress={handleSubmit as any}
                         />
+                        <EmailDataInfo />
                     </>
                 )}
             </Formik>

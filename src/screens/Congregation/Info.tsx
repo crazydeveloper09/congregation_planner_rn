@@ -67,7 +67,9 @@ const CongregationsInfoScreen: React.FC<CongregationsInfoScreenProps> = ({ navig
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("adminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.territoryServantEmail}</Text>
                 </View>
-                {state.congregation?.ministryOverseerEmail && <View style={[styles.congregationInfo, {borderColor: settingsContext.state.mainColor}]}>
+                {state.congregation?.ministryOverseerEmail && <View style={[styles.congregationInfo, {borderColor: settingsContext.state.mainColor}
+                    
+                ]}>
                     <Text style={[styles.text, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{congregationTranslate.t("secondAdminLabel")}</Text>
                     <Text style={[styles.textBold, { fontSize: 15 + settingsContext.state.fontIncrement }]}>{state.congregation?.ministryOverseerEmail}</Text>
                 </View>}
