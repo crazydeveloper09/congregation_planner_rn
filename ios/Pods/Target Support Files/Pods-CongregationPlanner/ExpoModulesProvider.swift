@@ -21,6 +21,7 @@ import EXNotifications
 import ExpoPrint
 import ExpoScreenOrientation
 import ExpoSharing
+import ExpoStoreReview
 import EXUpdates
 
 @objc(ExpoModulesProvider)
@@ -53,6 +54,7 @@ public class ExpoModulesProvider: ModulesProvider {
       ExpoPrintModule.self,
       ScreenOrientationModule.self,
       SharingModule.self,
+      StoreReviewModule.self,
       UpdatesModule.self
     ]
   }

@@ -48,4 +48,4 @@ with_node \
   --target "/Users/mkuta/Desktop/projects/congregation_planner_rn/ios/Pods/Target Support Files/Pods-CongregationPlanner/ExpoModulesProvider.swift" \
   --entitlement "/Users/mkuta/Desktop/projects/congregation_planner_rn/ios/CongregationPlanner/CongregationPlanner.entitlements" \
   --platform "apple" \
-  --packages "expo" "expo-application" "expo-asset" "expo-calendar" "expo-constants" "expo-eas-client" "expo-file-system" "expo-font" "expo-keep-awake" "expo-local-authentication" "expo-localization" "expo-notifications" "expo-print" "expo-screen-orientation" "expo-sharing" "expo-updates"
+  --packages "expo" "expo-application" "expo-asset" "expo-calendar" "expo-constants" "expo-eas-client" "expo-file-system" "expo-font" "expo-keep-awake" "expo-local-authentication" "expo-localization" "expo-notifications" "expo-print" "expo-screen-orientation" "expo-sharing" "expo-store-review" "expo-updates"
