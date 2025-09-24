@@ -410,6 +410,7 @@ const MeetingAssignmentEditScreen: React.FC<
                 listMode="MODAL"
                 modalTitle={meetingAssignmentsTranslate.t("helperLabel")}
                 placeholder={meetingAssignmentsTranslate.t("helperPlaceholder")}
+                searchable={true}
               />
             </>
           )}

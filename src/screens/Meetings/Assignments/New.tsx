@@ -222,6 +222,7 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                         listMode="MODAL"
                         modalTitle={meetingAssignmentsTranslate.t("helperLabel")}
                         placeholder={meetingAssignmentsTranslate.t("helperPlaceholder")}
+                        searchable={true}
                     />
 
                 </>}
