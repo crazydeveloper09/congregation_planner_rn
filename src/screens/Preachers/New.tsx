@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Platform } from 'react-native';
 import ButtonC from '../../commonComponents/Button';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -96,6 +96,7 @@ const PreachersNewScreen: React.FC = () => {
                     fontWeight: "bold"
                 }}
                 placeholder={preacherTranslate.t("rolesPlaceholder")}
+                searchable={Platform.OS === 'web'}
             />
             <Label text={preacherTranslate.t("privilegesLabel")} />
             <DropDownPicker 

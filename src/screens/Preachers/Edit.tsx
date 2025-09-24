@@ -1,6 +1,6 @@
 import { NavigationProp } from '@react-navigation/native';
 import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Platform } from 'react-native';
 import { Context as PreachersContext } from '../../contexts/PreachersContext';
 import ButtonC from '../../commonComponents/Button';
 import Loading from '../../commonComponents/Loading';
@@ -122,6 +122,7 @@ const PreachersEditScreen: React.FC<PreachersEditScreenProps> = ({ navigation, r
                     fontWeight: "bold"
                 }}
                 placeholder={preacherTranslate.t("rolesPlaceholder")}
+                searchable={Platform.OS === 'web'}
             />
             <Label text={preacherTranslate.t("privilegesLabel")} />
             <DropDownPicker 
