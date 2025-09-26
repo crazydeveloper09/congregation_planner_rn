@@ -44,7 +44,7 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
-    <key>NSCalendarsFullAccessUsageDescription</key>
+   <key>NSCalendarsFullAccessUsageDescription</key>
     <string>This app requires access to your calendar to schedule events.</string>
     <key>NSCalendarsFullAccessUsageDescription</key>
     <string>This app requires full access to your calendar to manage events.</string>
