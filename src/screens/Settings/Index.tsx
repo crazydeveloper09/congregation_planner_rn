@@ -76,7 +76,7 @@ const SettingsScreen: React.FC = () => {
       fontFamily: "MontserratRegular",
     },
   });
-
+console.log(auth.state.userID?.toString().replaceAll("\"", "") === "631272d87f4cd20016d2db19")
   return (
     <ScrollView
       style={styles.container}
@@ -99,6 +99,12 @@ const SettingsScreen: React.FC = () => {
             description={preacherTranslate.t("sectionText")}
           />
         )}
+        {auth.state.userID?.toString().replaceAll("\"", "") === "631272d87f4cd20016d2db19" && auth.state.whoIsLoggedIn === "preacher" && <SectionLink
+            screen="PreacherTerritories"
+            params={{ preacherID: auth.state.preacherID }}
+            iconName="map"
+            description="Moje tereny"
+          />}
       </View>
       {auth.state.whoIsLoggedIn === "admin" && ""}
       <SectionTitle

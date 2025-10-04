@@ -54,7 +54,7 @@ const authReducer = (state: IAuth, action: { type: string; payload: any }) => {
     case 'add_success': 
         return { ...state, successMessage: action.payload.message, errMessage: '', userID: action.payload.userID, isLoading: false }
     case 'signin': 
-        return { ...state, errMessage: '', successMessage: action.payload.message, token: action.payload.token, isLoading: false, preacherID: action.payload?.preacherID, whoIsLoggedIn: action.payload?.whoIsLoggedIn}
+        return { ...state, errMessage: '', userID: action.payload.userID, successMessage: action.payload.message, token: action.payload.token, isLoading: false, preacherID: action.payload?.preacherID, whoIsLoggedIn: action.payload?.whoIsLoggedIn}
     case 'signout': 
         return {...state, token: '', userID: '', successMessage: ''}
     case 'add_cong_info': 
@@ -118,7 +118,7 @@ const logInPreacher = (dispatch: Function) => {
         await storage.setItem('whoIsLoggedIn', 'preacher')
         await storage.setItem('preacherID', JSON.stringify(response.data.preacher._id))
         await storage.setItem('congregationID', JSON.stringify(response.data.preacher.congregation))
-        dispatch({ type: 'signin', payload: { token: response.data.token, message: response.data?.message, whoIsLoggedIn: 'preacher', preacherID: response.data.preacher._id  } })
+        dispatch({ type: 'signin', payload: { token: response.data.token, userID: response.data.preacher.congregation, message: response.data?.message, whoIsLoggedIn: 'preacher', preacherID: response.data.preacher._id  } })
         mainNavNavigate('Meetings')
       }
     } catch (err) {
@@ -187,7 +187,8 @@ const tryLocalSignIn = (dispatch: Function) => {
     const token = await storage.getItem('token', "session")
     const preacherID = await storage.getItem('preacherID')
     const whoIsLoggedIn = await storage.getItem('whoIsLoggedIn')
-    dispatch({ type: 'signin', payload: { token: token, successMessage: 'Automatycznie zalogowano do aplikacji', preacherID, whoIsLoggedIn } })
+    const userID = await storage.getItem("congregationID")
+    dispatch({ type: 'signin', payload: { token: token, successMessage: 'Automatycznie zalogowano do aplikacji', preacherID, whoIsLoggedIn, userID } })
     showMessage({
       message: authTranslate.t("automaticLoginMessage"),
       type: 'success'

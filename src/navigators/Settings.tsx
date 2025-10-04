@@ -14,6 +14,8 @@ import HelpInTranslationScreen from "../screens/Settings/HelpInTranslation";
 import ShareIdeaScreen from "../screens/Settings/ShareIdea";
 import RaiseIssueScreen from "../screens/Settings/RaiseIssue";
 import { settingsTranslations } from "../screens/Settings/translations";
+import PreacherTerritoriesScreen from "../screens/Preachers/PreacherTerritories";
+import TerritoriesHistoryScreen from "../screens/Preachers/History";
 
 const Stack = createStackNavigator()
 
@@ -55,6 +57,17 @@ const SettingsNavigator = () => {
                 name="Error" 
                 component={RaiseIssueScreen} 
                 options={{ headerTitle: settingsTranslate.t("issueLabel") }}
+            />
+            <Stack.Screen 
+                name="PreacherTerritories" 
+                component={PreacherTerritoriesScreen} 
+                options={{ headerTitle: "Moje tereny" }}
+            />
+
+            <Stack.Screen 
+                name="TerritoryHistory" 
+                component={TerritoriesHistoryScreen} 
+                options={{ headerTitle: "Mapka terenu" }}
             />
             <Stack.Screen name="Preachers" component={PreachersNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="Cong" component={CongregationsNavigator} options={{ headerShown: false }} />

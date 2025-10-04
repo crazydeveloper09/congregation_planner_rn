@@ -8,17 +8,19 @@ interface SectionLinkProps {
   iconName: string;
   description: string;
   screen: string,
+  params?: object;
 }
 
 const SectionLink: React.FC<SectionLinkProps> = ({
   iconName,
   description,
-  screen
+  screen,
+  params
 }) => {
   const settingsContext = useContext(SettingsContext)
 
   return (
-    <Pressable onPress={() => navigate(screen)} style={styles.container}>
+    <Pressable onPress={() => navigate(screen, params)} style={styles.container}>
       <Text style={styles.titleContainer}>
         <MaterialCommunityIcons name={iconName} size={22 + settingsContext.state.fontIncrement} style={{ marginRight: 10 }} />
         <Text>  </Text>

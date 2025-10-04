@@ -4,7 +4,7 @@ const { width, height } = Dimensions.get("window");
 const aspectRatio = height / width;
 
 // Platform-aware width thresholds
-const isWeb = Platform.OS === "web";
+export const isWeb = Platform.OS === "web";
 
 // Define breakpoints
 export const isTablet = !isWeb && aspectRatio < 1.6 && width >= 600;

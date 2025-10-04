@@ -9,6 +9,7 @@ import { Provider as OrdinalsProvider } from './src/contexts/AttendantsContext';
 import { Provider as PreachersProvider } from './src/contexts/PreachersContext';
 import { Provider as MinistryGroupProvider } from './src/contexts/MinistryGroupContext';
 import { Provider as SettingsProvider } from './src/contexts/SettingsContext';
+import { Provider as TerritoriesProvider } from './src/contexts/TerritoriesContext';
 import { Alert, StatusBar } from 'react-native';
 import { useFonts } from 'expo-font';
 import { navigationRef } from './src/RootNavigation';
@@ -63,7 +64,9 @@ function App() {
                 <PreachersProvider>
                   <MinistryGroupProvider>
                     <SettingsProvider>
-                      <AppContent />
+                      <TerritoriesProvider>
+                         <AppContent />
+                      </TerritoriesProvider>
                     </SettingsProvider>
                   </MinistryGroupProvider>
                 </PreachersProvider>
