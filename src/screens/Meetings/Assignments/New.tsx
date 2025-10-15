@@ -180,6 +180,12 @@ const MeetingAssignmentNewScreen: React.FC<MeetingAssignmentNewScreenProps> = ({
                 searchable
                 modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
                 placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
+                modalContentContainerStyle={{
+                    maxHeight: '100%',
+                }}
+                scrollViewProps={{
+                    nestedScrollEnabled: true,
+                }}
             />
              { (typeValue === "watchtowerStudy" || defaultTopicValue === meetingAssignmentsTranslate.t("congregationStudy")) && <>
                 <Label text={meetingAssignmentsTranslate.t("readerLabel")} />

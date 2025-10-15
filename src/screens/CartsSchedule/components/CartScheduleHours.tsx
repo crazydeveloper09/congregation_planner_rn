@@ -87,6 +87,12 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 modalTitle={cartScheduleTranslate.t("choosePreacher1Label", { timeDescription: hour?.timeDescription })}
                 placeholder={cartScheduleTranslate.t("choosePreacher1Placeholder")}
+                modalContentContainerStyle={{
+                  maxHeight: '100%',
+                }}
+                scrollViewProps={{
+                  nestedScrollEnabled: true,
+                }}
             />}
             <Label text={cartScheduleTranslate.t("isOtherPreacher1SwitchText")} />
             <Switch  
@@ -121,6 +127,12 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                 }}
                 modalTitle={cartScheduleTranslate.t("choosePreacher2Label", { timeDescription: hour?.timeDescription })}
                 placeholder={cartScheduleTranslate.t("choosePreacher2Placeholder")}
+                modalContentContainerStyle={{
+                  maxHeight: '100%',
+                }}
+                scrollViewProps={{
+                  nestedScrollEnabled: true,
+                }}  
             />}
             <Label text={cartScheduleTranslate.t("isOtherPreacher2SwitchText")} />
             <Switch  

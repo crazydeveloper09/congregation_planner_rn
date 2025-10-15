@@ -89,6 +89,12 @@ const PreachersNewScreen: React.FC = () => {
                 placeholderStyle={[dropdownStyles.container, dropdownStyles.text]}
                 listMode="MODAL"
                 modalTitle={preacherTranslate.t("rolesLabel")}
+                modalContentContainerStyle={{
+                    maxHeight: '100%',
+                }}
+                scrollViewProps={{
+                    nestedScrollEnabled: true,
+                }}
                 containerStyle={{
                     marginVertical: 8
                 }}

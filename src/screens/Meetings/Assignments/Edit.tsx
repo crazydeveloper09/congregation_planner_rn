@@ -28,6 +28,7 @@ import { Context as PreacherContext } from "../../../contexts/PreachersContext";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { chooseFontColorAndIcon } from "./helpers/types";
 import { useResponsive } from "../../../hooks/useResponsive";
+import { isWeb } from "../../../helpers/devices";
 
 interface MeetingAssignmentEditScreenProps {
   route: {
@@ -241,7 +242,7 @@ const MeetingAssignmentEditScreen: React.FC<
   }, [route.params.assignment]);
 
   return (
-    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled" style={styles.container} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
       <Text
         style={[
           styles.meeting,
@@ -353,6 +354,12 @@ const MeetingAssignmentEditScreen: React.FC<
         searchable
         modalTitle={meetingAssignmentsTranslate.t("participantLabel")}
         placeholder={meetingAssignmentsTranslate.t("participantPlaceholder")}
+        modalContentContainerStyle={{
+          maxHeight: '100%',
+        }}
+        scrollViewProps={{
+          nestedScrollEnabled: true,
+        }}  
       />
 
       {(typeValue === "watchtowerStudy" ||
