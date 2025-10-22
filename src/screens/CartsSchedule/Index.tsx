@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  Platform,
 } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import { NavigationProp } from "@react-navigation/native";
@@ -329,9 +330,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     display: "flex",
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: Platform.OS === "web" ? "center": "flex-start",
     paddingHorizontal: 15,
     paddingVertical: 7,
   },
