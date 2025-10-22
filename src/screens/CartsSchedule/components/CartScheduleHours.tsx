@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ICartHour, IPreacher } from "../../../contexts/interfaces";
+import { ICartDay, ICartHour, IPreacher } from "../../../contexts/interfaces";
 import { Context as CartsScheduleContext } from "../../../contexts/CartsScheduleContext";
 import { Context as PreachersContext } from "../../../contexts/PreachersContext";
 import { Context as AuthContext } from "../../../contexts/AuthContext";
@@ -19,11 +19,12 @@ import { convertTo12HourRange } from "../helpers/time";
 interface CartsScheduleHoursProps {
   hour: ICartHour;
   preachers: IPreacher[];
-  day: string;
+  day: ICartDay;
   refresh: Function;
+  dayItems: number;
 }
 
-const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers, day, refresh }) => {
+const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers, day, refresh, dayItems }) => {
   const cartScheduleTranslate = useLocaLization(cartScheduleTranslations)
   const [preacher1Value, setPreacher1Value] = useState("");
   const [preacher1Open, setPreacher1Open] = useState(false);
@@ -46,26 +47,42 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
   const settingsContext = useContext(SettingsContext);
   const dropdownStyles = defaultDropdownStyles(settingsContext.state.fontIncrement)
 
-
   useEffect(() => {
+    const currentPreacher = state.preacher;
+    const canEditAll =
+      currentPreacher?.roles?.includes("can_edit_cartSchedule") ||
+      authContext.state.whoIsLoggedIn === "admin";
 
-      const selectItems = preachers?.filter((preacher) => preacher.roles.includes("can_see_cartSchedule")).map((preacher) => {
-        return { label: preacher?.name, value: preacher?._id } as never
-      })
-      setPreacher1Items([...preacher1Items, ...selectItems])
-      setPreacher2Items([...preacher2Items, ...selectItems])
-    
-    setPreacher1Value(hour?.preacher1?._id || "")
-    setPreacher2Value(hour?.preacher2?._id || "")
-  }, [])
+    const visiblePreachers = preachers?.filter((preacher) => {
+      if (canEditAll) return preacher.roles.includes("can_see_cartSchedule");
+      // jeśli może przypisać tylko siebie:
+      if (currentPreacher?.roles?.includes("can_self-assign_cartHour"))
+        return preacher._id === currentPreacher._id;
+      return false;
+    });
+
+    const selectItems = visiblePreachers.map((preacher) => ({
+      label: preacher.name,
+      value: preacher._id,
+    }));
+
+    const baseItems = [{ label: cartScheduleTranslate.t("freeSpot"), value: "" }];
+
+    setPreacher1Items([...baseItems, ...selectItems, {label: hour?.preacher1?.name, value: hour?.preacher1?._id}]);
+    setPreacher2Items([...baseItems, ...selectItems, {label: hour?.preacher2?.name, value: hour?.preacher2?._id}]);
+
+    setPreacher1Value(hour?.preacher1?._id || "");
+    setPreacher2Value(hour?.preacher2?._id || "");
+  }, []);
+
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={[styles.title, { fontSize: 23 + settingsContext.state.fontIncrement }]}>
-          {settingsContext.state.format12h ? convertTo12HourRange(hour?.timeDescription) : hour?.timeDescription}
+          {settingsContext.state.format12h ? convertTo12HourRange(hour?.timeDescription) : hour?.timeDescription} {dayItems > 1 && `(${day.place})`}
         </Text>
-        {((state.preacher && state.preacher.roles?.includes("can_edit_cartSchedule") || state.preacher?.roles?.includes("can_self-assign_cartHour")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+        {((state.preacher?.roles?.includes("can_edit_cartSchedule") || state.preacher?.roles?.includes("can_self-assign_cartHour")) || authContext.state.whoIsLoggedIn === "admin") && <TouchableOpacity onPress={() => setEditMode(!editMode)}>
         {editMode ? <MaterialCommunityIcons name="eye-outline" size={23 + settingsContext.state.fontIncrement} /> : <MaterialCommunityIcons name="pencil" size={23 + settingsContext.state.fontIncrement} />}
         </TouchableOpacity>}
       
@@ -94,23 +111,26 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                   nestedScrollEnabled: true,
                 }}
             />}
-            <Label text={cartScheduleTranslate.t("isOtherPreacher1SwitchText")} />
-            <Switch  
-                value={isOtherPreacher1}
-                onValueChange={(value) => setIsOtherPreacher1(value)}
-                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
-                color={settingsContext.state.mainColor}
-            />
+            {(state.preacher?.roles?.includes("can_edit_cartSchedule") || authContext.state.whoIsLoggedIn === "admin") && <>
+              <Label text={cartScheduleTranslate.t("isOtherPreacher1SwitchText")} />
+              <Switch  
+                  value={isOtherPreacher1}
+                  onValueChange={(value) => setIsOtherPreacher1(value)}
+                  style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
+                  color={settingsContext.state.mainColor}
+              />
 
-            {isOtherPreacher1 && <>
-                <MyInput 
-                    value={otherPreacher1}
-                    onChangeText={setOtherPreacher1}
-                    label={cartScheduleTranslate.t("otherPreacher1Label")}
-                    placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
-                />
+              {isOtherPreacher1 && <>
+                  <MyInput 
+                      value={otherPreacher1}
+                      onChangeText={setOtherPreacher1}
+                      label={cartScheduleTranslate.t("otherPreacher1Label")}
+                      placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
+                  />
 
-            </>}
+              </>}  
+            </>
+            }
             {!isOtherPreacher2 && <DropDownPicker 
                 value={preacher2Value}
                 setValue={setPreacher2Value}
@@ -134,22 +154,26 @@ const CartsScheduleHours: React.FC<CartsScheduleHoursProps> = ({ hour, preachers
                   nestedScrollEnabled: true,
                 }}  
             />}
-            <Label text={cartScheduleTranslate.t("isOtherPreacher2SwitchText")} />
-            <Switch  
-                value={isOtherPreacher2}
-                onValueChange={(value) => setIsOtherPreacher2(value)}
-                style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
-                color={settingsContext.state.mainColor}
-            />
-            {isOtherPreacher2 && <>
-                <MyInput 
-                    value={otherPreacher2}
-                    onChangeText={setOtherPreacher2}
-                    label={cartScheduleTranslate.t("otherPreacher2Label")}
-                    placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
-                />
+            {(state.preacher?.roles?.includes("can_edit_cartSchedule") || authContext.state.whoIsLoggedIn === "admin") && <>
+              <Label text={cartScheduleTranslate.t("isOtherPreacher2SwitchText")} />
+              <Switch  
+                  value={isOtherPreacher2}
+                  onValueChange={(value) => setIsOtherPreacher2(value)}
+                  style={{ alignSelf: "flex-start",  transform: [{ scaleX: 1.3 + (settingsContext.state.fontIncrement / 10) }, { scaleY: 1.3 + (settingsContext.state.fontIncrement / 10) }], marginVertical: 10 }}
+                  color={settingsContext.state.mainColor}
+              />
+              {isOtherPreacher2 && <>
+                  <MyInput 
+                      value={otherPreacher2}
+                      onChangeText={setOtherPreacher2}
+                      label={cartScheduleTranslate.t("otherPreacher2Label")}
+                      placeholder={cartScheduleTranslate.t("otherPreacherPlaceholder")}
+                  />
 
-            </>}
+              </>}
+            </>
+            }
+          
             <ButtonC 
               title={cartScheduleTranslate.t("assignPreacherButtonText")}
               onPress={() => {

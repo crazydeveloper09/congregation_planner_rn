@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -28,6 +28,7 @@ import { cartScheduleTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { convertTo12HourRange } from "./helpers/time";
 import { useResponsive } from "../../hooks/useResponsive";
+import Modification from "./components/Modification";
 
 interface CartsScheduleIndexScreenProps {
   navigation: NavigationProp<any>;
@@ -45,7 +46,9 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   const cartScheduleTranslate = useLocaLization(cartScheduleTranslations);
   const mainTranslate = useLocaLization(mainTranslations);
   const filters = [mainTranslate.t("all"), mainTranslate.t("myAssignments")];
-  const [currentFilter, setCurrentFilter] = useState<string>(mainTranslate.t("all"));
+  const [currentFilter, setCurrentFilter] = useState<string>(
+    mainTranslate.t("all")
+  );
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(
     route.params?.date ? new Date(route.params.date) : new Date()
   );
@@ -60,24 +63,36 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
   const settingsContext = useContext(SettingsContext);
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(0);
 
-      const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-          setRefreshing(false);
-        }, 2000);
-      }, []);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const onDateChange = (date: Date) => {
     setSelectedStartDate(date);
   };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRight>
+          <TouchableOpacity onPress={onRefresh}>
+            <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
+          </TouchableOpacity>
+        </HeaderRight>
+      ),
+    });
+  }, [navigation, onRefresh]);
 
   useEffect(() => {
     currentFilter === mainTranslate.t("all")
       ? loadCartDayInfo(startDate)
       : loadPreacherHours();
     preachersContext.loadAllPreachers();
-
 
     const unsubscribe = navigation.addListener("focus", () => {
       currentFilter === mainTranslate.t("all")
@@ -92,67 +107,105 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
     return <Loading />;
   }
 
-  navigation.setOptions({
-    headerRight: () => (
-      <HeaderRight>
-        <TouchableOpacity
-          onPress={onRefresh}
-        >
-          <MaterialCommunityIcons name="refresh" size={30} color={"white"} />
-        </TouchableOpacity>
-        {!state.cartDay && <TouchableOpacity
-              onPress={() => navigation.navigate("Carts Day New", {date: selectedStartDate})}
-            >
-              <MaterialCommunityIcons name="plus" size={30} color={"white"} />
-            </TouchableOpacity>}
-            
-            {state.cartDay && (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Carts Day Edit", {
-                      cartDay: state.cartDay,
-                    })
-                  }
-                >
-                  <MaterialCommunityIcons
-                    name="pencil"
-                    size={28}
-                    color={"white"}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Carts Day Delete Confirm", {
-                      cartDay: state.cartDay,
-                    })
-                  }
-                >
-                  <MaterialCommunityIcons
-                    name="trash-can"
-                    size={28}
-                    color={"white"}
-                  />
-                </TouchableOpacity>
-              </>
-            )}
-      </HeaderRight>
-    ),
-  });
+  const cartDays = Array.isArray(state.cartDay)
+    ? state.cartDay
+    : state.cartDay
+    ? [state.cartDay]
+    : [];
+  const currentCartDay = cartDays[selectedPlaceIndex];
 
   return (
-    <ScrollView stickyHeaderIndices={[0]} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {currentFilter === mainTranslate.t("all") && <View style={[styles.titleContainer, { backgroundColor: settingsContext.state.mainColor}]}>
-            <>
-              <Text style={[styles.chosenDate, { color: 'white', fontSize: 21 + settingsContext.state.fontIncrement }]}>{selectedStartDate.toLocaleDateString()}</Text>
-              {state.cartDay && <Text style={[styles.place, { color: 'white', fontSize: 17 + settingsContext.state.fontIncrement }]}>{state.cartDay?.place}</Text>}
-            </>
-            
-        </View>}
-      {authContext.state.whoIsLoggedIn !== "admin" && (
-       <TopMenu state={currentFilter} data={filters} updateState={setCurrentFilter} />
+    <ScrollView
+      stickyHeaderIndices={[0]}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {currentFilter === mainTranslate.t("all") && (
+        <View
+          style={[
+            styles.titleContainer,
+            { backgroundColor: settingsContext.state.mainColor },
+          ]}
+        >
+          <>
+            <Text
+              style={[
+                styles.chosenDate,
+                {
+                  color: "white",
+                  fontSize: 21 + settingsContext.state.fontIncrement,
+                },
+              ]}
+            >
+              {selectedStartDate.toLocaleDateString()}
+            </Text>
+
+            {cartDays.length > 1 ? (
+              // 🔹 Jeśli jest kilka miejsc, pokaż przełącznik
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {cartDays.map((day, index) => (
+                  <TouchableOpacity
+                    key={day._id || index}
+                    onPress={() => setSelectedPlaceIndex(index)}
+                    style={{ marginRight: 10, marginBottom: 7 }}
+                  >
+                    <Text
+                      style={[
+                        styles.place,
+                        {
+                          color:
+                            index === selectedPlaceIndex
+                              ? "white"
+                              : "rgba(255,255,255,0.6)",
+
+                          ...(index === selectedPlaceIndex
+                            ? {
+                                borderBottomColor: "white",
+                                borderBottomWidth: 2,
+                              }
+                            : {}),
+                          fontSize: 17 + settingsContext.state.fontIncrement,
+                        },
+                      ]}
+                    >
+                      {day.place}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            ) : (
+              currentCartDay && (
+                <Text
+                  style={[
+                    styles.place,
+                    {
+                      color: "white",
+                      fontSize: 17 + settingsContext.state.fontIncrement,
+                    },
+                  ]}
+                >
+                  {currentCartDay.place}
+                </Text>
+              )
+            )}
+          </>
+        </View>
       )}
-      <View style={[styles.container, isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
+
+      {authContext.state.whoIsLoggedIn !== "admin" && (
+        <TopMenu
+          state={currentFilter}
+          data={filters}
+          updateState={setCurrentFilter}
+        />
+      )}
+      <View
+        style={[
+          styles.container,
+          isDesktop && { width: "50%", marginHorizontal: "auto" },
+        ]}
+      >
         {currentFilter === mainTranslate.t("all") ? (
           <>
             <CalendarPicker
@@ -161,40 +214,59 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               todayBackgroundColor={`${settingsContext.state.mainColor}30`}
               months={months}
               weekdays={weekdays}
-              selectMonthTitle={months[selectedStartDate.getMonth()] + ' ' + selectedStartDate.getFullYear()}
+              selectMonthTitle={
+                months[selectedStartDate.getMonth()] +
+                " " +
+                selectedStartDate.getFullYear()
+              }
               previousTitle={"←"}
               nextTitle={"→"}
               selectedStartDate={selectedStartDate}
               onDateChange={onDateChange}
-              nextTitleStyle={{ fontSize: 20 + settingsContext.state.fontIncrement }}
-              previousTitleStyle={{ fontSize: 20 + settingsContext.state.fontIncrement }}
-              monthTitleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement }}
-              yearTitleStyle={{ fontSize: 18 + settingsContext.state.fontIncrement }}
-              selectedDayTextStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
+              nextTitleStyle={{
+                fontSize: 20 + settingsContext.state.fontIncrement,
+              }}
+              previousTitleStyle={{
+                fontSize: 20 + settingsContext.state.fontIncrement,
+              }}
+              monthTitleStyle={{
+                fontSize: 18 + settingsContext.state.fontIncrement,
+              }}
+              yearTitleStyle={{
+                fontSize: 18 + settingsContext.state.fontIncrement,
+              }}
+              selectedDayTextStyle={{
+                fontSize: 14 + settingsContext.state.fontIncrement,
+              }}
               textStyle={{ fontSize: 14 + settingsContext.state.fontIncrement }}
             />
             <View style={styles.resultContainer}>
-              {Boolean(state.cartDay) ? (
-                ""
+              {currentCartDay ? (
+                <>
+                  <FlatList
+                    keyExtractor={(hour) => hour._id}
+                    data={currentCartDay.hours}
+                    renderItem={({ item }) => (
+                      <CartsScheduleHours
+                        hour={item}
+                        preachers={preachersContext.state.allPreachers!}
+                        day={currentCartDay}
+                        dayItems={cartDays.length}
+                        refresh={onRefresh}
+                      />
+                    )}
+                    contentContainerStyle={{ marginBottom: 50 }}
+                    scrollEnabled={false}
+                  />
+                </>
               ) : (
                 <NotFound title={cartScheduleTranslate.t("noEntry")} />
               )}
-              {state.cartDay && (
-                <FlatList
-                  keyExtractor={(hour) => hour._id}
-                  data={state.cartDay?.hours}
-                  renderItem={({ item }) => (
-                    <CartsScheduleHours
-                      hour={item}
-                      preachers={preachersContext.state.allPreachers!}
-                      day={startDate}
-                      refresh={onRefresh}
-                    />
-                  )}
-                  contentContainerStyle={{ marginBottom: 50 }}
-                  scrollEnabled={false}
-                />
-              )}
+              {(authContext.state.whoIsLoggedIn === "admin" || preachersContext.state?.preacher?.roles.includes("can_edit_cartSchedule")) && <Modification
+                date={selectedStartDate.toISOString()}
+                cartDay={currentCartDay}
+                dayItems={cartDays.length}
+              />}
             </View>
           </>
         ) : (
@@ -203,16 +275,34 @@ const CartsScheduleIndexScreen: React.FC<CartsScheduleIndexScreenProps> = ({
               <FlatList
                 keyExtractor={(hour) => hour._id}
                 data={state.cartHours}
-                renderItem={({ item }) => <>
-                  <Text style={[styles.myDate, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{item.cartDay.date} - {settingsContext.state.format12h ? convertTo12HourRange(item.timeDescription) : item.timeDescription} - {item.cartDay.place}</Text>
-                  <IconLink 
-                        onPress={() => addCartAssignmentToCalendar(item.cartDay.date, item.timeDescription, item.cartDay.place)}
-                        iconName="calendar-month-outline"
-                        description={mainTranslate.t("addToCalendar")}
-                        isCentered={true}
+                renderItem={({ item }) => (
+                  <>
+                    <Text
+                      style={[
+                        styles.myDate,
+                        { fontSize: 18 + settingsContext.state.fontIncrement },
+                      ]}
+                    >
+                      {item.cartDay.date} -{" "}
+                      {settingsContext.state.format12h
+                        ? convertTo12HourRange(item.timeDescription)
+                        : item.timeDescription}{" "}
+                      - {item.cartDay.place}
+                    </Text>
+                    <IconLink
+                      onPress={() =>
+                        addCartAssignmentToCalendar(
+                          item.cartDay.date,
+                          item.timeDescription,
+                          item.cartDay.place
+                        )
+                      }
+                      iconName="calendar-month-outline"
+                      description={mainTranslate.t("addToCalendar")}
+                      isCentered={true}
                     />
-                
-                </>}
+                  </>
+                )}
                 scrollEnabled={false}
               />
             ) : (
@@ -236,20 +326,20 @@ const styles = StyleSheet.create({
   resultContainer: {
     marginTop: 20,
   },
-  titleContainer: { 
+  titleContainer: {
     display: "flex",
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15, 
-    paddingVertical: 7, 
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 7,
   },
   myDate: {
     fontSize: 18,
-    fontFamily: 'PoppinsRegular',
-    textAlign: 'center',
-    marginVertical: 10
+    fontFamily: "PoppinsRegular",
+    textAlign: "center",
+    marginVertical: 10,
   },
   chosenDate: {
     color: "#1F8AAD",

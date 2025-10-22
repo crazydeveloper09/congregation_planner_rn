@@ -1,7 +1,6 @@
 import { Input } from "@rneui/themed";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, FlatList, Alert } from "react-native";
-import ButtonC from "../../commonComponents/Button";
 import { Context as PreachersContext } from "../../contexts/PreachersContext";
 import Loading from "../../commonComponents/Loading";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
@@ -12,19 +11,34 @@ import { preachersTranslations } from "./translations";
 import { useResponsive } from "../../hooks/useResponsive";
 
 const PreachersSearchScreen: React.FC = () => {
-   const { isDesktop } = useResponsive()
+  const { isDesktop } = useResponsive();
   const [param, setParam] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const { searchPreacher, state } = useContext(PreachersContext);
+  const { loadAllPreachers, state } = useContext(PreachersContext);
   const preacherTranslate = useLocaLization(preachersTranslations);
   const settingsContext = useContext(SettingsContext);
-  
-  if(state.errMessage){
-    Alert.alert("Server error", state.errMessage)
+
+  useEffect(() => {
+    loadAllPreachers(); 
+  }, []);
+
+  if (state.errMessage) {
+    Alert.alert("Server error", state.errMessage);
   }
 
+  const filteredPreachers =
+    param.trim().length === 0
+      ? state.allPreachers || []
+      : (state.allPreachers || []).filter((p) =>
+          (p.name ?? "").toLowerCase().includes(param.toLowerCase())
+        );
+
   return (
-    <ScrollView style={[styles.container]} contentContainerStyle={isDesktop && { width: '50%', marginHorizontal: 'auto'}}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={
+        isDesktop && { width: "50%", marginHorizontal: "auto" }
+      }
+    >
       <Input
         placeholder={preacherTranslate.t("nameLabel")}
         value={param}
@@ -32,38 +46,59 @@ const PreachersSearchScreen: React.FC = () => {
         inputContainerStyle={styles.inputContainer}
         containerStyle={styles.containerInput}
       />
-      <ButtonC
-        title={preacherTranslate.t("searchButtonText")}
-        onPress={() => {
-          searchPreacher(param);
-          setSubmitted(true);
-        }}
-      />
 
-      {!submitted ? (
-        <View style={styles.noParamContainer}>
-          <FontAwesome name="search" size={45 + settingsContext.state.fontIncrement} sty />
-          <Text style={[styles.noParamText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{preacherTranslate.t("searchPlaceholderText")}</Text>
-        </View>
-      ) : state.isLoading ? (
+      {state.isLoading ? (
         <Loading />
-      ) : state.searchResults?.length === 0 ? (
+      ) : filteredPreachers.length === 0 ? (
         <View style={styles.noParamContainer}>
-            <Entypo name="emoji-sad" size={45 + settingsContext.state.fontIncrement} />
-          <Text style={[styles.noParamText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>{preacherTranslate.t("noEntryFoundText")}</Text>
+          {param.trim().length === 0 ? (
+            <>
+              <FontAwesome
+                name="search"
+                size={45 + settingsContext.state.fontIncrement}
+              />
+              <Text
+                style={[
+                  styles.noParamText,
+                  { fontSize: 18 + settingsContext.state.fontIncrement },
+                ]}
+              >
+                {preacherTranslate.t("searchPlaceholderText")}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Entypo
+                name="emoji-sad"
+                size={45 + settingsContext.state.fontIncrement}
+              />
+              <Text
+                style={[
+                  styles.noParamText,
+                  { fontSize: 18 + settingsContext.state.fontIncrement },
+                ]}
+              >
+                {preacherTranslate.t("noEntryFoundText")}
+              </Text>
+            </>
+          )}
         </View>
       ) : (
         <View style={styles.resultsContainer}>
-          <Text style={[styles.resultsText, { fontSize: 18 + settingsContext.state.fontIncrement }]}>
-          {preacherTranslate.t("resultsLabelText")}: {state.searchResults?.length}
+          <Text
+            style={[
+              styles.resultsText,
+              { fontSize: 18 + settingsContext.state.fontIncrement },
+            ]}
+          >
+            {preacherTranslate.t("resultsLabelText")}: {filteredPreachers.length}
           </Text>
           <FlatList
-            keyExtractor={((preacher) => preacher._id)}
-            data={state.searchResults}
+            keyExtractor={(p) => p._id}
+            data={filteredPreachers}
             renderItem={({ item }) => <Preacher preacher={item} />}
             scrollEnabled={false}
           />
-    
         </View>
       )}
     </ScrollView>
@@ -80,12 +115,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 5,
-    borderColor: 'black',
+    borderColor: "black",
   },
-
   containerInput: {
-      paddingHorizontal: 0,
-      paddingVertical: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
   noParamContainer: {
     marginTop: 65,
@@ -96,7 +130,7 @@ const styles = StyleSheet.create({
   noParamText: {
     marginTop: 15,
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "PoppinsRegular",
   },
   resultsContainer: {
@@ -106,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     fontFamily: "PoppinsRegular",
-    marginBottom: 20
+    marginBottom: 20,
   },
 });
 

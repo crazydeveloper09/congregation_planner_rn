@@ -9,6 +9,7 @@ import { authTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useResponsive } from '../../hooks/useResponsive';
+import InfoText from '../../commonComponents/InfoText';
 
 const CongregationsVerificationScreen: React.FC = () => {
     const [code, setCode] = useState<string>();
@@ -32,6 +33,7 @@ const CongregationsVerificationScreen: React.FC = () => {
                 onPress={() => verifyNewUser({ code, userID: state.userID })}
                 isLoading={state.isLoading}
             />
+            <InfoText text={authTranslate.t("firstStepsInstruction")} />
         </KeyboardAwareScrollView>
     )
 }

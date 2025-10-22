@@ -20,7 +20,7 @@ const CartsScheduleNavigator: React.FC = () => {
                 name="Carts Schedule Index" 
                 component={CartsScheduleIndexScreen} 
                 options={{
-                    headerTitle: cartScheduleTranslate.t("sectionText")
+                    headerTitle: cartScheduleTranslate.t("sectionText"),
                 }}
             />
             <Stack.Screen 

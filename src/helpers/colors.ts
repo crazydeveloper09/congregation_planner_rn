@@ -28,17 +28,20 @@ export const buildTheme = (mainColor: string) => {
   const elevationLevel2 = isDark
     ? base.clone().lighten(tooLight.includes(mainColor) ? 50 : 65).toHexString()
     : base.clone().lighten(tooDark.includes(mainColor) ? 50 : 40).toHexString();
-  
+
   return {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: mainColor,
-    secondaryContainer,
-    elevation: {
-      ...DefaultTheme.colors.elevation,
-      level2: elevationLevel2,
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: mainColor,
+      secondary: mainColor, // 👈 dodaj to
+      secondaryContainer, // 👈 to też używa FAB.Group
+      onSecondaryContainer: "#000000", // 👈 kontrastowy kolor ikony
+      elevation: {
+        ...DefaultTheme.colors.elevation,
+        level2: elevationLevel2,
+      },
     },
-  },
-}
+  };
 };
+

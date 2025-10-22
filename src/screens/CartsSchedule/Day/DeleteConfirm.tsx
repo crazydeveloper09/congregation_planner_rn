@@ -26,7 +26,7 @@ const CartDayDeleteConfirmScreen: React.FC<CartDayDeleteConfirmScreenProps> = ({
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
 
-            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{cartScheduleTranslate.t("deleteConfirmText", {date: route.params.cartDay.date} )}</Text>
+            <Text style={[styles.text, { fontSize: 21 + settingsContext.state.fontIncrement }]}>{cartScheduleTranslate.t("deleteConfirmText", {date: route.params.cartDay.date, place: route.params.cartDay.place} )}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View style={{ width: '48%' }}>
                     <ButtonC title={mainTranslate.t("yes")} onPress={() => deleteCartDay(route.params.cartDay._id)} isLoading={state.isLoading} color="#AD371F" />

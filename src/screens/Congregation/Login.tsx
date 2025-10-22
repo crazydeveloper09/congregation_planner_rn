@@ -9,6 +9,7 @@ import useLocaLization from '../../hooks/useLocalization';
 import { authTranslations } from './translations';
 import { Context as SettingsContext } from "../../contexts/SettingsContext";
 import { useResponsive } from '../../hooks/useResponsive';
+import InfoText from '../../commonComponents/InfoText';
 
 interface CongregationsLoginScreenProps {
     route: {
@@ -23,27 +24,27 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
     const [ username, setUsername ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
     const [ link, setLink ] = useState<string>('')
-    const i18n = useLocaLization(authTranslations);
+    const authTranslate = useLocaLization(authTranslations);
     const settingsContext = useContext(SettingsContext);
     const { isDesktop } = useResponsive();
 
     return (
         <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={[{ flex: 1, justifyContent: 'center' },  isDesktop && { width: '50%', marginHorizontal: 'auto'}]}>
-            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{i18n.t('loginHeading')}</Text>
+            <Text h3 style={[styles.header, { color: settingsContext.state.mainColor, fontSize: 21 + settingsContext.state.fontIncrement }]}>{authTranslate.t('loginHeading')}</Text>
             { state.errMessage && <Text style={styles.errMessage}>{state.errMessage}</Text> }
             { state.successMessage && <Text style={styles.successMessage}>{state.successMessage}</Text> }
             {route.params.type === "admin" ? <>
             <MyInput 
-                label={i18n.t('usernameLabel')}
-                placeholder={i18n.t('usernamePlaceholder')}
+                label={authTranslate.t('usernameLabel')}
+                placeholder={authTranslate.t('usernamePlaceholder')}
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize='none'
                 autoCorrect={false}
             />
             <MyInput 
-                label={i18n.t('passwordLabel')}
-                placeholder={i18n.t('passwordPlaceholder')}
+                label={authTranslate.t('passwordLabel')}
+                placeholder={authTranslate.t('passwordPlaceholder')}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -52,13 +53,13 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
             />
             
             <ButtonC 
-                title={i18n.t('loginButtonText')}
+                title={authTranslate.t('loginButtonText')}
                 onPress={() => signIn({ username, password })}
                 isLoading={state.isLoading}
             />
             <View style={{ marginTop: 10 }}>
                 <ButtonC 
-                    title={i18n.t('forgotPasswordButtonText')}
+                    title={authTranslate.t('forgotPasswordButtonText')}
                     onPress={() => Linking.openURL("https://www.congregationplanner.pl/forgot")}
                     isLoading={state.isLoading}
                     color="rgba(0, 0, 0, 0.0)"
@@ -68,21 +69,23 @@ const CongregationsLoginScreen: React.FC<CongregationsLoginScreenProps> = ({ rou
             </View>
         
             </> : <>
-            <MyInput 
-                label={i18n.t('specialLinkLabel')}
-                placeholder={i18n.t('specialLinkPlaceholder')}
-                value={link}
-                onChangeText={setLink}
-                autoCapitalize='none'
-                autoCorrect={false}
-            />
-    
+                <MyInput 
+                    label={authTranslate.t('specialLinkLabel')}
+                    placeholder={authTranslate.t('specialLinkPlaceholder')}
+                    value={link}
+                    onChangeText={setLink}
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                />
+        
+                
+                <ButtonC 
+                    title={authTranslate.t('loginButtonText')}
+                    onPress={() => logInPreacher(link)}
+                    isLoading={state.isLoading}
+                />
+                <InfoText text={authTranslate.t("specialLinkInstruction")} />
             
-            <ButtonC 
-                title={i18n.t('loginButtonText')}
-                onPress={() => logInPreacher(link)}
-                isLoading={state.isLoading}
-            />
             </>}
             
         </KeyboardAwareScrollView>

@@ -11,7 +11,7 @@ import { authTranslations } from "../Congregation/translations";
 import { settingsTranslations } from "./translations";
 import { mainTranslations } from "../../../localization";
 import { useResponsive } from "../../hooks/useResponsive";
-import EmailDataInfo from "../../commonComponents/EmailDataInfo";
+import InfoText from "../../commonComponents/InfoText";
 
 const RaiseIssueScreen: React.FC = () => {
     const { isDesktop } = useResponsive();
@@ -104,7 +104,7 @@ const RaiseIssueScreen: React.FC = () => {
                             isLoading={state.isLoading}
                             onPress={handleSubmit as any}
                         />
-                        <EmailDataInfo />
+                        <InfoText text={mainTranslate.t("dataInfo")} />
                     </>
                 )}
             </Formik>
