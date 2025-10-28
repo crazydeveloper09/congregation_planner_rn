@@ -20,7 +20,7 @@ import { IMinistryMeeting } from "../../contexts/interfaces";
 import { buildMinistryMeetingsPDF } from "./helpers/pdf";
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import IconLink from "../../commonComponents/IconLink";
 import { useResponsive } from "../../hooks/useResponsive";
 

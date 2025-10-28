@@ -1,3 +1,3 @@
 import axios from "axios";
 
-export default axios.create({ baseURL: 'https://melodious-delight-production.up.railway.app/' })
+export default axios.create({ baseURL: 'https://crack-pegasus-hopefully.ngrok-free.app/' })

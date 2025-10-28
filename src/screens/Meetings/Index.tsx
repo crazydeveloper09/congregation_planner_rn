@@ -25,7 +25,7 @@ import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { Platform } from 'react-native';
 import { buildMeetingsPDF } from "./helpers/pdf";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useResponsive } from "../../hooks/useResponsive";
 
 interface MeetingsIndexScreenProps {

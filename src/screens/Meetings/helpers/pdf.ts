@@ -97,7 +97,7 @@ export function buildMeetingsPDF(meetings: IMeeting[], type: string, month: stri
             return `
               <div class="assignment">
                 ${songs}
-                <div class="assignment_type" style="background: ${color};">${type}</div>
+                <div class="assignment_type" style="background: ${color};">${assignmentsTranslate.t(type)}</div>
                 ${assignmentItems}
               </div>
             `;
